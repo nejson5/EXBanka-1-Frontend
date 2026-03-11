@@ -1,35 +1,62 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import { AuthLayout } from '@/components/layout/AuthLayout'
+import { AppLayout } from '@/components/layout/AppLayout'
+import { ProtectedRoute } from '@/components/shared/ProtectedRoute'
+import { LoginPage } from '@/pages/LoginPage'
+import { PasswordResetRequestPage } from '@/pages/PasswordResetRequestPage'
+import { PasswordResetPage } from '@/pages/PasswordResetPage'
+import { ActivationPage } from '@/pages/ActivationPage'
+import { EmployeeListPage } from '@/pages/EmployeeListPage'
+import { CreateEmployeePage } from '@/pages/CreateEmployeePage'
+import { EditEmployeePage } from '@/pages/EditEmployeePage'
 
-function App() {
-  const [count, setCount] = useState(0)
-
+export default function App() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Routes>
+      {/* Public routes */}
+      <Route element={<AuthLayout />}>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/password-reset-request" element={<PasswordResetRequestPage />} />
+        <Route path="/password-reset" element={<PasswordResetPage />} />
+        <Route path="/activate" element={<ActivationPage />} />
+      </Route>
+
+      {/* Protected routes */}
+      <Route
+        element={
+          <ProtectedRoute>
+            <AppLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route
+          path="/employees"
+          element={
+            <ProtectedRoute requiredPermission="employees.read">
+              <EmployeeListPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employees/new"
+          element={
+            <ProtectedRoute requiredPermission="employees.create">
+              <CreateEmployeePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employees/:id"
+          element={
+            <ProtectedRoute requiredPermission="employees.update">
+              <EditEmployeePage />
+            </ProtectedRoute>
+          }
+        />
+      </Route>
+
+      {/* Default redirect */}
+      <Route path="*" element={<Navigate to="/login" replace />} />
+    </Routes>
   )
 }
-
-export default App

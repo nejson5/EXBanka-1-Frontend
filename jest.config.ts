@@ -16,6 +16,7 @@ const config: Config = {
     '\\.(css|less|scss)$': 'identity-obj-proxy',
     '\\.(svg|png|jpg)$': '<rootDir>/src/__tests__/utils/fileMock.ts',
   },
+  setupFiles: ['<rootDir>/jest.setup.globals.js'],
   setupFilesAfterEnv: ['<rootDir>/src/__tests__/utils/setupTests.ts'],
   testMatch: ['<rootDir>/src/**/*.test.{ts,tsx}'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
