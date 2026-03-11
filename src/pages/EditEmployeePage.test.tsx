@@ -36,17 +36,18 @@ describe('EditEmployeePage', () => {
     expect(screen.getByText(/loading/i)).toBeInTheDocument()
   })
 
-  it('shows read-only view for admin-role employees', async () => {
-    const adminEmployee = createMockEmployee({ role: 'EmployeeAdmin', first_name: 'Boss' })
+  it('shows read-only view when viewing a different admin', async () => {
+    // Employee id=99, current user id=1 → different admin → read-only
+    const adminEmployee = createMockEmployee({ id: 99, role: 'EmployeeAdmin', first_name: 'Boss' })
     jest.mocked(employeesApi.getEmployee).mockResolvedValue(adminEmployee)
 
     renderWithProviders(<EditEmployeePage />, {
       preloadedState: { auth: createMockAuthState() },
-      route: '/employees/1',
+      route: '/employees/99',
       routePath: '/employees/:id',
     })
 
-    await screen.findByText(/cannot edit administrators/i)
+    await screen.findByText(/administrator profiles cannot be edited/i)
     expect(screen.queryByRole('button', { name: /save/i })).not.toBeInTheDocument()
   })
 })

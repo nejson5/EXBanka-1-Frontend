@@ -54,6 +54,7 @@ interface EmployeeFormProps {
   onSubmit: (data: CreateEmployeeRequest | UpdateEmployeeRequest) => void
   isLoading: boolean
   employee?: Employee
+  readOnly?: boolean
 }
 
 // Create form schema
@@ -66,7 +67,10 @@ const createFormSchema = z.object({
     .string()
     .min(1, 'Last name is required')
     .max(20, 'Last name must be at most 20 characters'),
-  date_of_birth: z.string().optional(),
+  date_of_birth: z
+    .string()
+    .optional()
+    .refine((val) => !val || new Date(val) <= new Date(), 'Date of birth cannot be in the future'),
   gender: z.string().optional(),
   email: z.string().email('Invalid email address'),
   phone: z.string().max(15, 'Phone number must be at most 15 digits').optional(),
@@ -90,7 +94,26 @@ const createFormSchema = z.object({
 type CreateFormData = z.infer<typeof createFormSchema>
 type EditFormData = z.infer<typeof updateEmployeeSchema>
 
-function PhoneInput({ value, onChange }: { value: string; onChange: (val: string) => void }) {
+const todayISO = () => new Date().toISOString().split('T')[0]
+
+const formatDateDisplay = (ts: number): string => {
+  if (!ts) return ''
+  const d = new Date(ts * 1000)
+  const day = String(d.getDate()).padStart(2, '0')
+  const month = String(d.getMonth() + 1).padStart(2, '0')
+  const year = d.getFullYear()
+  return `${day}/${month}/${year}`
+}
+
+function PhoneInput({
+  value,
+  onChange,
+  disabled,
+}: {
+  value: string
+  onChange: (val: string) => void
+  disabled?: boolean
+}) {
   const parsePhone = (full: string) => {
     for (const cc of COUNTRY_CODES) {
       if (full.startsWith(cc.code)) {
@@ -103,6 +126,10 @@ function PhoneInput({ value, onChange }: { value: string; onChange: (val: string
   const parsed = parsePhone(value)
   const [countryCode, setCountryCode] = useState(parsed.countryCode)
   const [number, setNumber] = useState(parsed.number)
+
+  if (disabled) {
+    return <Input type="tel" value={value} disabled />
+  }
 
   const handleCountryChange = (code: string | null) => {
     if (!code) return
@@ -158,16 +185,13 @@ function EditForm({
   employee,
   onSubmit,
   isLoading,
+  readOnly = false,
 }: {
   employee: Employee
   onSubmit: (data: UpdateEmployeeRequest) => void
   isLoading: boolean
+  readOnly?: boolean
 }) {
-  const timestampToDate = (ts: number) => {
-    const d = new Date(ts * 1000)
-    return d.toISOString().split('T')[0]
-  }
-
   const {
     register,
     handleSubmit,
@@ -195,49 +219,68 @@ function EditForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      {readOnly && (
+        <p className="text-sm text-muted-foreground bg-muted px-3 py-2 rounded-md">
+          View only — administrator profiles cannot be edited.
+        </p>
+      )}
+
       <div className="space-y-2">
         <Label htmlFor="first_name">First Name</Label>
         <Input id="first_name" defaultValue={employee.first_name} disabled />
       </div>
+
       <div className="space-y-2">
         <Label htmlFor="last_name">Last Name</Label>
-        <Input id="last_name" {...register('last_name')} maxLength={20} />
-        {errors.last_name && <p className="text-sm text-destructive">{errors.last_name.message}</p>}
+        <Input id="last_name" {...register('last_name')} maxLength={20} disabled={readOnly} />
+        {!readOnly && errors.last_name && (
+          <p className="text-sm text-destructive">{errors.last_name.message}</p>
+        )}
       </div>
+
       <div className="space-y-2">
         <Label htmlFor="date_of_birth">Date of Birth</Label>
         <Input
           id="date_of_birth"
-          type="date"
-          defaultValue={timestampToDate(employee.date_of_birth)}
+          type="text"
+          defaultValue={formatDateDisplay(employee.date_of_birth)}
           disabled
         />
       </div>
+
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
         <Input id="email" type="email" defaultValue={employee.email} disabled />
       </div>
+
       <div className="space-y-2">
         <Label htmlFor="username">Username</Label>
         <Input id="username" defaultValue={employee.username} disabled />
       </div>
+
       <div className="space-y-2">
         <Label>Phone</Label>
-        <PhoneInput value={phone} onChange={(val) => setValue('phone', val)} />
-        {errors.phone && <p className="text-sm text-destructive">{errors.phone.message}</p>}
+        <PhoneInput value={phone} onChange={(val) => setValue('phone', val)} disabled={readOnly} />
+        {!readOnly && errors.phone && (
+          <p className="text-sm text-destructive">{errors.phone.message}</p>
+        )}
       </div>
+
       <div className="space-y-2">
         <Label htmlFor="address">Address</Label>
-        <Input id="address" {...register('address')} />
+        <Input id="address" {...register('address')} disabled={readOnly} />
       </div>
+
       <div className="space-y-2">
         <Label htmlFor="position">Position</Label>
-        <Input id="position" {...register('position')} />
+        <Input id="position" {...register('position')} disabled={readOnly} />
       </div>
+
       <div className="space-y-2">
         <Label htmlFor="department">Department</Label>
-        <Input id="department" {...register('department')} />
+        <Input id="department" {...register('department')} disabled={readOnly} />
       </div>
+
       <div className="space-y-2">
         <Label htmlFor="jmbg">JMBG</Label>
         <Input
@@ -246,14 +289,19 @@ function EditForm({
           placeholder="13-digit JMBG"
           maxLength={13}
           inputMode="numeric"
+          disabled={readOnly}
         />
-        {errors.jmbg && <p className="text-sm text-destructive">{errors.jmbg.message}</p>}
+        {!readOnly && errors.jmbg && (
+          <p className="text-sm text-destructive">{errors.jmbg.message}</p>
+        )}
       </div>
+
       <div className="space-y-2">
         <Label htmlFor="status">Status</Label>
         <Select
           value={active ? 'active' : 'inactive'}
           onValueChange={(val) => setValue('active', val === 'active')}
+          disabled={readOnly}
         >
           <SelectTrigger id="status">
             <SelectValue placeholder="Select status" />
@@ -264,11 +312,13 @@ function EditForm({
           </SelectContent>
         </Select>
       </div>
+
       <div className="space-y-2">
         <Label htmlFor="role">Role</Label>
         <Select
           value={role}
           onValueChange={(val) => setValue('role', val as (typeof ROLES)[number])}
+          disabled={readOnly}
         >
           <SelectTrigger id="role">
             <SelectValue placeholder="Select role" />
@@ -282,9 +332,12 @@ function EditForm({
           </SelectContent>
         </Select>
       </div>
-      <Button type="submit" disabled={isLoading}>
-        {isLoading ? 'Saving...' : 'Save'}
-      </Button>
+
+      {!readOnly && (
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? 'Saving...' : 'Save'}
+        </Button>
+      )}
     </form>
   )
 }
@@ -332,46 +385,59 @@ function CreateForm({
           <p className="text-sm text-destructive">{errors.first_name.message}</p>
         )}
       </div>
+
       <div className="space-y-2">
         <Label htmlFor="last_name">Last Name</Label>
         <Input id="last_name" {...register('last_name')} maxLength={20} />
         {errors.last_name && <p className="text-sm text-destructive">{errors.last_name.message}</p>}
       </div>
+
       <div className="space-y-2">
         <Label htmlFor="date_of_birth">Date of Birth</Label>
-        <Input id="date_of_birth" type="date" {...register('date_of_birth')} />
+        <Input id="date_of_birth" type="date" max={todayISO()} {...register('date_of_birth')} />
+        {errors.date_of_birth && (
+          <p className="text-sm text-destructive">{errors.date_of_birth.message}</p>
+        )}
       </div>
+
       <div className="space-y-2">
         <Label htmlFor="gender">Gender</Label>
         <Input id="gender" {...register('gender')} />
       </div>
+
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
         <Input id="email" type="email" {...register('email')} />
         {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
       </div>
+
       <div className="space-y-2">
         <Label>Phone</Label>
         <PhoneInput value={phone} onChange={(val) => setValue('phone', val)} />
         {errors.phone && <p className="text-sm text-destructive">{errors.phone.message}</p>}
       </div>
+
       <div className="space-y-2">
         <Label htmlFor="address">Address</Label>
         <Input id="address" {...register('address')} />
       </div>
+
       <div className="space-y-2">
         <Label htmlFor="username">Username</Label>
         <Input id="username" {...register('username')} />
         {errors.username && <p className="text-sm text-destructive">{errors.username.message}</p>}
       </div>
+
       <div className="space-y-2">
         <Label htmlFor="position">Position</Label>
         <Input id="position" {...register('position')} />
       </div>
+
       <div className="space-y-2">
         <Label htmlFor="department">Department</Label>
         <Input id="department" {...register('department')} />
       </div>
+
       <div className="space-y-2">
         <Label htmlFor="jmbg">JMBG</Label>
         <Input
@@ -383,6 +449,7 @@ function CreateForm({
         />
         {errors.jmbg && <p className="text-sm text-destructive">{errors.jmbg.message}</p>}
       </div>
+
       <div className="space-y-2">
         <Label htmlFor="status">Status</Label>
         <Select
@@ -398,6 +465,7 @@ function CreateForm({
           </SelectContent>
         </Select>
       </div>
+
       <div className="space-y-2">
         <Label htmlFor="role">Role</Label>
         <Select
@@ -417,6 +485,7 @@ function CreateForm({
         </Select>
         {errors.role && <p className="text-sm text-destructive">{errors.role.message}</p>}
       </div>
+
       <Button type="submit" disabled={isLoading}>
         {isLoading ? 'Saving...' : 'Save'}
       </Button>
@@ -424,10 +493,15 @@ function CreateForm({
   )
 }
 
-export function EmployeeForm({ onSubmit, isLoading, employee }: EmployeeFormProps) {
+export function EmployeeForm({ onSubmit, isLoading, employee, readOnly }: EmployeeFormProps) {
   if (employee) {
     return (
-      <EditForm employee={employee} onSubmit={(data) => onSubmit(data)} isLoading={isLoading} />
+      <EditForm
+        employee={employee}
+        onSubmit={(data) => onSubmit(data)}
+        isLoading={isLoading}
+        readOnly={readOnly}
+      />
     )
   }
 

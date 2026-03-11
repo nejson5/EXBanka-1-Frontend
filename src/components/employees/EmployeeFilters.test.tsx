@@ -1,11 +1,17 @@
-import { screen, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { screen, waitFor, act, fireEvent } from '@testing-library/react'
 import { renderWithProviders } from '@/__tests__/utils/test-utils'
 import { EmployeeFilters } from '@/components/employees/EmployeeFilters'
 
 const mockOnFilter = jest.fn()
 
-beforeEach(() => jest.clearAllMocks())
+beforeEach(() => {
+  jest.clearAllMocks()
+  jest.useFakeTimers()
+})
+
+afterEach(() => {
+  jest.useRealTimers()
+})
 
 describe('EmployeeFilters', () => {
   it('renders a single search input', () => {
@@ -13,13 +19,13 @@ describe('EmployeeFilters', () => {
     expect(screen.getByPlaceholderText(/search by name, email or position/i)).toBeInTheDocument()
   })
 
-  it('calls onFilter with email when input contains @', async () => {
+  it('debounces and calls onFilter with email when input contains @', async () => {
     renderWithProviders(<EmployeeFilters onFilter={mockOnFilter} />)
-    await userEvent.type(
-      screen.getByPlaceholderText(/search by name, email or position/i),
-      'jane@example.com'
-    )
-    await userEvent.click(screen.getByRole('button', { name: /search/i }))
+    const input = screen.getByPlaceholderText(/search by name, email or position/i)
+
+    fireEvent.change(input, { target: { value: 'jane@example.com' } })
+    act(() => jest.runAllTimers())
+
     await waitFor(() => {
       expect(mockOnFilter).toHaveBeenCalledWith(
         expect.objectContaining({ email: 'jane@example.com' })
@@ -27,10 +33,13 @@ describe('EmployeeFilters', () => {
     })
   })
 
-  it('calls onFilter with name when input has no @', async () => {
+  it('debounces and calls onFilter with name when input has no @', async () => {
     renderWithProviders(<EmployeeFilters onFilter={mockOnFilter} />)
-    await userEvent.type(screen.getByPlaceholderText(/search by name, email or position/i), 'Jane')
-    await userEvent.click(screen.getByRole('button', { name: /search/i }))
+    const input = screen.getByPlaceholderText(/search by name, email or position/i)
+
+    fireEvent.change(input, { target: { value: 'Jane' } })
+    act(() => jest.runAllTimers())
+
     await waitFor(() => {
       expect(mockOnFilter).toHaveBeenCalledWith(expect.objectContaining({ name: 'Jane' }))
     })
@@ -38,7 +47,12 @@ describe('EmployeeFilters', () => {
 
   it('calls onFilter with empty object when input is cleared', async () => {
     renderWithProviders(<EmployeeFilters onFilter={mockOnFilter} />)
-    await userEvent.click(screen.getByRole('button', { name: /search/i }))
+    const input = screen.getByPlaceholderText(/search by name, email or position/i)
+
+    fireEvent.change(input, { target: { value: 'Jane' } })
+    fireEvent.change(input, { target: { value: '' } })
+    act(() => jest.runAllTimers())
+
     await waitFor(() => {
       expect(mockOnFilter).toHaveBeenCalledWith({})
     })

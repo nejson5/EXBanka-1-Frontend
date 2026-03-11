@@ -2,6 +2,8 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { EmployeeForm } from '@/components/employees/EmployeeForm'
 import { useEmployee } from '@/hooks/useEmployee'
+import { useAppSelector } from '@/hooks/useAppSelector'
+import { selectCurrentUser } from '@/store/selectors/authSelectors'
 import { updateEmployee } from '@/lib/api/employees'
 import type { UpdateEmployeeRequest } from '@/types/employee'
 
@@ -10,7 +12,11 @@ export function EditEmployeePage() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const employeeId = Number(id)
+  const currentUser = useAppSelector(selectCurrentUser)
   const { data: employee, isLoading } = useEmployee(employeeId)
+
+  const isOwnProfile = currentUser?.id === employeeId
+  const isOtherAdmin = employee?.role === 'EmployeeAdmin' && !isOwnProfile
 
   const mutation = useMutation({
     mutationFn: (data: UpdateEmployeeRequest) => updateEmployee(employeeId, data),
@@ -24,22 +30,20 @@ export function EditEmployeePage() {
   if (isLoading) return <p>Loading...</p>
   if (!employee) return <p>Employee not found.</p>
 
-  if (employee.role === 'EmployeeAdmin') {
-    return (
-      <div>
-        <h1 className="text-2xl font-bold mb-6">Employee Details</h1>
-        <p className="text-muted-foreground">Cannot edit administrators.</p>
-      </div>
-    )
-  }
+  const title = isOtherAdmin
+    ? 'Administrator Details'
+    : isOwnProfile
+      ? 'My Profile'
+      : 'Edit Employee'
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Edit Employee</h1>
+      <h1 className="text-2xl font-bold mb-6">{title}</h1>
       <EmployeeForm
         employee={employee}
         onSubmit={(data) => mutation.mutate(data as UpdateEmployeeRequest)}
         isLoading={mutation.isPending}
+        readOnly={isOtherAdmin}
       />
       {mutation.isError && <p className="text-destructive mt-2">Failed to update employee.</p>}
     </div>
