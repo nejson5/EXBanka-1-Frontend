@@ -1,19 +1,13 @@
-import { configureStore } from '@reduxjs/toolkit'
 import {
   selectIsAuthenticated,
   selectIsAdmin,
   selectHasPermission,
 } from '@/store/selectors/authSelectors'
 import { createMockAuthState } from '@/__tests__/fixtures/auth-fixtures'
-import authReducer from '@/store/slices/authSlice'
+import type { RootState } from '@/store'
 
-// Create a local store type for testing (until @/store is ready)
-type TestState = ReturnType<
-  ReturnType<typeof configureStore<{ auth: ReturnType<typeof authReducer> }>>['getState']
->
-
-function mockRootState(authOverrides = {}): TestState {
-  return { auth: createMockAuthState(authOverrides) } as TestState
+function mockRootState(authOverrides = {}): RootState {
+  return { auth: createMockAuthState(authOverrides) } as RootState
 }
 
 describe('authSelectors', () => {

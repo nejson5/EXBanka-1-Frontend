@@ -1,17 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit'
+import type { RootState } from '@/store'
 
-// We use a local type here that will be compatible with RootState once the store is created
-interface StateWithAuth {
-  auth: {
-    user: { role: string; permissions: string[] } | null
-    status: 'idle' | 'loading' | 'authenticated' | 'error'
-    error: string | null
-    accessToken: string | null
-    refreshToken: string | null
-  }
-}
-
-export const selectAuthState = (state: StateWithAuth) => state.auth
+export const selectAuthState = (state: RootState) => state.auth
 
 export const selectIsAuthenticated = createSelector(
   selectAuthState,
@@ -23,7 +13,7 @@ export const selectIsAdmin = createSelector(
   (auth) => auth.user?.role === 'EmployeeAdmin'
 )
 
-export const selectHasPermission = (state: StateWithAuth, permission: string): boolean => {
+export const selectHasPermission = (state: RootState, permission: string): boolean => {
   const permissions = state.auth.user?.permissions ?? []
   return permissions.includes(permission)
 }
