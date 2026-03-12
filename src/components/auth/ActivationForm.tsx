@@ -50,7 +50,7 @@ export function ActivationForm({ onSubmit, isLoading, isSuccess, error }: Activa
   }
 
   return (
-    <Card>
+    <Card className="border-t-4 border-t-primary">
       <CardHeader>
         <CardTitle className="text-2xl text-center">Activate Account</CardTitle>
       </CardHeader>

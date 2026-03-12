@@ -55,7 +55,7 @@ export function PasswordResetForm({
   }
 
   return (
-    <Card>
+    <Card className="border-t-4 border-t-primary">
       <CardHeader>
         <CardTitle className="text-2xl text-center">Set New Password</CardTitle>
       </CardHeader>
