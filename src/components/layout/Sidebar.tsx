@@ -18,7 +18,7 @@ export function Sidebar() {
 
   return (
     <aside className="w-64 bg-sidebar text-sidebar-foreground flex flex-col p-4">
-      <div className="text-lg font-bold mb-6 text-accent-2">Bloom Bank</div>
+      <div className="text-lg font-bold mb-6 text-accent-2">EXBanka</div>
       <nav className="flex-1 space-y-1">
         <Link
           to="/employees"
