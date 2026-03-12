@@ -91,5 +91,6 @@ export const updateEmployeeSchema = z.object({
   jmbg: z
     .string()
     .regex(/^\d{13}$/, 'JMBG must be exactly 13 digits')
-    .optional(),
+    .optional()
+    .or(z.literal('')),
 })

@@ -21,7 +21,7 @@ describe('EmployeeFilters', () => {
     const input = screen.getByPlaceholderText(/type to filter/i)
     fireEvent.change(input, { target: { value: 'Jane' } })
     expect(mockOnFilterChange).toHaveBeenCalledWith({
-      category: 'first_name',
+      category: 'all',
       value: 'Jane',
     })
   })

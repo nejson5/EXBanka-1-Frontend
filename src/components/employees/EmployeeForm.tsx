@@ -16,6 +16,7 @@ import { updateEmployeeSchema } from '@/lib/utils/validation'
 import type { Employee, CreateEmployeeRequest, UpdateEmployeeRequest } from '@/types/employee'
 
 const ROLES = ['EmployeeBasic', 'EmployeeAgent', 'EmployeeSupervisor', 'EmployeeAdmin'] as const
+const formatRoleLabel = (role: string) => role.replace(/([A-Z])/g, ' $1').trim()
 const GENDERS = ['Male', 'Female', 'Other', 'Misha'] as const
 
 const COUNTRY_CODES = [
@@ -203,14 +204,16 @@ function EditForm({
     resolver: zodResolver(updateEmployeeSchema),
     defaultValues: {
       last_name: employee.last_name,
-      gender: employee.gender,
+      gender: (GENDERS as readonly string[]).includes(employee.gender ?? '')
+        ? employee.gender
+        : 'Misha',
       phone: employee.phone,
       address: employee.address,
       position: employee.position,
       department: employee.department,
       role: employee.role as (typeof ROLES)[number],
       active: employee.active,
-      jmbg: employee.jmbg ?? '',
+      jmbg: employee.jmbg,
     },
   })
 
@@ -219,8 +222,12 @@ function EditForm({
   const phone = watch('phone') ?? ''
   const gender = watch('gender')
 
+  const handleEditSubmit = (data: EditFormData) => {
+    onSubmit({ ...data, jmbg: data.jmbg || undefined })
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(handleEditSubmit)} className="space-y-4">
       {readOnly && (
         <p className="text-sm text-muted-foreground bg-muted px-3 py-2 rounded-md">
           View only — administrator profiles cannot be edited.
@@ -343,12 +350,14 @@ function EditForm({
           disabled={readOnly}
         >
           <SelectTrigger id="role">
-            <SelectValue placeholder="Select role" />
+            <SelectValue placeholder="Select role">
+              {role ? formatRoleLabel(role) : null}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             {ROLES.map((r) => (
               <SelectItem key={r} value={r}>
-                {r}
+                {formatRoleLabel(r)}
               </SelectItem>
             ))}
           </SelectContent>

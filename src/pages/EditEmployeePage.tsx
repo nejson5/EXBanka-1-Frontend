@@ -40,8 +40,14 @@ export function EditEmployeePage() {
   return (
     <div>
       <div className="flex items-center gap-3 mb-6">
-        <Button variant="outline" size="sm" onClick={() => navigate('/employees')}>
-          ← Back
+        <Button
+          variant="outline"
+          size="sm"
+          aria-label="Back"
+          onClick={() => navigate('/employees')}
+          className="text-accent-2 border-accent-2 hover:bg-accent-2/10"
+        >
+          ←
         </Button>
         <h1 className="text-2xl font-bold">{title}</h1>
       </div>

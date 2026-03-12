@@ -58,6 +58,27 @@ describe('EmployeeForm', () => {
     expect(screen.getByText('Female')).toBeInTheDocument()
   })
 
+  it('defaults gender to Misha when employee gender is not a valid option', async () => {
+    const employee = createMockEmployee({ gender: 'M' })
+    renderWithProviders(
+      <EmployeeForm onSubmit={mockOnSubmit} isLoading={false} employee={employee} />
+    )
+    await userEvent.click(screen.getByRole('button', { name: /save/i }))
+    await waitFor(() => {
+      expect(mockOnSubmit).toHaveBeenCalledWith(expect.objectContaining({ gender: 'Misha' }))
+    })
+  })
+
+  it('displays role label with spaces between words in edit mode', async () => {
+    const employee = createMockEmployee({ role: 'EmployeeBasic' })
+    renderWithProviders(
+      <EmployeeForm onSubmit={mockOnSubmit} isLoading={false} employee={employee} />
+    )
+    const roleCombobox = screen.getByRole('combobox', { name: /^role$/i })
+    await userEvent.click(roleCombobox)
+    expect(screen.queryAllByText('Employee Basic').length).toBeGreaterThan(0)
+  })
+
   it('disables gender dropdown when readOnly', () => {
     const employee = createMockEmployee({ gender: 'Male' })
     renderWithProviders(

@@ -22,7 +22,7 @@ interface EmployeeFiltersProps {
 }
 
 export function EmployeeFilters({ onFilterChange }: EmployeeFiltersProps) {
-  const [category, setCategory] = useState<FilterCategory>('first_name')
+  const [category, setCategory] = useState<FilterCategory>('all')
   const [value, setValue] = useState('')
 
   const handleCategoryChange = (newCategory: string | null) => {
