@@ -2,6 +2,8 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { EmployeeForm } from '@/components/employees/EmployeeForm'
 import { BackButton } from '@/components/shared/BackButton'
+import { LoadingSpinner } from '@/components/shared/LoadingSpinner'
+import { ErrorMessage } from '@/components/shared/ErrorMessage'
 import { useEmployee } from '@/hooks/useEmployee'
 import { useAppSelector } from '@/hooks/useAppSelector'
 import { selectCurrentUser } from '@/store/selectors/authSelectors'
@@ -28,8 +30,8 @@ export function EditEmployeePage() {
     },
   })
 
-  if (isLoading) return <p>Loading...</p>
-  if (!employee) return <p>Employee not found.</p>
+  if (isLoading) return <LoadingSpinner />
+  if (!employee) return <ErrorMessage message="Employee not found." />
 
   const title = isOtherAdmin
     ? 'Administrator Details'
@@ -49,7 +51,7 @@ export function EditEmployeePage() {
         isLoading={mutation.isPending}
         readOnly={isOtherAdmin}
       />
-      {mutation.isError && <p className="text-destructive mt-2">Failed to update employee.</p>}
+      {mutation.isError && <ErrorMessage message="Failed to update employee." />}
     </div>
   )
 }

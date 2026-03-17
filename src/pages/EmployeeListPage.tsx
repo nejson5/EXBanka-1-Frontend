@@ -8,6 +8,8 @@ import { useEmployees } from '@/hooks/useEmployees'
 import { useEmployee } from '@/hooks/useEmployee'
 import { useAppSelector } from '@/hooks/useAppSelector'
 import { selectCurrentUser } from '@/store/selectors/authSelectors'
+import { LoadingSpinner } from '@/components/shared/LoadingSpinner'
+import { ErrorMessage } from '@/components/shared/ErrorMessage'
 import type { FilterCategory } from '@/types/employee'
 
 const PAGE_SIZE = 20
@@ -17,8 +19,8 @@ function MeTab() {
   const { data: employee, isLoading } = useEmployee(currentUser?.id ?? 0)
 
   if (!currentUser) return <p className="text-muted-foreground">Not logged in.</p>
-  if (isLoading) return <p>Loading...</p>
-  if (!employee) return <p className="text-muted-foreground">Could not load your profile.</p>
+  if (isLoading) return <LoadingSpinner />
+  if (!employee) return <ErrorMessage message="Could not load your profile." />
 
   const formatDate = (ts: number) => {
     if (!ts) return '—'
@@ -116,7 +118,7 @@ export function EmployeeListPage() {
           <EmployeeFilters onFilterChange={handleFilterChange} />
 
           {isLoading ? (
-            <p>Loading...</p>
+            <LoadingSpinner />
           ) : paginatedEmployees.length ? (
             <>
               <EmployeeTable employees={paginatedEmployees} onRowClick={handleRowClick} />

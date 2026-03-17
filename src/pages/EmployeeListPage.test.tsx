@@ -96,7 +96,7 @@ describe('EmployeeListPage', () => {
     renderWithProviders(<EmployeeListPage />, {
       preloadedState: { auth: createMockAuthState() },
     })
-    expect(screen.getByText(/loading/i)).toBeInTheDocument()
+    expect(screen.getByTestId('loading-spinner')).toBeInTheDocument()
   })
 
   it('fetches employees without filter or pagination params', async () => {
