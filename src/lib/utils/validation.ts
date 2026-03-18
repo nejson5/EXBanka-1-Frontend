@@ -75,6 +75,101 @@ export const createEmployeeSchema = z.object({
     .optional(),
 })
 
+// --- Banking Schemas ---
+
+const ACCOUNT_TYPES = ['CURRENT', 'FOREIGN_CURRENCY'] as const
+const OWNER_TYPES = ['PERSONAL', 'BUSINESS'] as const
+const LOAN_TYPES_ENUM = ['CASH', 'MORTGAGE', 'AUTO', 'REFINANCING', 'STUDENT'] as const
+
+export const companySchema = z.object({
+  name: z.string().min(1, 'Company name is required'),
+  registration_number: z.string().regex(/^\d{8}$/, 'Must be exactly 8 digits'),
+  tax_number: z.string().regex(/^\d{9}$/, 'Must be exactly 9 digits'),
+  activity_code: z.string().regex(/^\d{2}\.\d{1,2}$/, 'Format: XX.XX'),
+  address: z.string().min(1, 'Address is required'),
+})
+
+export const createAccountSchema = z.object({
+  name: z.string().min(1, 'Account name is required'),
+  owner_id: z.number().min(1, 'Owner is required'),
+  account_type: z.enum(ACCOUNT_TYPES),
+  owner_type: z.enum(OWNER_TYPES),
+  subtype: z.string().min(1, 'Subtype is required'),
+  currency: z.string().min(1, 'Currency is required'),
+  initial_balance: z.number().min(0, 'Balance cannot be negative').optional(),
+  create_card: z.boolean().optional(),
+  daily_limit: z.number().min(0).optional(),
+  monthly_limit: z.number().min(0).optional(),
+})
+
+export const createTransferSchema = z
+  .object({
+    from_account: z.string().regex(/^\d{18}$/, 'Account number must be 18 digits'),
+    to_account: z.string().regex(/^\d{18}$/, 'Account number must be 18 digits'),
+    amount: z.number().positive('Amount must be greater than 0'),
+  })
+  .refine((data) => data.from_account !== data.to_account, {
+    message: 'Source and destination must be different',
+    path: ['to_account'],
+  })
+
+export const createPaymentSchema = z.object({
+  from_account: z.string().min(1, 'From account is required'),
+  to_account: z.string().min(1, 'To account is required'),
+  receiver_name: z.string().min(1, 'Receiver name is required'),
+  amount: z.number().positive('Amount must be greater than 0'),
+  payment_code: z.string().min(1, 'Payment code is required'),
+  reference: z.string().optional(),
+  description: z.string().optional(),
+})
+
+export const createInternalTransferSchema = z
+  .object({
+    from_account: z.string().min(1, 'From account is required'),
+    to_account: z.string().min(1, 'To account is required'),
+    amount: z.number().positive('Amount must be greater than 0'),
+    description: z.string().optional(),
+  })
+  .refine((data) => data.from_account !== data.to_account, {
+    message: 'Source and destination must be different',
+    path: ['to_account'],
+  })
+
+export const createLoanRequestSchema = z.object({
+  loan_type: z.enum(LOAN_TYPES_ENUM),
+  account_number: z.string().min(1, 'Account is required'),
+  amount: z.number().positive('Amount must be greater than 0'),
+  period: z.number().int().positive('Period must be positive'),
+  currency_code: z.string().optional(),
+})
+
+export const paymentRecipientSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  account_number: z.string().min(1, 'Account number is required'),
+  reference: z.string().optional(),
+  payment_code: z.string().optional(),
+})
+
+export const updateAccountLimitsSchema = z.object({
+  daily_limit: z.number().min(0, 'Daily limit cannot be negative').optional(),
+  monthly_limit: z.number().min(0, 'Monthly limit cannot be negative').optional(),
+})
+
+export const updateAccountNameSchema = z.object({
+  name: z.string().min(1, 'Account name is required'),
+})
+
+export const updateClientSchema = z.object({
+  first_name: z.string().min(1).optional(),
+  last_name: z.string().min(1).optional(),
+  email: emailSchema.optional(),
+  phone: z.string().optional(),
+  address: z.string().optional(),
+  gender: z.string().optional(),
+})
+
+// --- End Banking Schemas ---
+
 export const updateEmployeeSchema = z.object({
   last_name: z
     .string()
@@ -88,6 +183,27 @@ export const updateEmployeeSchema = z.object({
   department: z.string().optional(),
   role: z.enum(EMPLOYEE_ROLES).optional(),
   active: z.boolean().optional(),
+  jmbg: z
+    .string()
+    .regex(/^\d{13}$/, 'JMBG must be exactly 13 digits')
+    .optional()
+    .or(z.literal('')),
+})
+
+export const createClientSchema = z.object({
+  first_name: z
+    .string()
+    .min(1, 'First name is required')
+    .max(20, 'First name must be at most 20 characters'),
+  last_name: z
+    .string()
+    .min(1, 'Last name is required')
+    .max(20, 'Last name must be at most 20 characters'),
+  date_of_birth: z.number({ error: 'Date of birth is required' }),
+  email: emailSchema,
+  gender: z.string().optional(),
+  phone: z.string().max(15, 'Phone number must be at most 15 digits').optional(),
+  address: z.string().optional(),
   jmbg: z
     .string()
     .regex(/^\d{13}$/, 'JMBG must be exactly 13 digits')
