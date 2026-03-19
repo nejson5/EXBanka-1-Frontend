@@ -1,10 +1,6 @@
 {
   "permissions": {
     "allow": [
-      "Bash(cd \"C:\\\\Users\\\\Nevena\\\\Desktop\\\\si\\\\EXBanka-1-Frontend\" && npx shadcn@latest add tabs --yes 2>&1)",
-      "Bash(npm test:*)",
-      "Bash(npx jest:*)",
-      "Bash(npx tsc:*)"
     ]
   }
 }
