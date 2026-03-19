@@ -9,7 +9,6 @@ export function LoanDetailsPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { data: loan, isLoading } = useLoan(Number(id))
-  const loanTypeLabel = (type: string) => LOAN_TYPES.find((t) => t.value === type)?.label ?? type
 
   if (isLoading) return <p>Učitavanje...</p>
   if (!loan) return <p>Kredit nije pronađen.</p>
@@ -20,7 +19,9 @@ export function LoanDetailsPage() {
         <Button variant="ghost" onClick={() => navigate('/loans')}>
           ← Nazad
         </Button>
-        <h1 className="text-2xl font-bold">{loanTypeLabel(loan.loan_type)}</h1>
+        <h1 className="text-2xl font-bold">
+          {LOAN_TYPES.find((t) => t.value === loan.loan_type)?.label ?? loan.loan_type}
+        </h1>
       </div>
 
       <LoanDetails loan={loan} />
