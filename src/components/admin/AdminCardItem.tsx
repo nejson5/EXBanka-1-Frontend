@@ -1,16 +1,16 @@
-import type { Card } from '@/types/card'
+import type { Card, CardStatus } from '@/types/card'
 import { maskCardNumber } from '@/lib/utils/format'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card as CardUI, CardContent } from '@/components/ui/card'
 
-const STATUS_LABELS: Record<string, string> = {
+const STATUS_LABELS: Record<CardStatus, string> = {
   ACTIVE: 'Aktivna',
   BLOCKED: 'Blokirana',
   DEACTIVATED: 'Deaktivirana',
 }
 
-const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive'> = {
+const STATUS_VARIANT: Record<CardStatus, 'default' | 'secondary' | 'destructive'> = {
   ACTIVE: 'default',
   BLOCKED: 'secondary',
   DEACTIVATED: 'destructive',
