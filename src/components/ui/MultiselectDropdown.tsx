@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
+import { buttonVariants } from '@/components/ui/button'
 import type { FilterOption } from '@/types/filters'
 
 interface MultiselectDropdownProps {
@@ -34,7 +35,7 @@ export function MultiselectDropdown({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger>
+      <PopoverTrigger className={buttonVariants({ variant: 'outline' })}>
         {triggerLabel}
       </PopoverTrigger>
       <PopoverContent className="w-56 p-2">
