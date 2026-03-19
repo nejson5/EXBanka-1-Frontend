@@ -17,7 +17,7 @@ describe('LoanDetailsPage', () => {
 
   it('renders loan details', () => {
     renderWithProviders(<LoanDetailsPage />, { route: '/loans/1' })
-    expect(screen.getByText(/gotovinski/i)).toBeInTheDocument()
+    expect(screen.getAllByText(/gotovinski/i).length).toBeGreaterThan(0)
     expect(screen.getByText(/kamatna stopa/i)).toBeInTheDocument()
   })
 })
