@@ -37,6 +37,7 @@ describe('authSlice', () => {
         email: 'a@b.com',
         role: 'EmployeeAdmin',
         permissions: ['employees.read'],
+        system_type: 'employee',
       })
 
       const store = createStore()
@@ -52,6 +53,7 @@ describe('authSlice', () => {
         email: 'a@b.com',
         role: 'EmployeeAdmin',
         permissions: ['employees.read'],
+        system_type: 'employee' as const,
       }
       jest.mocked(authApi.login).mockResolvedValue(tokens)
       jest.mocked(jwt.decodeAuthToken).mockReturnValue(user)
@@ -81,7 +83,13 @@ describe('authSlice', () => {
   describe('clientLoginThunk', () => {
     it('sets authenticated state on success', async () => {
       const tokens = { access_token: 'at', refresh_token: 'rt' }
-      const user = { id: 2, email: 'client@b.com', role: 'Client', permissions: [] }
+      const user = {
+        id: 2,
+        email: 'client@b.com',
+        role: 'Client',
+        permissions: [],
+        system_type: 'client' as const,
+      }
       jest.mocked(authApi.clientLogin).mockResolvedValue(tokens)
       jest.mocked(jwt.decodeAuthToken).mockReturnValue(user)
 
@@ -99,7 +107,13 @@ describe('authSlice', () => {
       jest.mocked(authApi.clientLogin).mockResolvedValue(tokens)
       jest
         .mocked(jwt.decodeAuthToken)
-        .mockReturnValue({ id: 2, email: 'c@b.com', role: 'Client', permissions: [] })
+        .mockReturnValue({
+          id: 2,
+          email: 'c@b.com',
+          role: 'Client',
+          permissions: [],
+          system_type: 'client' as const,
+        })
 
       const store = createStore()
       await store.dispatch(clientLoginThunk({ email: 'c@b.com', password: 'pass' }))

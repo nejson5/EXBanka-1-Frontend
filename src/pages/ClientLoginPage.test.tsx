@@ -47,7 +47,13 @@ describe('ClientLoginPage', () => {
 
   it('dispatches clientLogin on form submit', async () => {
     const tokens = { access_token: 'at', refresh_token: 'rt' }
-    const user = { id: 2, email: 'client@b.com', role: 'Client', permissions: [] }
+    const user = {
+      id: 2,
+      email: 'client@b.com',
+      role: 'Client',
+      permissions: [],
+      system_type: 'client' as const,
+    }
     jest.mocked(authApi.clientLogin).mockResolvedValue(tokens)
     jest.mocked(jwt.decodeAuthToken).mockReturnValue(user)
 
