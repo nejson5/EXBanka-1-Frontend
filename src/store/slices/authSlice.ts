@@ -64,6 +64,7 @@ const authSlice = createSlice({
       const user = decodeAuthToken(action.payload.access_token)
       if (user) {
         state.user = user
+        state.userType = user.system_type
         state.status = 'authenticated'
       }
     },

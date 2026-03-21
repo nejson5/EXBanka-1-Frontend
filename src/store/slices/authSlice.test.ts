@@ -100,6 +100,25 @@ describe('authSlice', () => {
     })
   })
 
+  describe('setTokens', () => {
+    it('sets userType from system_type when setTokens is called', () => {
+      jest.mocked(jwt.decodeAuthToken).mockReturnValue({
+        id: 2,
+        email: 'client@b.com',
+        role: 'client',
+        permissions: [],
+        system_type: 'client',
+      })
+
+      const store = createStore()
+      store.dispatch(setTokens({ access_token: 'tok', refresh_token: 'ref' }))
+
+      const state = store.getState().auth
+      expect(state.userType).toBe('client')
+      expect(state.status).toBe('authenticated')
+    })
+  })
+
   describe('logoutThunk', () => {
     it('clears auth state', async () => {
       jest.mocked(authApi.logout).mockResolvedValue(undefined)
