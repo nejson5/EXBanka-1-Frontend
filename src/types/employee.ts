@@ -56,5 +56,3 @@ export interface UpdateEmployeeRequest {
   active?: boolean
   jmbg?: string
 }
-
-export type FilterCategory = 'name' | 'email' | 'position'

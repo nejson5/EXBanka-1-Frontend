@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import type { FilterCategory } from '@/types/employee'
+type FilterCategory = 'name' | 'email' | 'position'
 
 const FILTER_CATEGORIES: { value: FilterCategory; label: string }[] = [
   { value: 'name', label: 'Name' },
