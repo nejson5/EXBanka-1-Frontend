@@ -35,11 +35,11 @@ export function AccountListPage() {
     return a.status.localeCompare(b.status)
   })
 
-  if (isLoading) return <p>Učitavanje...</p>
+  if (isLoading) return <p>Loading...</p>
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold">Moji računi</h1>
+      <h1 className="text-2xl font-bold">My Accounts</h1>
       <div className="space-y-3">
         {accounts.map((account) => (
           <AccountCard
@@ -48,33 +48,35 @@ export function AccountListPage() {
             onClick={() => setSelectedAccount(account)}
           />
         ))}
-        {accounts.length === 0 && <p className="text-muted-foreground">Nemate aktivnih računa.</p>}
+        {accounts.length === 0 && (
+          <p className="text-muted-foreground">You have no active accounts.</p>
+        )}
       </div>
 
       {effectiveAccount && (
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-base">
-              Poslednje transakcije — {effectiveAccount.account_name}
+              Recent Transactions — {effectiveAccount.account_name}
             </CardTitle>
             <Button
               variant="outline"
               size="sm"
               onClick={() => navigate(`/accounts/${effectiveAccount.id}`)}
             >
-              Detalji računa
+              Account Details
             </Button>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2 mb-2">
-              <Label>Sortiraj po:</Label>
+              <Label>Sort by:</Label>
               <Select value={sortBy} onValueChange={(v) => setSortBy(v as 'date' | 'type')}>
                 <SelectTrigger className="w-40">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="date">Datumu</SelectItem>
-                  <SelectItem value="type">Tipu transakcije</SelectItem>
+                  <SelectItem value="date">Date</SelectItem>
+                  <SelectItem value="type">Transaction Type</SelectItem>
                 </SelectContent>
               </Select>
             </div>

@@ -67,14 +67,14 @@ export function PaymentRecipientsPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Sačuvani primaoci</h1>
-        <Button onClick={handleToggleForm}>{showForm ? 'Otkaži' : 'Dodaj primaoca'}</Button>
+        <h1 className="text-2xl font-bold">Saved Recipients</h1>
+        <Button onClick={handleToggleForm}>{showForm ? 'Cancel' : 'Add Recipient'}</Button>
       </div>
 
       {showForm && (
         <Card>
           <CardHeader>
-            <CardTitle>{editingRecipient ? 'Izmeni primaoca' : 'Novi primalac'}</CardTitle>
+            <CardTitle>{editingRecipient ? 'Edit Recipient' : 'New Recipient'}</CardTitle>
           </CardHeader>
           <CardContent>
             <RecipientForm
@@ -88,7 +88,7 @@ export function PaymentRecipientsPage() {
       )}
 
       {isLoading ? (
-        <p>Učitavanje...</p>
+        <p>Loading...</p>
       ) : (
         <RecipientList recipients={recipients ?? []} onEdit={handleEdit} onDelete={handleDelete} />
       )}

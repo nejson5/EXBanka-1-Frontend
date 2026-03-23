@@ -16,7 +16,7 @@ describe('InternalTransferPage', () => {
 
   it('renders internal transfer form', () => {
     renderWithProviders(<InternalTransferPage />)
-    expect(screen.getByText(/prenos sredstava/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/iznos/i)).toBeInTheDocument()
+    expect(screen.getByText(/transfer funds/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/amount/i)).toBeInTheDocument()
   })
 })

@@ -16,6 +16,6 @@ describe('TransferHistoryPage', () => {
 
   it('renders history page title', () => {
     renderWithProviders(<TransferHistoryPage />)
-    expect(screen.getByText(/istorija transfera/i)).toBeInTheDocument()
+    expect(screen.getByText(/transfer history/i)).toBeInTheDocument()
   })
 })

@@ -130,18 +130,18 @@ export const createInternalTransferSchema = z
   })
 
 export const createLoanRequestSchema = z.object({
-  loan_type: z.enum(LOAN_TYPES_ENUM, { message: 'Izaberite vrstu kredita' }),
+  loan_type: z.enum(LOAN_TYPES_ENUM, { message: 'Please select a loan type' }),
   interest_type: z.enum(['FIXED', 'VARIABLE'] as const, {
-    message: 'Izaberite tip kamatne stope',
+    message: 'Please select an interest rate type',
   }),
-  account_number: z.string().min(1, 'Izaberite račun'),
-  amount: z.number({ error: 'Unesite iznos' }).positive('Iznos mora biti pozitivan'),
-  currency_code: z.string().min(1, 'Izaberite valutu'),
+  account_number: z.string().min(1, 'Please select an account'),
+  amount: z.number({ error: 'Please enter an amount' }).positive('Amount must be positive'),
+  currency_code: z.string().min(1, 'Please select a currency'),
   purpose: z.string().optional(),
-  monthly_salary: z.number().positive('Plata mora biti pozitivna').optional(),
+  monthly_salary: z.number().positive('Salary must be positive').optional(),
   employment_status: z.string().optional(),
   employment_period: z.number().int().min(0).optional(),
-  repayment_period: z.number({ error: 'Izaberite period otplate' }).int().positive(),
+  repayment_period: z.number({ error: 'Please select a repayment period' }).int().positive(),
   phone: z.string().max(15).optional().or(z.literal('')),
 })
 
@@ -199,10 +199,10 @@ export const createClientSchema = z.object({
     .string()
     .min(1, 'Last name is required')
     .max(20, 'Last name must be at most 20 characters'),
-  date_of_birth: z.string().min(1, 'Datum rođenja je obavezno'),
+  date_of_birth: z.string().min(1, 'Date of birth is required'),
   email: emailSchema,
   gender: z.string().optional(),
   phone: z.string().max(15, 'Phone number must be at most 15 digits').optional(),
   address: z.string().optional(),
-  jmbg: z.string().regex(/^\d{13}$/, 'JMBG mora imati tačno 13 cifara'),
+  jmbg: z.string().regex(/^\d{13}$/, 'JMBG must have exactly 13 digits'),
 })

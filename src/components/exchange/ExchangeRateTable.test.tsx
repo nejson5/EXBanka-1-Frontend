@@ -28,15 +28,15 @@ describe('ExchangeRateTable', () => {
 
   it('shows buy and sell columns', () => {
     renderWithProviders(<ExchangeRateTable rates={mockRates} />)
-    expect(screen.getByText(/kupovni/i)).toBeInTheDocument()
-    expect(screen.getByText(/prodajni/i)).toBeInTheDocument()
+    expect(screen.getByText(/buy rate/i)).toBeInTheDocument()
+    expect(screen.getByText(/sell rate/i)).toBeInTheDocument()
     expect(screen.getByText('116.50')).toBeInTheDocument()
     expect(screen.getByText('117.80')).toBeInTheDocument()
   })
 
   it('shows empty state when no rates', () => {
     renderWithProviders(<ExchangeRateTable rates={[]} />)
-    expect(screen.getByText(/nema podataka/i)).toBeInTheDocument()
+    expect(screen.getByText(/no exchange rate data/i)).toBeInTheDocument()
   })
 
   it('renders rate values returned as strings from API without crashing', () => {

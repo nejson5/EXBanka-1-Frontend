@@ -35,26 +35,26 @@ export function EquivalenceCalculator({ onConvert, result, loading }: Equivalenc
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Proveri ekvivalentnost</CardTitle>
+        <CardTitle>Check Equivalence</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label htmlFor="amount">Iznos</Label>
+            <Label htmlFor="amount">Amount</Label>
             <Input
               id="amount"
               type="number"
               value={amount || ''}
               onChange={(e) => setAmount(Number(e.target.value))}
-              aria-label="Iznos"
+              aria-label="Amount"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>Iz valute</Label>
+              <Label>From Currency</Label>
               <Select value={fromCurrency} onValueChange={(v) => setFromCurrency(v ?? 'RSD')}>
-                <SelectTrigger aria-label="Iz valute">
+                <SelectTrigger aria-label="From Currency">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -68,9 +68,9 @@ export function EquivalenceCalculator({ onConvert, result, loading }: Equivalenc
             </div>
 
             <div>
-              <Label>U valutu</Label>
+              <Label>To Currency</Label>
               <Select value={toCurrency} onValueChange={(v) => setToCurrency(v ?? 'EUR')}>
-                <SelectTrigger aria-label="U valutu">
+                <SelectTrigger aria-label="To Currency">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -85,7 +85,7 @@ export function EquivalenceCalculator({ onConvert, result, loading }: Equivalenc
           </div>
 
           <Button type="submit" className="w-full" disabled={loading || amount <= 0}>
-            {loading ? 'Izračunavanje...' : 'Izračunaj'}
+            {loading ? 'Calculating...' : 'Calculate'}
           </Button>
         </form>
 
@@ -96,7 +96,7 @@ export function EquivalenceCalculator({ onConvert, result, loading }: Equivalenc
               {formatCurrency(result.to_amount, result.to_currency)}
             </p>
             <p className="text-sm text-muted-foreground text-center">
-              Kurs: {result.rate.toFixed(4)}
+              Rate: {result.rate.toFixed(4)}
             </p>
           </div>
         )}

@@ -15,20 +15,20 @@ import type { PaymentFilters as PaymentFiltersType } from '@/types/payment'
 import type { FilterFieldDef, FilterValues } from '@/types/filters'
 
 const PAYMENT_FILTER_FIELDS: FilterFieldDef[] = [
-  { key: 'date_from', label: 'Od datuma', type: 'date' },
-  { key: 'date_to', label: 'Do datuma', type: 'date' },
+  { key: 'date_from', label: 'From Date', type: 'date' },
+  { key: 'date_to', label: 'To Date', type: 'date' },
   {
     key: 'status_filter',
     label: 'Status',
     type: 'multiselect',
     options: [
-      { label: 'Realizovano', value: 'COMPLETED' },
-      { label: 'Odbijeno', value: 'FAILED' },
-      { label: 'U obradi', value: 'PENDING' },
+      { label: 'Completed', value: 'COMPLETED' },
+      { label: 'Rejected', value: 'FAILED' },
+      { label: 'Processing', value: 'PENDING' },
     ],
   },
-  { key: 'amount_min', label: 'Min iznos', type: 'number' },
-  { key: 'amount_max', label: 'Max iznos', type: 'number' },
+  { key: 'amount_min', label: 'Min Amount', type: 'number' },
+  { key: 'amount_max', label: 'Max Amount', type: 'number' },
 ]
 
 export function PaymentHistoryPage() {
@@ -51,16 +51,16 @@ export function PaymentHistoryPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold">Istorija plaćanja</h1>
+      <h1 className="text-2xl font-bold">Payment History</h1>
       {accounts.length > 1 && (
         <div className="flex items-center gap-2">
-          <Label>Račun:</Label>
+          <Label>Account:</Label>
           <Select
             value={selectedAccountNumber}
             onValueChange={(v) => setSelectedAccountNumber(v ?? '')}
           >
             <SelectTrigger className="w-64">
-              <SelectValue placeholder="Svi računi" />
+              <SelectValue placeholder="All Accounts" />
             </SelectTrigger>
             <SelectContent>
               {accounts.map((acc) => (
@@ -73,7 +73,7 @@ export function PaymentHistoryPage() {
         </div>
       )}
       <FilterBar fields={PAYMENT_FILTER_FIELDS} values={filterValues} onChange={setFilterValues} />
-      {isLoading ? <p>Učitavanje...</p> : <PaymentHistoryTable payments={payments} />}
+      {isLoading ? <p>Loading...</p> : <PaymentHistoryTable payments={payments} />}
     </div>
   )
 }

@@ -29,8 +29,8 @@ describe('PaymentRecipientsPage', () => {
 
   it('renders recipients page', () => {
     renderWithProviders(<PaymentRecipientsPage />)
-    expect(screen.getByText(/sačuvani primaoci/i)).toBeInTheDocument()
-    expect(screen.getByText(/dodaj primaoca/i)).toBeInTheDocument()
+    expect(screen.getByText('Saved Recipients')).toBeInTheDocument()
+    expect(screen.getByText(/add recipient/i)).toBeInTheDocument()
   })
 
   it('renders edit button for each recipient', () => {
@@ -43,7 +43,7 @@ describe('PaymentRecipientsPage', () => {
       isPending: false,
     } as any)
     renderWithProviders(<PaymentRecipientsPage />)
-    expect(screen.getByRole('button', { name: /izmeni/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /edit/i })).toBeInTheDocument()
   })
 
   it('pre-fills form when edit button is clicked', async () => {
@@ -59,10 +59,10 @@ describe('PaymentRecipientsPage', () => {
 
     renderWithProviders(<PaymentRecipientsPage />)
 
-    await userEvent.click(screen.getByRole('button', { name: /izmeni/i }))
+    await userEvent.click(screen.getByRole('button', { name: /edit/i }))
 
     expect(screen.getByDisplayValue(recipient.recipient_name)).toBeInTheDocument()
     expect(screen.getByDisplayValue(recipient.account_number)).toBeInTheDocument()
-    expect(screen.getByText(/izmeni primaoca/i)).toBeInTheDocument()
+    expect(screen.getByText(/edit recipient/i)).toBeInTheDocument()
   })
 })

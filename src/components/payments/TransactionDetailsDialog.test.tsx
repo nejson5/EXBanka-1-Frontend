@@ -21,7 +21,7 @@ describe('TransactionDetailsDialog', () => {
     renderWithProviders(
       <TransactionDetailsDialog payment={null} open={false} onOpenChange={jest.fn()} />
     )
-    expect(screen.queryByText(/detalji/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/details/i)).not.toBeInTheDocument()
   })
 
   it('renders PDF download button', () => {
@@ -29,6 +29,6 @@ describe('TransactionDetailsDialog', () => {
     renderWithProviders(
       <TransactionDetailsDialog payment={payment} open onOpenChange={jest.fn()} />
     )
-    expect(screen.getByRole('button', { name: /štampaj potvrdu/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /print receipt/i })).toBeInTheDocument()
   })
 })

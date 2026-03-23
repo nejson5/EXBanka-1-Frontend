@@ -208,15 +208,15 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
 
       {createCard && (
         <div>
-          <Label>Tip kartice</Label>
+          <Label>Card Brand</Label>
           <Select
             value={watch('card_brand') ?? ''}
             onValueChange={(v) =>
               setValue('card_brand', v as 'visa' | 'mastercard' | 'dinacard' | undefined)
             }
           >
-            <SelectTrigger aria-label="Tip kartice">
-              <SelectValue placeholder="Izaberite tip kartice" />
+            <SelectTrigger aria-label="Card Brand">
+              <SelectValue placeholder="Select card brand" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="visa">Visa</SelectItem>

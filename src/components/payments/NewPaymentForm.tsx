@@ -44,19 +44,19 @@ export function NewPaymentForm({ accounts, recipients, onSubmit }: NewPaymentFor
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Nova uplata</CardTitle>
+        <CardTitle>New Payment</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <Label>Sa računa</Label>
+            <Label>From Account</Label>
             <Controller
               name="from_account_number"
               control={control}
               render={({ field }) => (
                 <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Izaberite račun" />
+                    <SelectValue placeholder="Select account" />
                   </SelectTrigger>
                   <SelectContent>
                     {accounts.map((acc) => (
@@ -76,10 +76,10 @@ export function NewPaymentForm({ accounts, recipients, onSubmit }: NewPaymentFor
 
           {recipients && recipients.length > 0 && (
             <div>
-              <Label>Sačuvani primaoci</Label>
+              <Label>Saved Recipients</Label>
               <Select onValueChange={handleRecipientSelect}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Izaberite primaoca" />
+                  <SelectValue placeholder="Select recipient" />
                 </SelectTrigger>
                 <SelectContent>
                   {recipients.map((r) => (
@@ -93,7 +93,7 @@ export function NewPaymentForm({ accounts, recipients, onSubmit }: NewPaymentFor
           )}
 
           <div>
-            <Label htmlFor="to_account_number">Broj računa primaoca</Label>
+            <Label htmlFor="to_account_number">Recipient Account Number</Label>
             <Input id="to_account_number" {...register('to_account_number')} />
             {errors.to_account_number && (
               <p className="text-sm text-destructive">{errors.to_account_number.message}</p>
@@ -101,7 +101,7 @@ export function NewPaymentForm({ accounts, recipients, onSubmit }: NewPaymentFor
           </div>
 
           <div>
-            <Label htmlFor="recipient_name">Ime primaoca</Label>
+            <Label htmlFor="recipient_name">Recipient Name</Label>
             <Input id="recipient_name" {...register('recipient_name')} />
             {errors.recipient_name && (
               <p className="text-sm text-destructive">{errors.recipient_name.message}</p>
@@ -109,20 +109,20 @@ export function NewPaymentForm({ accounts, recipients, onSubmit }: NewPaymentFor
           </div>
 
           <div>
-            <Label htmlFor="amount">Iznos</Label>
+            <Label htmlFor="amount">Amount</Label>
             <Input id="amount" type="number" {...register('amount', { valueAsNumber: true })} />
             {errors.amount && <p className="text-sm text-destructive">{errors.amount.message}</p>}
           </div>
 
           <div>
-            <Label>Šifra plaćanja</Label>
+            <Label>Payment Code</Label>
             <Controller
               name="payment_code"
               control={control}
               render={({ field }) => (
                 <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Izaberite šifru" />
+                    <SelectValue placeholder="Select code" />
                   </SelectTrigger>
                   <SelectContent>
                     {PAYMENT_CODES.map((c) => (
@@ -140,17 +140,17 @@ export function NewPaymentForm({ accounts, recipients, onSubmit }: NewPaymentFor
           </div>
 
           <div>
-            <Label htmlFor="reference_number">Poziv na broj (opciono)</Label>
+            <Label htmlFor="reference_number">Reference Number (optional)</Label>
             <Input id="reference_number" {...register('reference_number')} />
           </div>
 
           <div>
-            <Label htmlFor="payment_purpose">Opis (opciono)</Label>
+            <Label htmlFor="payment_purpose">Description (optional)</Label>
             <Input id="payment_purpose" {...register('payment_purpose')} />
           </div>
 
           <Button type="submit" className="w-full">
-            Nastavi
+            Continue
           </Button>
         </form>
       </CardContent>

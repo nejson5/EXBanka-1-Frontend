@@ -17,16 +17,16 @@ describe('PaymentHistoryTable', () => {
   it('renders table headers', () => {
     render(<PaymentHistoryTable payments={[]} />)
 
-    expect(screen.getByText('Datum')).toBeInTheDocument()
-    expect(screen.getByText('Sa računa')).toBeInTheDocument()
-    expect(screen.getByText('Primalac')).toBeInTheDocument()
-    expect(screen.getByText('Iznos')).toBeInTheDocument()
+    expect(screen.getByText('Date')).toBeInTheDocument()
+    expect(screen.getByText('From Account')).toBeInTheDocument()
+    expect(screen.getByText('Recipient')).toBeInTheDocument()
+    expect(screen.getByText('Amount')).toBeInTheDocument()
     expect(screen.getByText('Status')).toBeInTheDocument()
   })
 
   it('shows empty state when no payments', () => {
     render(<PaymentHistoryTable payments={[]} />)
-    expect(screen.getByText(/nema plaćanja/i)).toBeInTheDocument()
+    expect(screen.getByText(/no payments/i)).toBeInTheDocument()
   })
 
   it('renders status badge for each payment', () => {
@@ -36,8 +36,8 @@ describe('PaymentHistoryTable', () => {
     ]
     render(<PaymentHistoryTable payments={payments} />)
 
-    expect(screen.getByText('Realizovano')).toBeInTheDocument()
-    expect(screen.getByText('Odbijeno')).toBeInTheDocument()
+    expect(screen.getByText('Completed')).toBeInTheDocument()
+    expect(screen.getByText('Rejected')).toBeInTheDocument()
   })
 
   it('renders formatted amount for each payment', () => {

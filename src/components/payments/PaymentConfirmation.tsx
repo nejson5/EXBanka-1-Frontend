@@ -30,24 +30,26 @@ export function PaymentConfirmation({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Potvrdi uplatu</CardTitle>
+        <CardTitle>Confirm Payment</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
-        <ConfirmRow label="Sa računa" value={formData.from_account_number} />
-        <ConfirmRow label="Na račun" value={formData.to_account_number} />
-        <ConfirmRow label="Primalac" value={formData.recipient_name} />
-        <ConfirmRow label="Iznos" value={formatCurrency(formData.amount, 'RSD')} />
-        <ConfirmRow label="Šifra" value={formData.payment_code} />
+        <ConfirmRow label="From Account" value={formData.from_account_number} />
+        <ConfirmRow label="To Account" value={formData.to_account_number} />
+        <ConfirmRow label="Recipient" value={formData.recipient_name} />
+        <ConfirmRow label="Amount" value={formatCurrency(formData.amount, 'RSD')} />
+        <ConfirmRow label="Code" value={formData.payment_code} />
         {formData.reference_number && (
-          <ConfirmRow label="Poziv na broj" value={formData.reference_number} />
+          <ConfirmRow label="Reference Number" value={formData.reference_number} />
         )}
-        {formData.payment_purpose && <ConfirmRow label="Opis" value={formData.payment_purpose} />}
+        {formData.payment_purpose && (
+          <ConfirmRow label="Description" value={formData.payment_purpose} />
+        )}
         <div className="flex gap-3 pt-4">
           <Button variant="outline" className="flex-1" onClick={onBack}>
-            Nazad
+            Back
           </Button>
           <Button className="flex-1" disabled={submitting} onClick={onConfirm}>
-            {submitting ? 'Obrađuje se...' : 'Potvrdi'}
+            {submitting ? 'Processing...' : 'Confirm'}
           </Button>
         </div>
         {error && <p className="text-sm text-destructive">{error}</p>}

@@ -49,12 +49,12 @@ export function NewPaymentPage() {
   if (step === 'success' && result) {
     return (
       <div className="space-y-4 text-center">
-        <h2 className="text-xl font-semibold">Uplata uspešna!</h2>
-        <p>ID transakcije: {result.id}</p>
+        <h2 className="text-xl font-semibold">Payment successful!</h2>
+        <p>Transaction ID: {result.id}</p>
         <div className="flex justify-center gap-3">
-          <Button onClick={() => navigate('/payments/history')}>Istorija</Button>
+          <Button onClick={() => navigate('/payments/history')}>History</Button>
           <Button variant="outline" onClick={() => dispatch(resetPaymentFlow())}>
-            Nova uplata
+            New Payment
           </Button>
         </div>
       </div>
@@ -87,10 +87,10 @@ export function NewPaymentPage() {
                 if (res.valid) {
                   dispatch(setPaymentStep('success'))
                 } else {
-                  dispatch(setVerificationError('Neispravan kod'))
+                  dispatch(setVerificationError('Invalid code'))
                 }
               },
-              onError: () => dispatch(setVerificationError('Greška pri verifikaciji')),
+              onError: () => dispatch(setVerificationError('Verification error')),
             }
           )
         }}

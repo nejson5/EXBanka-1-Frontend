@@ -23,21 +23,21 @@ describe('InternalTransferForm', () => {
 
   it('renders from account selector', () => {
     renderWithProviders(<InternalTransferForm accounts={mockAccounts} onSubmit={onSubmit} />)
-    expect(screen.getByText('Sa računa')).toBeInTheDocument()
+    expect(screen.getByText('From Account')).toBeInTheDocument()
   })
 
   it('renders to account selector', () => {
     renderWithProviders(<InternalTransferForm accounts={mockAccounts} onSubmit={onSubmit} />)
-    expect(screen.getByText('Na račun')).toBeInTheDocument()
+    expect(screen.getByText('To Account')).toBeInTheDocument()
   })
 
   it('renders amount input', () => {
     renderWithProviders(<InternalTransferForm accounts={mockAccounts} onSubmit={onSubmit} />)
-    expect(screen.getByLabelText(/iznos/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/amount/i)).toBeInTheDocument()
   })
 
   it('renders submit button', () => {
     renderWithProviders(<InternalTransferForm accounts={mockAccounts} onSubmit={onSubmit} />)
-    expect(screen.getByRole('button', { name: /nastavi/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /continue/i })).toBeInTheDocument()
   })
 })

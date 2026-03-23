@@ -34,6 +34,6 @@ describe('AccountDetailsPage', () => {
 
   it('renders rename button', () => {
     renderWithProviders(<AccountDetailsPage />, { route: '/accounts/1' })
-    expect(screen.getByText(/preimenuj račun/i)).toBeInTheDocument()
+    expect(screen.getByText(/rename account/i)).toBeInTheDocument()
   })
 })

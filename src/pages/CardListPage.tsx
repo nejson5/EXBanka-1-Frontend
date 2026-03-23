@@ -8,13 +8,13 @@ export function CardListPage() {
   const { data: cards, isLoading } = useCards()
   const blockCard = useBlockCard()
 
-  if (isLoading) return <p>Učitavanje...</p>
+  if (isLoading) return <p>Loading...</p>
 
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Kartice</h1>
-        <Button onClick={() => navigate('/cards/request')}>Zatraži karticu</Button>
+        <h1 className="text-2xl font-bold">Cards</h1>
+        <Button onClick={() => navigate('/cards/request')}>Request Card</Button>
       </div>
       <CardGrid cards={cards ?? []} onBlock={(id) => blockCard.mutate(id)} />
     </div>

@@ -13,7 +13,7 @@ describe('LoanDetails', () => {
   it('renders loan type', () => {
     const loan = createMockLoan({ loan_type: 'CASH' })
     renderWithProviders(<LoanDetails loan={loan} />)
-    expect(screen.getByText(/gotovinski/i)).toBeInTheDocument()
+    expect(screen.getByText(/cash/i)).toBeInTheDocument()
   })
 
   it('renders interest rate', () => {
@@ -24,22 +24,22 @@ describe('LoanDetails', () => {
 
   it('renders effective interest rate', () => {
     renderWithProviders(<LoanDetails loan={createMockLoan()} />)
-    expect(screen.getByText(/efektivna/i)).toBeInTheDocument()
+    expect(screen.getByText(/effective/i)).toBeInTheDocument()
   })
 
   it('renders maturity date', () => {
     renderWithProviders(<LoanDetails loan={createMockLoan()} />)
-    expect(screen.getByText(/datum dospeća/i)).toBeInTheDocument()
+    expect(screen.getByText(/maturity date/i)).toBeInTheDocument()
   })
 
   it('renders remaining debt', () => {
     renderWithProviders(<LoanDetails loan={createMockLoan()} />)
-    expect(screen.getByText(/preostalo dugovanje/i)).toBeInTheDocument()
+    expect(screen.getByText(/remaining debt/i)).toBeInTheDocument()
   })
 
   it('renders next installment info', () => {
     renderWithProviders(<LoanDetails loan={createMockLoan()} />)
-    expect(screen.getByText(/sledeća rata/i)).toBeInTheDocument()
+    expect(screen.getByText(/next installment/i)).toBeInTheDocument()
   })
 
   it('renders currency from loan data', () => {
@@ -49,6 +49,6 @@ describe('LoanDetails', () => {
 
   it('renders interest type', () => {
     renderWithProviders(<LoanDetails loan={createMockLoan({ interest_type: 'VARIABLE' })} />)
-    expect(screen.getByText(/varijabilna/i)).toBeInTheDocument()
+    expect(screen.getByText(/variable/i)).toBeInTheDocument()
   })
 })

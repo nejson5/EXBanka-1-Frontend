@@ -48,9 +48,9 @@ export function MultiselectDropdown({
               type="checkbox"
               checked={allSelected}
               onChange={handleSelectAll}
-              aria-label="Izaberi sve"
+              aria-label="Select all"
             />
-            Izaberi sve
+            Select all
           </label>
           <div className="border-t my-1" />
           {options.map((opt) => (

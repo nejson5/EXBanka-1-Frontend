@@ -73,12 +73,12 @@ beforeEach(() => {
 describe('AdminAccountsPage', () => {
   it('renders admin accounts page', () => {
     renderWithProviders(<AdminAccountsPage />)
-    expect(screen.getByText(/upravljanje računima/i)).toBeInTheDocument()
+    expect(screen.getByText(/account management/i)).toBeInTheDocument()
   })
 
   it('shows create account button', () => {
     renderWithProviders(<AdminAccountsPage />)
-    expect(screen.getByText(/novi račun/i)).toBeInTheDocument()
+    expect(screen.getByText(/new account/i)).toBeInTheDocument()
   })
 
   it('shows client first and last name for personal accounts', () => {
@@ -94,7 +94,7 @@ describe('AdminAccountsPage', () => {
 
   it('filters personal accounts by client name when typing in owner filter', async () => {
     renderWithProviders(<AdminAccountsPage />)
-    await userEvent.type(screen.getByPlaceholderText(/ime vlasnika/i), 'Anić')
+    await userEvent.type(screen.getByPlaceholderText(/owner name/i), 'Anić')
     expect(screen.getByText('Ana Anić')).toBeInTheDocument()
     expect(screen.queryByText('Marko Marković')).not.toBeInTheDocument()
     expect(screen.queryByText('Jovana Jović')).not.toBeInTheDocument()
@@ -102,7 +102,7 @@ describe('AdminAccountsPage', () => {
 
   it('filters company accounts by owner name when typing in owner filter', async () => {
     renderWithProviders(<AdminAccountsPage />)
-    await userEvent.type(screen.getByPlaceholderText(/ime vlasnika/i), 'Jovana')
+    await userEvent.type(screen.getByPlaceholderText(/owner name/i), 'Jovana')
     expect(screen.getByText('Jovana Jović')).toBeInTheDocument()
     expect(screen.queryByText('Ana Anić')).not.toBeInTheDocument()
     expect(screen.queryByText('Marko Marković')).not.toBeInTheDocument()
@@ -110,7 +110,7 @@ describe('AdminAccountsPage', () => {
 
   it('shows all accounts when owner filter is cleared', async () => {
     renderWithProviders(<AdminAccountsPage />)
-    const input = screen.getByPlaceholderText(/ime vlasnika/i)
+    const input = screen.getByPlaceholderText(/owner name/i)
     await userEvent.type(input, 'Ana')
     await userEvent.clear(input)
     expect(screen.getByText('Ana Anić')).toBeInTheDocument()

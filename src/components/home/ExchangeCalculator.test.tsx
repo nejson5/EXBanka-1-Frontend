@@ -17,6 +17,6 @@ describe('ExchangeCalculator', () => {
 
   it('renders amount input and currency selectors', () => {
     renderWithProviders(<ExchangeCalculator />)
-    expect(screen.getByLabelText(/iznos/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/amount/i)).toBeInTheDocument()
   })
 })

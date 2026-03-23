@@ -5,8 +5,8 @@ import { AuthorizedPersonForm } from '@/components/cards/AuthorizedPersonForm'
 describe('AuthorizedPersonForm', () => {
   it('renders form fields', () => {
     renderWithProviders(<AuthorizedPersonForm onSubmit={jest.fn()} loading={false} />)
-    expect(screen.getByLabelText('Ime')).toBeInTheDocument()
-    expect(screen.getByLabelText(/prezime/i)).toBeInTheDocument()
+    expect(screen.getByLabelText('First Name')).toBeInTheDocument()
+    expect(screen.getByLabelText(/last name/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument()
   })
 })

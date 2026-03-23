@@ -16,9 +16,9 @@ interface InstallmentTableProps {
 }
 
 const INSTALLMENT_STATUS_LABELS: Record<string, string> = {
-  PAID: 'Plaćena',
-  UNPAID: 'Neplaćena',
-  OVERDUE: 'Zakasnela',
+  PAID: 'Paid',
+  UNPAID: 'Unpaid',
+  OVERDUE: 'Overdue',
 }
 
 const INSTALLMENT_VARIANT: Record<string, 'default' | 'secondary' | 'destructive'> = {
@@ -32,10 +32,10 @@ export function InstallmentTable({ installments }: InstallmentTableProps) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Rate</CardTitle>
+          <CardTitle>Installments</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground text-sm">Nema rata za prikaz.</p>
+          <p className="text-muted-foreground text-sm">No installments to display.</p>
         </CardContent>
       </Card>
     )
@@ -44,15 +44,15 @@ export function InstallmentTable({ installments }: InstallmentTableProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Rate</CardTitle>
+        <CardTitle>Installments</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>#</TableHead>
-              <TableHead>Rok plaćanja</TableHead>
-              <TableHead>Iznos</TableHead>
+              <TableHead>Due Date</TableHead>
+              <TableHead>Amount</TableHead>
               <TableHead>Status</TableHead>
             </TableRow>
           </TableHeader>

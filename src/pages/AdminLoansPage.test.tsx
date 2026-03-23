@@ -17,7 +17,7 @@ describe('AdminLoansPage', () => {
 
   it('renders all loans page', () => {
     renderWithProviders(<AdminLoansPage />)
-    expect(screen.getByText(/svi krediti/i)).toBeInTheDocument()
+    expect(screen.getByText(/all loans/i)).toBeInTheDocument()
     expect(screen.getByText('LN-2026-00001')).toBeInTheDocument()
   })
 })

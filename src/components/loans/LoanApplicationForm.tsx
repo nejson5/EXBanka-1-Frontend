@@ -33,14 +33,14 @@ export function LoanApplicationForm({
   return (
     <form onSubmit={submitForm} className="space-y-4">
       <div>
-        <Label>Tip kredita</Label>
+        <Label>Loan Type</Label>
         <Controller
           name="loan_type"
           control={control}
           render={({ field }) => (
             <Select onValueChange={field.onChange} value={field.value}>
-              <SelectTrigger aria-label="Tip kredita">
-                <SelectValue placeholder="Izaberite tip" />
+              <SelectTrigger aria-label="Loan Type">
+                <SelectValue placeholder="Select type" />
               </SelectTrigger>
               <SelectContent>
                 {LOAN_TYPES.map((t) => (
@@ -56,14 +56,14 @@ export function LoanApplicationForm({
       </div>
 
       <div>
-        <Label>Tip kamatne stope</Label>
+        <Label>Interest Rate Type</Label>
         <Controller
           name="interest_type"
           control={control}
           render={({ field }) => (
             <Select onValueChange={field.onChange} value={field.value}>
               <SelectTrigger>
-                <SelectValue placeholder="Izaberite tip kamate" />
+                <SelectValue placeholder="Select interest type" />
               </SelectTrigger>
               <SelectContent>
                 {INTEREST_TYPES.map((t) => (
@@ -81,7 +81,7 @@ export function LoanApplicationForm({
       </div>
 
       <div>
-        <Label>Račun za isplatu</Label>
+        <Label>Disbursement Account</Label>
         <Controller
           name="account_number"
           control={control}
@@ -94,7 +94,7 @@ export function LoanApplicationForm({
               value={field.value}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Izaberite račun" />
+                <SelectValue placeholder="Select account" />
               </SelectTrigger>
               <SelectContent>
                 {accounts.map((acc) => (
@@ -114,13 +114,13 @@ export function LoanApplicationForm({
       <input type="hidden" {...register('currency_code')} />
 
       <div>
-        <Label htmlFor="amount">Iznos</Label>
+        <Label htmlFor="amount">Amount</Label>
         <Input id="amount" type="number" {...register('amount', { valueAsNumber: true })} />
         {errors.amount && <p className="text-sm text-destructive">{errors.amount.message}</p>}
       </div>
 
       <div>
-        <Label>Period (meseci)</Label>
+        <Label>Period (months)</Label>
         <Controller
           name="repayment_period"
           control={control}
@@ -129,13 +129,13 @@ export function LoanApplicationForm({
               onValueChange={(v) => field.onChange(Number(v))}
               value={field.value ? String(field.value) : ''}
             >
-              <SelectTrigger aria-label="Period otplate">
-                <SelectValue placeholder="Izaberite period" />
+              <SelectTrigger aria-label="Repayment Period">
+                <SelectValue placeholder="Select period" />
               </SelectTrigger>
               <SelectContent>
                 {periodOptions.map((m) => (
                   <SelectItem key={m} value={String(m)}>
-                    {m} meseci
+                    {m} months
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -148,12 +148,12 @@ export function LoanApplicationForm({
       </div>
 
       <div>
-        <Label htmlFor="purpose">Svrha kredita</Label>
+        <Label htmlFor="purpose">Loan Purpose</Label>
         <Input id="purpose" {...register('purpose')} />
       </div>
 
       <div>
-        <Label htmlFor="monthly_salary">Mesečna plata</Label>
+        <Label htmlFor="monthly_salary">Monthly Salary</Label>
         <Input
           id="monthly_salary"
           type="number"
@@ -165,14 +165,14 @@ export function LoanApplicationForm({
       </div>
 
       <div>
-        <Label>Status zaposlenja</Label>
+        <Label>Employment Status</Label>
         <Controller
           name="employment_status"
           control={control}
           render={({ field }) => (
             <Select onValueChange={field.onChange} value={field.value}>
               <SelectTrigger>
-                <SelectValue placeholder="Izaberite status" />
+                <SelectValue placeholder="Select status" />
               </SelectTrigger>
               <SelectContent>
                 {EMPLOYMENT_STATUSES.map((s) => (
@@ -187,7 +187,7 @@ export function LoanApplicationForm({
       </div>
 
       <div>
-        <Label htmlFor="employment_period">Period zaposlenja (godine)</Label>
+        <Label htmlFor="employment_period">Employment Period (years)</Label>
         <Input
           id="employment_period"
           type="number"
@@ -196,7 +196,7 @@ export function LoanApplicationForm({
       </div>
 
       <div>
-        <Label htmlFor="phone">Telefon</Label>
+        <Label htmlFor="phone">Phone</Label>
         <Input id="phone" {...register('phone')} />
         {errors.phone && <p className="text-sm text-destructive">{errors.phone.message}</p>}
       </div>
@@ -204,7 +204,7 @@ export function LoanApplicationForm({
       {error && <p className="text-sm text-destructive">{error}</p>}
 
       <Button type="submit" className="w-full" disabled={submitting}>
-        {submitting ? 'Podnošenje...' : 'Podnesi zahtev'}
+        {submitting ? 'Submitting...' : 'Submit Request'}
       </Button>
     </form>
   )

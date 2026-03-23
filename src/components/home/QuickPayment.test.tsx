@@ -16,11 +16,11 @@ describe('QuickPayment', () => {
 
   it('renders section title', () => {
     renderWithProviders(<QuickPayment />)
-    expect(screen.getByText(/sačuvani primaoci/i)).toBeInTheDocument()
+    expect(screen.getByText('Saved Recipients')).toBeInTheDocument()
   })
 
   it('shows empty state when no recipients', () => {
     renderWithProviders(<QuickPayment />)
-    expect(screen.getByText(/nema sačuvanih primalaca/i)).toBeInTheDocument()
+    expect(screen.getByText(/no saved recipients/i)).toBeInTheDocument()
   })
 })

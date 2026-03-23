@@ -15,6 +15,6 @@ describe('TransferHistoryTable', () => {
 
   it('shows empty state', () => {
     renderWithProviders(<TransferHistoryTable transfers={[]} />)
-    expect(screen.getByText(/nema transfera/i)).toBeInTheDocument()
+    expect(screen.getByText(/no transfers/i)).toBeInTheDocument()
   })
 })

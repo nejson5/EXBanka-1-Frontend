@@ -7,7 +7,7 @@ import { ClientTable } from '@/components/admin/ClientTable'
 import type { FilterFieldDef, FilterValues } from '@/types/filters'
 
 const CLIENT_FILTER_FIELDS: FilterFieldDef[] = [
-  { key: 'name', label: 'Ime', type: 'text' },
+  { key: 'name', label: 'Name', type: 'text' },
   { key: 'email', label: 'Email', type: 'text' },
 ]
 
@@ -23,14 +23,14 @@ export function AdminClientsPage() {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Upravljanje klijentima</h1>
-        <Button onClick={() => navigate('/admin/clients/new')}>Novi klijent</Button>
+        <h1 className="text-2xl font-bold">Client Management</h1>
+        <Button onClick={() => navigate('/admin/clients/new')}>New Client</Button>
       </div>
 
       <FilterBar fields={CLIENT_FILTER_FIELDS} values={filterValues} onChange={setFilterValues} />
 
       {isLoading ? (
-        <p>Učitavanje...</p>
+        <p>Loading...</p>
       ) : (
         <ClientTable
           clients={clients}

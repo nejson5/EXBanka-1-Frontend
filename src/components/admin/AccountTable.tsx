@@ -13,20 +13,20 @@ import type { Account } from '@/types/account'
 import type { Client } from '@/types/client'
 
 const STATUS_LABELS: Record<string, string> = {
-  ACTIVE: 'Aktivan',
-  INACTIVE: 'Neaktivan',
-  BLOCKED: 'Blokiran',
-  CLOSED: 'Zatvoren',
+  ACTIVE: 'Active',
+  INACTIVE: 'Inactive',
+  BLOCKED: 'Blocked',
+  CLOSED: 'Closed',
 }
 
 const ACCOUNT_KIND_LABELS: Record<string, string> = {
-  current: 'Tekući',
-  foreign: 'Devizni',
+  current: 'Checking',
+  foreign: 'Foreign Currency',
 }
 
 const ACCOUNT_CATEGORY_LABELS: Record<string, string> = {
-  personal: 'Lični',
-  business: 'Poslovni',
+  personal: 'Personal',
+  business: 'Business',
 }
 
 const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive'> = {
@@ -47,15 +47,15 @@ export function AccountTable({ accounts, onViewCards, clientsById }: AccountTabl
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Vlasnik</TableHead>
-          <TableHead>Broj računa</TableHead>
-          <TableHead>Naziv</TableHead>
-          <TableHead>Tip</TableHead>
-          <TableHead>Vlasnik tip</TableHead>
-          <TableHead>Valuta</TableHead>
-          <TableHead>Stanje</TableHead>
+          <TableHead>Owner</TableHead>
+          <TableHead>Account Number</TableHead>
+          <TableHead>Name</TableHead>
+          <TableHead>Type</TableHead>
+          <TableHead>Owner Type</TableHead>
+          <TableHead>Currency</TableHead>
+          <TableHead>Balance</TableHead>
           <TableHead>Status</TableHead>
-          <TableHead>Akcije</TableHead>
+          <TableHead>Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -83,7 +83,7 @@ export function AccountTable({ accounts, onViewCards, clientsById }: AccountTabl
             </TableCell>
             <TableCell>
               <Button size="sm" variant="outline" onClick={() => onViewCards(acc.id)}>
-                Kartice
+                Cards
               </Button>
             </TableCell>
           </TableRow>
@@ -91,7 +91,7 @@ export function AccountTable({ accounts, onViewCards, clientsById }: AccountTabl
         {accounts.length === 0 && (
           <TableRow>
             <TableCell colSpan={9} className="text-center text-muted-foreground">
-              Nema računa.
+              No accounts.
             </TableCell>
           </TableRow>
         )}

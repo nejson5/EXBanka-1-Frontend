@@ -19,12 +19,12 @@ describe('InstallmentTable', () => {
     renderWithProviders(<InstallmentTable installments={mockInstallments} />)
     expect(screen.getByText('1')).toBeInTheDocument()
     expect(screen.getByText('2')).toBeInTheDocument()
-    expect(screen.getByText('Plaćena')).toBeInTheDocument()
-    expect(screen.getByText('Neplaćena')).toBeInTheDocument()
+    expect(screen.getByText('Paid')).toBeInTheDocument()
+    expect(screen.getByText('Unpaid')).toBeInTheDocument()
   })
 
   it('shows empty state when no installments', () => {
     renderWithProviders(<InstallmentTable installments={[]} />)
-    expect(screen.getByText(/nema rata/i)).toBeInTheDocument()
+    expect(screen.getByText(/no installments/i)).toBeInTheDocument()
   })
 })

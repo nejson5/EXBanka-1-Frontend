@@ -20,9 +20,9 @@ export function RecipientList({ recipients, onEdit, onDelete }: RecipientListPro
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Ime</TableHead>
-          <TableHead>Broj računa</TableHead>
-          <TableHead>Akcije</TableHead>
+          <TableHead>Name</TableHead>
+          <TableHead>Account Number</TableHead>
+          <TableHead>Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -32,10 +32,10 @@ export function RecipientList({ recipients, onEdit, onDelete }: RecipientListPro
             <TableCell className="font-mono text-sm">{r.account_number}</TableCell>
             <TableCell className="flex gap-2">
               <Button size="sm" variant="outline" onClick={() => onEdit(r)}>
-                Izmeni
+                Edit
               </Button>
               <Button size="sm" variant="destructive" onClick={() => onDelete(r.id)}>
-                Obriši
+                Delete
               </Button>
             </TableCell>
           </TableRow>
@@ -43,7 +43,7 @@ export function RecipientList({ recipients, onEdit, onDelete }: RecipientListPro
         {recipients.length === 0 && (
           <TableRow>
             <TableCell colSpan={3} className="text-center text-muted-foreground">
-              Nema sačuvanih primalaca.
+              No saved recipients.
             </TableCell>
           </TableRow>
         )}

@@ -20,7 +20,7 @@ describe('EditClientForm', () => {
     const firstNameInput = screen.getByDisplayValue('Petar')
     await userEvent.clear(firstNameInput)
     await userEvent.type(firstNameInput, 'Nikola')
-    await userEvent.click(screen.getByRole('button', { name: /sačuvaj/i }))
+    await userEvent.click(screen.getByRole('button', { name: /save/i }))
     expect(onSubmit).toHaveBeenCalledWith(
       expect.objectContaining({ first_name: 'Nikola' }),
       expect.anything()
@@ -30,6 +30,6 @@ describe('EditClientForm', () => {
   it('shows loading state when submitting=true', () => {
     const client = createMockClient()
     renderWithProviders(<EditClientForm client={client} onSubmit={jest.fn()} submitting={true} />)
-    expect(screen.getByRole('button', { name: /čuvanje/i })).toBeDisabled()
+    expect(screen.getByRole('button', { name: /saving/i })).toBeDisabled()
   })
 })

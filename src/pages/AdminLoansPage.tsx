@@ -16,9 +16,9 @@ import type { LoanFilters as LoanFiltersType, LoanType, LoanStatus } from '@/typ
 import type { FilterFieldDef, FilterValues } from '@/types/filters'
 
 const STATUS_LABELS: Record<string, string> = {
-  ACTIVE: 'Aktivan',
-  PAID_OFF: 'Isplaćen',
-  DELINQUENT: 'U kašnjenju',
+  ACTIVE: 'Active',
+  PAID_OFF: 'Paid Off',
+  DELINQUENT: 'Delinquent',
 }
 const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive'> = {
   ACTIVE: 'default',
@@ -26,14 +26,14 @@ const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive'> = 
   DELINQUENT: 'destructive',
 }
 const INTEREST_TYPE_LABELS: Record<string, string> = {
-  FIXED: 'Fiksna',
-  VARIABLE: 'Varijabilna',
+  FIXED: 'Fixed',
+  VARIABLE: 'Variable',
 }
 
 const LOAN_FILTER_FIELDS: FilterFieldDef[] = [
   {
     key: 'loan_type',
-    label: 'Tip kredita',
+    label: 'Loan Type',
     type: 'multiselect',
     options: LOAN_TYPES.map((t) => ({ label: t.label, value: t.value })),
   },
@@ -42,12 +42,12 @@ const LOAN_FILTER_FIELDS: FilterFieldDef[] = [
     label: 'Status',
     type: 'multiselect',
     options: [
-      { label: 'Aktivan', value: 'ACTIVE' },
-      { label: 'Isplaćen', value: 'PAID_OFF' },
-      { label: 'Neizmiren', value: 'DELINQUENT' },
+      { label: 'Active', value: 'ACTIVE' },
+      { label: 'Paid Off', value: 'PAID_OFF' },
+      { label: 'Overdue', value: 'DELINQUENT' },
     ],
   },
-  { key: 'account_number', label: 'Broj računa', type: 'text' },
+  { key: 'account_number', label: 'Account Number', type: 'text' },
 ]
 
 export function AdminLoansPage() {
@@ -63,25 +63,25 @@ export function AdminLoansPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold">Svi krediti</h1>
+      <h1 className="text-2xl font-bold">All Loans</h1>
 
       <FilterBar fields={LOAN_FILTER_FIELDS} values={filterValues} onChange={setFilterValues} />
 
       {isLoading ? (
-        <p>Učitavanje...</p>
+        <p>Loading...</p>
       ) : (
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Broj kredita</TableHead>
-              <TableHead>Tip</TableHead>
-              <TableHead>Tip kamate</TableHead>
-              <TableHead>Iznos</TableHead>
+              <TableHead>Loan Number</TableHead>
+              <TableHead>Type</TableHead>
+              <TableHead>Interest Type</TableHead>
+              <TableHead>Amount</TableHead>
               <TableHead>Period</TableHead>
-              <TableHead>Rata</TableHead>
-              <TableHead>Preostalo dugovanje</TableHead>
-              <TableHead>Valuta</TableHead>
-              <TableHead>Odobren</TableHead>
+              <TableHead>Installment</TableHead>
+              <TableHead>Remaining Debt</TableHead>
+              <TableHead>Currency</TableHead>
+              <TableHead>Approved</TableHead>
               <TableHead>Status</TableHead>
             </TableRow>
           </TableHeader>
@@ -96,7 +96,7 @@ export function AdminLoansPage() {
                     {loan.interest_type ? (INTEREST_TYPE_LABELS[loan.interest_type] ?? '—') : '—'}
                   </TableCell>
                   <TableCell>{formatCurrency(loan.amount, currency)}</TableCell>
-                  <TableCell>{loan.period} mes.</TableCell>
+                  <TableCell>{loan.period} months</TableCell>
                   <TableCell>{formatCurrency(loan.installment_amount, currency)}</TableCell>
                   <TableCell>
                     {loan.remaining_debt !== undefined
@@ -116,7 +116,7 @@ export function AdminLoansPage() {
             {loans.length === 0 && (
               <TableRow>
                 <TableCell colSpan={10} className="text-center text-muted-foreground">
-                  Nema kredita.
+                  No loans.
                 </TableCell>
               </TableRow>
             )}

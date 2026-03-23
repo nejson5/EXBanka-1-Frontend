@@ -40,7 +40,7 @@ describe('CreateTransferPage', () => {
 
   it('renders transfer form initially', () => {
     renderWithProviders(<CreateTransferPage />)
-    expect(screen.getByText(/kreiraj transfer/i)).toBeInTheDocument()
+    expect(screen.getByText(/create transfer/i)).toBeInTheDocument()
   })
 
   it('shows loading when accounts load', () => {
@@ -49,6 +49,6 @@ describe('CreateTransferPage', () => {
       isLoading: true,
     } as any)
     renderWithProviders(<CreateTransferPage />)
-    expect(screen.getByText(/učitavanje/i)).toBeInTheDocument()
+    expect(screen.getByText(/loading/i)).toBeInTheDocument()
   })
 })

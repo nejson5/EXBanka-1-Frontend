@@ -29,12 +29,12 @@ export function AuthorizedPersonForm({ onSubmit, loading }: AuthorizedPersonForm
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Podaci ovlašćenog lica</CardTitle>
+        <CardTitle>Authorized Person Information</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <Label htmlFor="ap-fname">Ime</Label>
+            <Label htmlFor="ap-fname">First Name</Label>
             <Input
               id="ap-fname"
               value={form.first_name}
@@ -42,7 +42,7 @@ export function AuthorizedPersonForm({ onSubmit, loading }: AuthorizedPersonForm
             />
           </div>
           <div>
-            <Label htmlFor="ap-lname">Prezime</Label>
+            <Label htmlFor="ap-lname">Last Name</Label>
             <Input
               id="ap-lname"
               value={form.last_name}
@@ -60,7 +60,7 @@ export function AuthorizedPersonForm({ onSubmit, loading }: AuthorizedPersonForm
           />
         </div>
         <div>
-          <Label htmlFor="ap-phone">Telefon</Label>
+          <Label htmlFor="ap-phone">Phone</Label>
           <Input
             id="ap-phone"
             value={form.phone}
@@ -68,7 +68,7 @@ export function AuthorizedPersonForm({ onSubmit, loading }: AuthorizedPersonForm
           />
         </div>
         <div>
-          <Label htmlFor="ap-address">Adresa</Label>
+          <Label htmlFor="ap-address">Address</Label>
           <Input
             id="ap-address"
             value={form.address}
@@ -76,7 +76,7 @@ export function AuthorizedPersonForm({ onSubmit, loading }: AuthorizedPersonForm
           />
         </div>
         <div>
-          <Label htmlFor="ap-dob">Datum rođenja</Label>
+          <Label htmlFor="ap-dob">Date of Birth</Label>
           <Input
             id="ap-dob"
             type="date"
@@ -92,7 +92,7 @@ export function AuthorizedPersonForm({ onSubmit, loading }: AuthorizedPersonForm
           disabled={!isValid || loading}
           className="w-full"
         >
-          {loading ? 'Slanje...' : 'Zatraži karticu za ovlašćeno lice'}
+          {loading ? 'Sending...' : 'Request Card for Authorized Person'}
         </Button>
       </CardContent>
     </Card>

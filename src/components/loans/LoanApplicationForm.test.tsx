@@ -31,22 +31,22 @@ describe('LoanApplicationForm', () => {
 
   it('renders loan type selector', () => {
     renderWithProviders(<LoanApplicationForm {...defaultProps} />)
-    expect(screen.getByText(/tip kredita/i)).toBeInTheDocument()
+    expect(screen.getByText(/loan type/i)).toBeInTheDocument()
   })
 
   it('renders amount input', () => {
     renderWithProviders(<LoanApplicationForm {...defaultProps} />)
-    expect(screen.getByLabelText(/iznos/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/amount/i)).toBeInTheDocument()
   })
 
   it('renders submit button', () => {
     renderWithProviders(<LoanApplicationForm {...defaultProps} />)
-    expect(screen.getByRole('button', { name: /podnesi zahtev/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /submit request/i })).toBeInTheDocument()
   })
 
   it('shows loading state when submitting is true', () => {
     renderWithProviders(<LoanApplicationForm {...defaultProps} submitting={true} />)
-    expect(screen.getByRole('button', { name: /podnošenje/i })).toBeDisabled()
+    expect(screen.getByRole('button', { name: /submitting/i })).toBeDisabled()
   })
 
   it('shows error message when error is provided', () => {
@@ -57,40 +57,40 @@ describe('LoanApplicationForm', () => {
 
   it('renders interest type selector', () => {
     renderWithProviders(<LoanApplicationForm {...defaultProps} />)
-    expect(screen.getByText(/tip kamatne stope/i)).toBeInTheDocument()
+    expect(screen.getByText(/interest rate type/i)).toBeInTheDocument()
   })
 
   it('renders purpose field', () => {
     renderWithProviders(<LoanApplicationForm {...defaultProps} />)
-    expect(screen.getByLabelText(/svrha kredita/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/loan purpose/i)).toBeInTheDocument()
   })
 
   it('renders monthly salary field', () => {
     renderWithProviders(<LoanApplicationForm {...defaultProps} />)
-    expect(screen.getByLabelText(/mesečna plata/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/monthly salary/i)).toBeInTheDocument()
   })
 
   it('renders employment status selector', () => {
     renderWithProviders(<LoanApplicationForm {...defaultProps} />)
-    expect(screen.getByText(/status zaposlenja/i)).toBeInTheDocument()
+    expect(screen.getByText(/employment status/i)).toBeInTheDocument()
   })
 
   it('renders phone field', () => {
     renderWithProviders(<LoanApplicationForm {...defaultProps} />)
-    expect(screen.getByLabelText(/telefon/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/phone/i)).toBeInTheDocument()
   })
 
   it('shows housing period options when housing loan type is selected', async () => {
     const user = userEvent.setup()
     renderWithProviders(<LoanApplicationForm {...defaultProps} />)
     // Open loan type select
-    const loanTypeSelect = screen.getByRole('combobox', { name: /tip kredita/i })
+    const loanTypeSelect = screen.getByRole('combobox', { name: /loan type/i })
     await user.click(loanTypeSelect)
-    const housingOption = screen.getByText('Stambeni')
+    const housingOption = screen.getByText('Housing')
     await user.click(housingOption)
     // Housing periods include 360 months
     const periodSelect = screen.getByRole('combobox', { name: /period/i })
     await user.click(periodSelect)
-    expect(screen.getByText('360 meseci')).toBeInTheDocument()
+    expect(screen.getByText('360 months')).toBeInTheDocument()
   })
 })

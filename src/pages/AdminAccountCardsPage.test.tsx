@@ -27,7 +27,7 @@ describe('AdminAccountCardsPage', () => {
 
   it('renders card management page', () => {
     renderWithProviders(<AdminAccountCardsPage />, { route: '/admin/accounts/1/cards' })
-    expect(screen.getByText(/kartice/i)).toBeInTheDocument()
+    expect(screen.getByText(/cards/i)).toBeInTheDocument()
     expect(screen.getByText('4111********1111')).toBeInTheDocument()
   })
 })

@@ -27,20 +27,20 @@ describe('AccountListPage', () => {
 
   it('renders accounts list', () => {
     renderWithProviders(<AccountListPage />)
-    expect(screen.getByText(/moji računi/i)).toBeInTheDocument()
+    expect(screen.getByText(/my accounts/i)).toBeInTheDocument()
     expect(screen.getByText('Tekući RSD')).toBeInTheDocument()
   })
 
   it('shows recent transactions for the first account by default', () => {
     renderWithProviders(<AccountListPage />)
-    expect(screen.getByText(/poslednje transakcije/i)).toBeInTheDocument()
+    expect(screen.getByText(/recent transactions/i)).toBeInTheDocument()
     expect(screen.getByText('Elektro Beograd')).toBeInTheDocument()
   })
 
   it('shows recent transactions after clicking an account', () => {
     renderWithProviders(<AccountListPage />)
     fireEvent.click(screen.getByText('Tekući RSD'))
-    expect(screen.getByText(/poslednje transakcije/i)).toBeInTheDocument()
+    expect(screen.getByText(/recent transactions/i)).toBeInTheDocument()
     expect(screen.getByText('Elektro Beograd')).toBeInTheDocument()
   })
 
@@ -54,6 +54,6 @@ describe('AccountListPage', () => {
   it('shows details button after account selection', () => {
     renderWithProviders(<AccountListPage />)
     fireEvent.click(screen.getByText('Tekući RSD'))
-    expect(screen.getByRole('button', { name: /detalji računa/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /account details/i })).toBeInTheDocument()
   })
 })

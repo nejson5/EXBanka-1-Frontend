@@ -29,7 +29,7 @@ export function CardRequestPage() {
   const [selectedAccount, setSelectedAccount] = useState('')
   const [selectedBrand, setSelectedBrand] = useState<CardBrand | undefined>()
 
-  if (isLoading) return <p>Učitavanje...</p>
+  if (isLoading) return <p>Loading...</p>
 
   const handleSelectAccount = (accountNumber: string, cardBrand: CardBrand) => {
     setSelectedAccount(accountNumber)
@@ -92,8 +92,8 @@ export function CardRequestPage() {
   if (step === 'success') {
     return (
       <div className="space-y-4 text-center">
-        <h2 className="text-xl font-semibold">Kartica uspešno kreirana!</h2>
-        <Button onClick={() => navigate('/cards')}>Nazad na kartice</Button>
+        <h2 className="text-xl font-semibold">Card successfully created!</h2>
+        <Button onClick={() => navigate('/cards')}>Back to Cards</Button>
       </div>
     )
   }
@@ -106,7 +106,7 @@ export function CardRequestPage() {
     return (
       <div className="space-y-4">
         <Button variant="ghost" onClick={() => setStep('business-choice')}>
-          ← Nazad
+          ← Back
         </Button>
         <AuthorizedPersonForm
           onSubmit={handleRequestForAP}
@@ -120,15 +120,15 @@ export function CardRequestPage() {
     return (
       <div className="space-y-4">
         <Button variant="ghost" onClick={() => setStep('select')}>
-          ← Nazad
+          ← Back
         </Button>
-        <h2 className="text-lg font-semibold">Za koga tražite karticu?</h2>
+        <h2 className="text-lg font-semibold">Who do you want a card for?</h2>
         <div className="flex gap-3">
           <Button onClick={handleRequestForSelf} disabled={requestCard.isPending}>
-            Za sebe
+            For Myself
           </Button>
           <Button variant="outline" onClick={() => setStep('authorized-person')}>
-            Za ovlašćeno lice
+            For Authorized Person
           </Button>
         </div>
       </div>
@@ -138,7 +138,7 @@ export function CardRequestPage() {
   return (
     <div className="space-y-4">
       <Button variant="ghost" onClick={() => navigate('/cards')}>
-        ← Nazad
+        ← Back
       </Button>
       <CardRequestForm
         accounts={accounts}

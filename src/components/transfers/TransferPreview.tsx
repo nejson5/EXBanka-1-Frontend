@@ -43,23 +43,23 @@ export function TransferPreview({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Potvrdi transfer</CardTitle>
+        <CardTitle>Confirm Transfer</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
-        <DetailRow label="Klijent" value={clientName} />
-        <DetailRow label="Sa računa" value={formatAccountNumber(fromAccount)} />
-        <DetailRow label="Na račun" value={formatAccountNumber(toAccount)} />
-        <DetailRow label="Iznos" value={formatCurrency(amount, fromCurrency)} />
-        <DetailRow label="Kurs" value={String(rate)} />
-        <DetailRow label="Provizija" value={formatCurrency(commission, toCurrency)} />
-        <DetailRow label="Krajnji iznos" value={formatCurrency(finalAmount, toCurrency)} />
+        <DetailRow label="Client" value={clientName} />
+        <DetailRow label="From Account" value={formatAccountNumber(fromAccount)} />
+        <DetailRow label="To Account" value={formatAccountNumber(toAccount)} />
+        <DetailRow label="Amount" value={formatCurrency(amount, fromCurrency)} />
+        <DetailRow label="Rate" value={String(rate)} />
+        <DetailRow label="Commission" value={formatCurrency(commission, toCurrency)} />
+        <DetailRow label="Final Amount" value={formatCurrency(finalAmount, toCurrency)} />
 
         <div className="flex gap-3 pt-4">
           <Button variant="outline" onClick={onBack} className="flex-1">
-            Nazad
+            Back
           </Button>
           <Button onClick={onConfirm} disabled={submitting} className="flex-1">
-            {submitting ? 'Obrađuje se...' : 'Potvrdi'}
+            {submitting ? 'Processing...' : 'Confirm'}
           </Button>
         </div>
       </CardContent>

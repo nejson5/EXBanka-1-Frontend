@@ -38,7 +38,7 @@ export function CreateTransferPage() {
     }
   }, [dispatch])
 
-  if (isLoading) return <p>Učitavanje...</p>
+  if (isLoading) return <p>Loading...</p>
 
   const handleFormSubmit = (data: {
     from_account_number: string
@@ -63,12 +63,12 @@ export function CreateTransferPage() {
   if (step === 'success' && result) {
     return (
       <div className="space-y-4 text-center">
-        <h2 className="text-xl font-semibold">Transfer uspešan!</h2>
-        <p>ID transakcije: {result.id}</p>
+        <h2 className="text-xl font-semibold">Transfer successful!</h2>
+        <p>Transaction ID: {result.id}</p>
         <div className="flex justify-center gap-3">
-          <Button onClick={() => navigate('/transfers/history')}>Istorija</Button>
+          <Button onClick={() => navigate('/transfers/history')}>History</Button>
           <Button variant="outline" onClick={() => dispatch(resetTransferFlow())}>
-            Novi transfer
+            New Transfer
           </Button>
         </div>
       </div>

@@ -38,16 +38,16 @@ describe('HomePage', () => {
     renderWithProviders(<HomePage />, {
       preloadedState: { auth: createMockAuthState() },
     })
-    expect(screen.getByText(/dobrodošli/i)).toBeInTheDocument()
-    expect(screen.getByText(/sačuvani primaoci/i)).toBeInTheDocument()
-    expect(screen.getByText(/brza konverzija/i)).toBeInTheDocument()
+    expect(screen.getByText(/welcome/i)).toBeInTheDocument()
+    expect(screen.getByText('Saved Recipients')).toBeInTheDocument()
+    expect(screen.getByText(/quick conversion/i)).toBeInTheDocument()
   })
 
   it('does not show recent transactions section when no accounts exist', () => {
     renderWithProviders(<HomePage />, {
       preloadedState: { auth: createMockAuthState() },
     })
-    expect(screen.queryByText(/poslednje transakcije/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/recent transactions/i)).not.toBeInTheDocument()
   })
 
   it('shows recent transactions section for the primary account', () => {
@@ -63,7 +63,7 @@ describe('HomePage', () => {
     renderWithProviders(<HomePage />, {
       preloadedState: { auth: createMockAuthState() },
     })
-    expect(screen.getByText(/poslednje transakcije/i)).toBeInTheDocument()
+    expect(screen.getByText(/recent transactions/i)).toBeInTheDocument()
     expect(screen.getByText('Elektro Beograd')).toBeInTheDocument()
   })
 

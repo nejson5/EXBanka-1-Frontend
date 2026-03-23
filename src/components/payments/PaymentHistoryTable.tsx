@@ -15,9 +15,9 @@ import { generateReceiptPdf } from '@/lib/utils/receipt-pdf'
 import type { Payment } from '@/types/payment'
 
 const STATUS_LABELS: Record<string, string> = {
-  COMPLETED: 'Realizovano',
-  PENDING: 'U obradi',
-  FAILED: 'Odbijeno',
+  COMPLETED: 'Completed',
+  PENDING: 'Processing',
+  FAILED: 'Rejected',
 }
 
 const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive'> = {
@@ -38,10 +38,10 @@ export function PaymentHistoryTable({ payments }: PaymentHistoryTableProps) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Datum</TableHead>
-            <TableHead>Sa računa</TableHead>
-            <TableHead>Primalac</TableHead>
-            <TableHead>Iznos</TableHead>
+            <TableHead>Date</TableHead>
+            <TableHead>From Account</TableHead>
+            <TableHead>Recipient</TableHead>
+            <TableHead>Amount</TableHead>
             <TableHead>Status</TableHead>
             <TableHead></TableHead>
           </TableRow>
@@ -77,7 +77,7 @@ export function PaymentHistoryTable({ payments }: PaymentHistoryTableProps) {
           {payments.length === 0 && (
             <TableRow>
               <TableCell colSpan={6} className="text-center text-muted-foreground">
-                Nema plaćanja.
+                No payments.
               </TableCell>
             </TableRow>
           )}

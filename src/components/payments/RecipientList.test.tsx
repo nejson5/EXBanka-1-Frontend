@@ -34,7 +34,7 @@ describe('RecipientList', () => {
     const onEdit = jest.fn()
     render(<RecipientList recipients={recipients} onEdit={onEdit} onDelete={jest.fn()} />)
 
-    const editButtons = screen.getAllByRole('button', { name: /izmeni/i })
+    const editButtons = screen.getAllByRole('button', { name: /edit/i })
     await user.click(editButtons[0])
     expect(onEdit).toHaveBeenCalledWith(recipients[0])
   })
@@ -44,13 +44,13 @@ describe('RecipientList', () => {
     const onDelete = jest.fn()
     render(<RecipientList recipients={recipients} onEdit={jest.fn()} onDelete={onDelete} />)
 
-    const deleteButtons = screen.getAllByRole('button', { name: /obriši/i })
+    const deleteButtons = screen.getAllByRole('button', { name: /delete/i })
     await user.click(deleteButtons[1])
     expect(onDelete).toHaveBeenCalledWith(2)
   })
 
   it('shows empty state when no recipients', () => {
     render(<RecipientList recipients={[]} onEdit={jest.fn()} onDelete={jest.fn()} />)
-    expect(screen.getByText(/nema sačuvanih primalaca/i)).toBeInTheDocument()
+    expect(screen.getByText(/no saved recipients/i)).toBeInTheDocument()
   })
 })

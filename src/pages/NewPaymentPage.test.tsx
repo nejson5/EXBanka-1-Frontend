@@ -22,8 +22,8 @@ describe('NewPaymentPage', () => {
 
   it('renders payment form', () => {
     renderWithProviders(<NewPaymentPage />)
-    expect(screen.getByText(/nova uplata/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/broj računa primaoca/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/iznos/i)).toBeInTheDocument()
+    expect(screen.getByText(/new payment/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/recipient account number/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/amount/i)).toBeInTheDocument()
   })
 })

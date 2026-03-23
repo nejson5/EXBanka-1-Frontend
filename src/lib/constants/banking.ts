@@ -13,27 +13,27 @@ export type SupportedCurrency = (typeof SUPPORTED_CURRENCIES)[number]
 export const FOREIGN_CURRENCIES = ['EUR', 'CHF', 'USD', 'GBP', 'JPY', 'CAD', 'AUD'] as const
 
 export const CURRENT_PERSONAL_SUBTYPES = [
-  { value: 'STANDARD', label: 'Standardni' },
-  { value: 'SAVINGS', label: 'Štedni' },
-  { value: 'PENSION', label: 'Penzionerski' },
-  { value: 'YOUTH', label: 'Za mlade' },
-  { value: 'STUDENT', label: 'Za studente' },
-  { value: 'UNEMPLOYED', label: 'Za nezaposlene' },
+  { value: 'STANDARD', label: 'Standard' },
+  { value: 'SAVINGS', label: 'Savings' },
+  { value: 'PENSION', label: 'Pension' },
+  { value: 'YOUTH', label: 'Youth' },
+  { value: 'STUDENT', label: 'Student' },
+  { value: 'UNEMPLOYED', label: 'Unemployed' },
 ] as const
 
 export const CURRENT_BUSINESS_SUBTYPES = [
   { value: 'DOO', label: 'DOO' },
   { value: 'AD', label: 'AD' },
-  { value: 'PREDUZETNIK', label: 'Preduzetnik' },
-  { value: 'FONDACIJA', label: 'Fondacija' },
+  { value: 'PREDUZETNIK', label: 'Sole Trader' },
+  { value: 'FONDACIJA', label: 'Foundation' },
 ] as const
 
 export const LOAN_TYPES = [
-  { value: 'CASH', label: 'Gotovinski' },
-  { value: 'HOUSING', label: 'Stambeni' },
+  { value: 'CASH', label: 'Cash' },
+  { value: 'HOUSING', label: 'Housing' },
   { value: 'AUTO', label: 'Auto' },
-  { value: 'REFINANCING', label: 'Refinansiranje' },
-  { value: 'STUDENT', label: 'Studentski' },
+  { value: 'REFINANCING', label: 'Refinancing' },
+  { value: 'STUDENT', label: 'Student' },
 ] as const
 
 export const LOAN_PERIODS_MONTHS = [6, 12, 24, 36, 48, 60, 84, 120, 180, 240, 360] as const
@@ -47,19 +47,19 @@ export const LOAN_PERIODS_BY_TYPE: Record<string, number[]> = {
 }
 
 export const INTEREST_TYPES = [
-  { value: 'FIXED', label: 'Fiksna' },
-  { value: 'VARIABLE', label: 'Varijabilna' },
+  { value: 'FIXED', label: 'Fixed' },
+  { value: 'VARIABLE', label: 'Variable' },
 ] as const
 
 export const EMPLOYMENT_STATUSES = [
-  { value: 'EMPLOYED', label: 'Stalno zaposlenje' },
-  { value: 'SELF_EMPLOYED', label: 'Privremeno zaposlenje' },
-  { value: 'UNEMPLOYED', label: 'Nezaposlen' },
-  { value: 'RETIRED', label: 'Penzioner' },
+  { value: 'EMPLOYED', label: 'Permanent Employment' },
+  { value: 'SELF_EMPLOYED', label: 'Temporary Employment' },
+  { value: 'UNEMPLOYED', label: 'Unemployed' },
+  { value: 'RETIRED', label: 'Retired' },
 ] as const
 
 export const PAYMENT_CODES = [
-  { value: '221', label: '221 - Platni promet' },
-  { value: '253', label: '253 - Komunalije' },
-  { value: '289', label: '289 - Ostalo' },
+  { value: '221', label: '221 - Payment Transactions' },
+  { value: '253', label: '253 - Utilities' },
+  { value: '289', label: '289 - Other' },
 ] as const

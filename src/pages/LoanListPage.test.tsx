@@ -17,12 +17,12 @@ describe('LoanListPage', () => {
 
   it('renders loan list', () => {
     renderWithProviders(<LoanListPage />)
-    expect(screen.getByText(/moji krediti/i)).toBeInTheDocument()
-    expect(screen.getByText(/gotovinski/i)).toBeInTheDocument()
+    expect(screen.getByText(/my loans/i)).toBeInTheDocument()
+    expect(screen.getByText(/cash/i)).toBeInTheDocument()
   })
 
   it('shows apply button', () => {
     renderWithProviders(<LoanListPage />)
-    expect(screen.getByText(/podnesi zahtev/i)).toBeInTheDocument()
+    expect(screen.getByText(/apply for loan/i)).toBeInTheDocument()
   })
 })

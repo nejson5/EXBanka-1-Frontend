@@ -16,8 +16,8 @@ describe('LoanApplicationPage', () => {
 
   it('renders loan application form', () => {
     renderWithProviders(<LoanApplicationPage />)
-    expect(screen.getByText(/podnesi zahtev za kredit/i)).toBeInTheDocument()
-    expect(screen.getByText(/tip kredita/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/iznos/i)).toBeInTheDocument()
+    expect(screen.getByText(/submit loan request/i)).toBeInTheDocument()
+    expect(screen.getByText(/loan type/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/amount/i)).toBeInTheDocument()
   })
 })

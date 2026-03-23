@@ -24,13 +24,13 @@ describe('CreateTransferForm', () => {
 
   it('renders from/to account selectors and amount field', () => {
     renderWithProviders(<CreateTransferForm accounts={mockAccounts as any} onSubmit={onSubmit} />)
-    expect(screen.getByLabelText(/izvorni račun/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/odredišni račun/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/iznos/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/source account/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/destination account/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/amount/i)).toBeInTheDocument()
   })
 
   it('renders submit button', () => {
     renderWithProviders(<CreateTransferForm accounts={mockAccounts as any} onSubmit={onSubmit} />)
-    expect(screen.getByText(/uradi transfer/i)).toBeInTheDocument()
+    expect(screen.getByText(/make transfer/i)).toBeInTheDocument()
   })
 })

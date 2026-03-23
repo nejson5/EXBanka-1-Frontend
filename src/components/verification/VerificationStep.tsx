@@ -32,25 +32,25 @@ export function VerificationStep({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Verifikacija</CardTitle>
+        <CardTitle>Verification</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {!codeRequested ? (
           <>
             <p className="text-sm text-muted-foreground">
-              Kliknite dugme ispod da biste dobili verifikacioni kod na email.
+              Click the button below to receive a verification code via email.
             </p>
             <Button onClick={onRequestCode} disabled={loading}>
-              {loading ? 'Slanje...' : 'Pošalji kod'}
+              {loading ? 'Sending...' : 'Send Code'}
             </Button>
           </>
         ) : (
           <>
             <p className="text-sm text-muted-foreground">
-              Unesite 6-cifreni kod koji ste dobili na email. Kod važi 5 minuta.
+              Enter the 6-digit code you received via email. The code is valid for 5 minutes.
             </p>
             <div>
-              <Label htmlFor="verification-code">Verifikacioni kod</Label>
+              <Label htmlFor="verification-code">Verification Code</Label>
               <Input
                 id="verification-code"
                 value={code}
@@ -62,17 +62,17 @@ export function VerificationStep({
             {error && <p className="text-sm text-destructive">{error}</p>}
             <div className="flex gap-3">
               <Button variant="outline" onClick={onBack}>
-                Nazad
+                Back
               </Button>
               <Button onClick={handleSubmit} disabled={loading || code.length === 0}>
-                {loading ? 'Provera...' : 'Potvrdi'}
+                {loading ? 'Verifying...' : 'Confirm'}
               </Button>
             </div>
           </>
         )}
         {!codeRequested && (
           <Button variant="ghost" onClick={onBack}>
-            Nazad
+            Back
           </Button>
         )}
       </CardContent>

@@ -19,15 +19,15 @@ describe('CreateClientPage', () => {
 
   it('renders form title and required fields', () => {
     renderWithProviders(<CreateClientPage />)
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/novi klijent/i)
-    expect(screen.getByLabelText('Ime')).toBeInTheDocument()
-    expect(screen.getByLabelText('Prezime')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/new client/i)
+    expect(screen.getByLabelText('First Name')).toBeInTheDocument()
+    expect(screen.getByLabelText('Last Name')).toBeInTheDocument()
     expect(screen.getByLabelText('Email')).toBeInTheDocument()
   })
 
   it('renders back button', () => {
     renderWithProviders(<CreateClientPage />)
-    expect(screen.getByRole('button', { name: /nazad/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /back/i })).toBeInTheDocument()
   })
 
   it('calls createClient.mutate with form data on submit', async () => {
@@ -41,13 +41,13 @@ describe('CreateClientPage', () => {
 
     renderWithProviders(<CreateClientPage />)
 
-    await userEvent.type(screen.getByLabelText('Ime'), 'Marko')
-    await userEvent.type(screen.getByLabelText('Prezime'), 'Petrović')
+    await userEvent.type(screen.getByLabelText('First Name'), 'Marko')
+    await userEvent.type(screen.getByLabelText('Last Name'), 'Petrović')
     await userEvent.type(screen.getByLabelText('Email'), 'marko@test.com')
-    fireEvent.change(screen.getByLabelText(/datum ro/i), { target: { value: '1990-01-01' } })
+    fireEvent.change(screen.getByLabelText(/date of birth/i), { target: { value: '1990-01-01' } })
     await userEvent.type(screen.getByLabelText('JMBG'), '1234567890123')
 
-    await userEvent.click(screen.getByRole('button', { name: /kreiraj klijenta/i }))
+    await userEvent.click(screen.getByRole('button', { name: /create client/i }))
 
     await waitFor(() => {
       expect(mockMutate).toHaveBeenCalledWith(
@@ -70,7 +70,7 @@ describe('CreateClientPage', () => {
     } as any)
 
     renderWithProviders(<CreateClientPage />)
-    expect(screen.getByText(/greška pri kreiranju/i)).toBeInTheDocument()
+    expect(screen.getByText(/error creating/i)).toBeInTheDocument()
   })
 
   it('disables submit button while pending', () => {
@@ -82,6 +82,6 @@ describe('CreateClientPage', () => {
     } as any)
 
     renderWithProviders(<CreateClientPage />)
-    expect(screen.getByRole('button', { name: /kreiranje/i })).toBeDisabled()
+    expect(screen.getByRole('button', { name: /creating/i })).toBeDisabled()
   })
 })

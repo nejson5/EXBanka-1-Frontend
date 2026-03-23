@@ -41,14 +41,14 @@ export function EditClientForm({ client, onSubmit, submitting }: EditClientFormP
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="first_name">Ime</Label>
+          <Label htmlFor="first_name">First Name</Label>
           <Input id="first_name" {...register('first_name')} />
           {errors.first_name && (
             <p className="text-sm text-destructive">{errors.first_name.message}</p>
           )}
         </div>
         <div>
-          <Label htmlFor="last_name">Prezime</Label>
+          <Label htmlFor="last_name">Last Name</Label>
           <Input id="last_name" {...register('last_name')} />
           {errors.last_name && (
             <p className="text-sm text-destructive">{errors.last_name.message}</p>
@@ -63,17 +63,17 @@ export function EditClientForm({ client, onSubmit, submitting }: EditClientFormP
       </div>
 
       <div>
-        <Label htmlFor="phone">Telefon</Label>
+        <Label htmlFor="phone">Phone</Label>
         <Input id="phone" {...register('phone')} />
       </div>
 
       <div>
-        <Label htmlFor="address">Adresa</Label>
+        <Label htmlFor="address">Address</Label>
         <Input id="address" {...register('address')} />
       </div>
 
       <Button type="submit" disabled={submitting}>
-        {submitting ? 'Čuvanje...' : 'Sačuvaj'}
+        {submitting ? 'Saving...' : 'Save'}
       </Button>
     </form>
   )

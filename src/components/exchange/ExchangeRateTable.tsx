@@ -14,16 +14,16 @@ interface ExchangeRateTableProps {
 
 export function ExchangeRateTable({ rates }: ExchangeRateTableProps) {
   if (rates.length === 0) {
-    return <p className="text-muted-foreground">Nema podataka o kursnoj listi.</p>
+    return <p className="text-muted-foreground">No exchange rate data available.</p>
   }
 
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Oznaka</TableHead>
-          <TableHead className="text-right">Kupovni kurs</TableHead>
-          <TableHead className="text-right">Prodajni kurs</TableHead>
+          <TableHead>Currency</TableHead>
+          <TableHead className="text-right">Buy Rate</TableHead>
+          <TableHead className="text-right">Sell Rate</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

@@ -28,14 +28,14 @@ export function HomePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Dobrodošli, {user?.email}!</h1>
-        <p className="text-muted-foreground">Pregled vaših računa</p>
+        <h1 className="text-2xl font-bold">Welcome, {user?.email}!</h1>
+        <p className="text-muted-foreground">Your Accounts Overview</p>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">Brze akcije</CardTitle>
+            <CardTitle className="text-sm">Quick Actions</CardTitle>
           </CardHeader>
           <CardContent>
             <QuickPayment />
@@ -44,7 +44,7 @@ export function HomePage() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">Menjačnica</CardTitle>
+            <CardTitle className="text-sm">Currency Exchange</CardTitle>
           </CardHeader>
           <CardContent>
             <ExchangeCalculator />
@@ -53,8 +53,8 @@ export function HomePage() {
       </div>
 
       <div className="space-y-3">
-        <h2 className="text-lg font-semibold">Moji računi</h2>
-        {isLoading && <p>Učitavanje...</p>}
+        <h2 className="text-lg font-semibold">My Accounts</h2>
+        {isLoading && <p>Loading...</p>}
         {accounts.map((account, i) => (
           <div
             key={account.id}
@@ -68,14 +68,14 @@ export function HomePage() {
           </div>
         ))}
         {!isLoading && accounts.length === 0 && (
-          <p className="text-muted-foreground">Nemate aktivnih računa.</p>
+          <p className="text-muted-foreground">You have no active accounts.</p>
         )}
       </div>
 
       {selectedAccount && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-sm">Poslednje transakcije</CardTitle>
+            <CardTitle className="text-sm">Recent Transactions</CardTitle>
           </CardHeader>
           <CardContent>
             <RecentTransactions transactions={recentTransactions} />

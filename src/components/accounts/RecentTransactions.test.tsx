@@ -16,6 +16,6 @@ describe('RecentTransactions', () => {
 
   it('shows empty state when no transactions', () => {
     renderWithProviders(<RecentTransactions transactions={[]} />)
-    expect(screen.getByText(/nema transakcija/i)).toBeInTheDocument()
+    expect(screen.getByText(/no transactions/i)).toBeInTheDocument()
   })
 })

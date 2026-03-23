@@ -50,7 +50,7 @@ describe('AdminLoanRequestsPage', () => {
 
   it('renders the page heading', () => {
     renderWithProviders(<AdminLoanRequestsPage />)
-    expect(screen.getByText(/zahtevi za kredite/i)).toBeInTheDocument()
+    expect(screen.getByText(/loan requests/i)).toBeInTheDocument()
   })
 
   it('shows client full name from client lookup', () => {
@@ -63,14 +63,14 @@ describe('AdminLoanRequestsPage', () => {
     expect(screen.getByText('111000100000000011')).toBeInTheDocument()
     expect(screen.getByText(/500\.000/)).toBeInTheDocument()
     expect(screen.getAllByText(/RSD/).length).toBeGreaterThan(0)
-    expect(screen.getByText(/60 mes/i)).toBeInTheDocument()
+    expect(screen.getByText(/60 months/i)).toBeInTheDocument()
     expect(screen.getByText('Renoviranje stana')).toBeInTheDocument()
   })
 
   it('shows approve and reject buttons', () => {
     renderWithProviders(<AdminLoanRequestsPage />)
-    expect(screen.getByRole('button', { name: /odobri/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /odbij/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /approve/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /reject/i })).toBeInTheDocument()
   })
 
   it('calls approve mutation with request id when approve clicked', async () => {
@@ -81,7 +81,7 @@ describe('AdminLoanRequestsPage', () => {
     } as any)
     const user = userEvent.setup()
     renderWithProviders(<AdminLoanRequestsPage />)
-    await user.click(screen.getByRole('button', { name: /odobri/i }))
+    await user.click(screen.getByRole('button', { name: /approve/i }))
     expect(approveMutate).toHaveBeenCalledWith(1)
   })
 
@@ -93,7 +93,7 @@ describe('AdminLoanRequestsPage', () => {
     } as any)
     const user = userEvent.setup()
     renderWithProviders(<AdminLoanRequestsPage />)
-    await user.click(screen.getByRole('button', { name: /odbij/i }))
+    await user.click(screen.getByRole('button', { name: /reject/i }))
     expect(rejectMutate).toHaveBeenCalledWith(1)
   })
 
@@ -120,7 +120,7 @@ describe('AdminLoanRequestsPage', () => {
     expect(screen.getByText('Ana Anić')).toBeInTheDocument()
     expect(screen.getByText('Marko Marković')).toBeInTheDocument()
 
-    await user.type(screen.getByPlaceholderText(/ime klijenta/i), 'Ana')
+    await user.type(screen.getByPlaceholderText(/client name/i), 'Ana')
     expect(screen.getByText('Ana Anić')).toBeInTheDocument()
     expect(screen.queryByText('Marko Marković')).not.toBeInTheDocument()
   })
@@ -131,6 +131,6 @@ describe('AdminLoanRequestsPage', () => {
       isLoading: false,
     } as any)
     renderWithProviders(<AdminLoanRequestsPage />)
-    expect(screen.getByText(/nema zahteva/i)).toBeInTheDocument()
+    expect(screen.getByText(/no requests/i)).toBeInTheDocument()
   })
 })

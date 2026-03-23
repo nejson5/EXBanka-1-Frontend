@@ -22,8 +22,8 @@ describe('EditClientPage', () => {
 
   it('renders edit client form', () => {
     renderWithProviders(<EditClientPage />, { route: '/admin/clients/1/edit' })
-    expect(screen.getByText(/izmeni klijenta/i)).toBeInTheDocument()
-    expect(screen.getByLabelText('Ime')).toBeInTheDocument()
+    expect(screen.getByText(/edit client/i)).toBeInTheDocument()
+    expect(screen.getByLabelText('First Name')).toBeInTheDocument()
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument()
   })
 })

@@ -27,12 +27,12 @@ export function LoanApplicationPage() {
   if (step === 'success' && result) {
     return (
       <div className="space-y-4 text-center">
-        <h2 className="text-xl font-semibold">Zahtev za kredit uspešno podnet!</h2>
-        <p className="text-muted-foreground">Vaš zahtev je u obradi.</p>
+        <h2 className="text-xl font-semibold">Loan request submitted successfully!</h2>
+        <p className="text-muted-foreground">Your request is being processed.</p>
         <div className="flex justify-center gap-3">
-          <Button onClick={() => navigate('/loans')}>Nazad na kredite</Button>
+          <Button onClick={() => navigate('/loans')}>Back to Loans</Button>
           <Button variant="outline" onClick={() => dispatch(resetLoanFlow())}>
-            Novi zahtev
+            New Request
           </Button>
         </div>
       </div>
@@ -48,7 +48,7 @@ export function LoanApplicationPage() {
     <div className="max-w-lg mx-auto">
       <Card>
         <CardHeader>
-          <CardTitle>Podnesi zahtev za kredit</CardTitle>
+          <CardTitle>Submit Loan Request</CardTitle>
         </CardHeader>
         <CardContent>
           <LoanApplicationForm

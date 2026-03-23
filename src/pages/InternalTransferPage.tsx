@@ -50,12 +50,12 @@ export function InternalTransferPage() {
   if (step === 'success' && result) {
     return (
       <div className="space-y-4 text-center">
-        <h2 className="text-xl font-semibold">Prenos uspešan!</h2>
-        <p>ID transakcije: {result.id}</p>
+        <h2 className="text-xl font-semibold">Transfer successful!</h2>
+        <p>Transaction ID: {result.id}</p>
         <div className="flex justify-center gap-3">
-          <Button onClick={() => navigate('/payments/history')}>Istorija</Button>
+          <Button onClick={() => navigate('/payments/history')}>History</Button>
           <Button variant="outline" onClick={() => dispatch(resetPaymentFlow())}>
-            Novi prenos
+            New Transfer
           </Button>
         </div>
       </div>
@@ -88,10 +88,10 @@ export function InternalTransferPage() {
                 if (res.valid) {
                   dispatch(setPaymentStep('success'))
                 } else {
-                  dispatch(setVerificationError('Neispravan kod'))
+                  dispatch(setVerificationError('Invalid code'))
                 }
               },
-              onError: () => dispatch(setVerificationError('Greška pri verifikaciji')),
+              onError: () => dispatch(setVerificationError('Verification error')),
             }
           )
         }}

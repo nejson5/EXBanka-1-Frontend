@@ -22,6 +22,6 @@ describe('PaymentHistoryPage', () => {
 
   it('renders payment history page', () => {
     renderWithProviders(<PaymentHistoryPage />)
-    expect(screen.getByText(/istorija plaćanja/i)).toBeInTheDocument()
+    expect(screen.getByText(/payment history/i)).toBeInTheDocument()
   })
 })

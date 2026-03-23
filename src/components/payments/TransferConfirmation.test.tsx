@@ -42,8 +42,8 @@ describe('TransferConfirmation', () => {
         error={null}
       />
     )
-    expect(screen.getByRole('button', { name: /potvrdi/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /nazad/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /confirm/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /back/i })).toBeInTheDocument()
   })
 
   it('calls onConfirm when Confirm clicked', async () => {
@@ -58,7 +58,7 @@ describe('TransferConfirmation', () => {
         error={null}
       />
     )
-    await user.click(screen.getByRole('button', { name: /potvrdi/i }))
+    await user.click(screen.getByRole('button', { name: /confirm/i }))
     expect(onConfirm).toHaveBeenCalled()
   })
 
@@ -74,7 +74,7 @@ describe('TransferConfirmation', () => {
         error={null}
       />
     )
-    await user.click(screen.getByRole('button', { name: /nazad/i }))
+    await user.click(screen.getByRole('button', { name: /back/i }))
     expect(onBack).toHaveBeenCalled()
   })
 })

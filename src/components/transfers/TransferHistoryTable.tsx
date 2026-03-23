@@ -15,19 +15,19 @@ interface TransferHistoryTableProps {
 
 export function TransferHistoryTable({ transfers }: TransferHistoryTableProps) {
   if (transfers.length === 0) {
-    return <p className="text-muted-foreground">Nema transfera.</p>
+    return <p className="text-muted-foreground">No transfers.</p>
   }
 
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Datum</TableHead>
-          <TableHead>Sa računa</TableHead>
-          <TableHead>Na račun</TableHead>
-          <TableHead>Iznos</TableHead>
-          <TableHead>Krajnji iznos</TableHead>
-          <TableHead>Kurs</TableHead>
+          <TableHead>Date</TableHead>
+          <TableHead>From Account</TableHead>
+          <TableHead>To Account</TableHead>
+          <TableHead>Amount</TableHead>
+          <TableHead>Final Amount</TableHead>
+          <TableHead>Rate</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

@@ -19,12 +19,12 @@ import type { FilterFieldDef, FilterValues } from '@/types/filters'
 const LOAN_REQUEST_FILTER_FIELDS: FilterFieldDef[] = [
   {
     key: 'loan_type',
-    label: 'Tip kredita',
+    label: 'Loan Type',
     type: 'multiselect',
     options: LOAN_TYPES.map((t) => ({ label: t.label, value: t.value })),
   },
-  { key: 'account_number', label: 'Broj računa', type: 'text' },
-  { key: 'name', label: 'Ime klijenta', type: 'text' },
+  { key: 'account_number', label: 'Account Number', type: 'text' },
+  { key: 'name', label: 'Client Name', type: 'text' },
 ]
 
 export function AdminLoanRequestsPage() {
@@ -59,7 +59,7 @@ export function AdminLoanRequestsPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold">Zahtevi za kredite</h1>
+      <h1 className="text-2xl font-bold">Loan Requests</h1>
 
       <FilterBar
         fields={LOAN_REQUEST_FILTER_FIELDS}
@@ -68,25 +68,25 @@ export function AdminLoanRequestsPage() {
       />
 
       {isLoading ? (
-        <p>Učitavanje...</p>
+        <p>Loading...</p>
       ) : (
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Klijent</TableHead>
-              <TableHead>Broj računa</TableHead>
-              <TableHead>Iznos</TableHead>
-              <TableHead>Valuta</TableHead>
-              <TableHead>Period otplate</TableHead>
-              <TableHead>Svrha</TableHead>
-              <TableHead>Akcije</TableHead>
+              <TableHead>Client</TableHead>
+              <TableHead>Account Number</TableHead>
+              <TableHead>Amount</TableHead>
+              <TableHead>Currency</TableHead>
+              <TableHead>Repayment Period</TableHead>
+              <TableHead>Purpose</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filtered.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={7} className="text-center text-muted-foreground">
-                  Nema zahteva.
+                  No requests.
                 </TableCell>
               </TableRow>
             ) : (
@@ -94,7 +94,7 @@ export function AdminLoanRequestsPage() {
                 const client = clientsById[req.client_id ?? -1]
                 const clientName = client
                   ? `${client.first_name} ${client.last_name}`
-                  : `Klijent #${req.client_id}`
+                  : `Client #${req.client_id}`
                 const currency = req.currency_code ?? 'RSD'
 
                 return (
@@ -103,7 +103,7 @@ export function AdminLoanRequestsPage() {
                     <TableCell className="font-mono text-sm">{req.account_number}</TableCell>
                     <TableCell>{formatCurrency(req.amount, currency)}</TableCell>
                     <TableCell>{currency}</TableCell>
-                    <TableCell>{req.repayment_period} mes.</TableCell>
+                    <TableCell>{req.repayment_period} months</TableCell>
                     <TableCell>{req.purpose ?? '—'}</TableCell>
                     <TableCell>
                       <div className="flex gap-2">
@@ -112,7 +112,7 @@ export function AdminLoanRequestsPage() {
                           onClick={() => approve.mutate(req.id)}
                           disabled={isDisabled}
                         >
-                          Odobri
+                          Approve
                         </Button>
                         <Button
                           size="sm"
@@ -120,7 +120,7 @@ export function AdminLoanRequestsPage() {
                           onClick={() => reject.mutate(req.id)}
                           disabled={isDisabled}
                         >
-                          Odbij
+                          Reject
                         </Button>
                       </div>
                     </TableCell>

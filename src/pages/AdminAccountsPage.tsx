@@ -10,8 +10,8 @@ import type { Client } from '@/types/client'
 import type { FilterFieldDef, FilterValues } from '@/types/filters'
 
 const ACCOUNT_FILTER_FIELDS: FilterFieldDef[] = [
-  { key: 'owner_name', label: 'Ime vlasnika', type: 'text' },
-  { key: 'account_number', label: 'Broj računa', type: 'text' },
+  { key: 'owner_name', label: 'Owner Name', type: 'text' },
+  { key: 'account_number', label: 'Account Number', type: 'text' },
 ]
 
 export function AdminAccountsPage() {
@@ -42,12 +42,12 @@ export function AdminAccountsPage() {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Upravljanje računima</h1>
-        <Button onClick={() => navigate('/accounts/new')}>Novi račun</Button>
+        <h1 className="text-2xl font-bold">Account Management</h1>
+        <Button onClick={() => navigate('/accounts/new')}>New Account</Button>
       </div>
       <FilterBar fields={ACCOUNT_FILTER_FIELDS} values={filterValues} onChange={setFilterValues} />
       {isLoading ? (
-        <p>Učitavanje...</p>
+        <p>Loading...</p>
       ) : (
         <AccountTable
           accounts={accounts}

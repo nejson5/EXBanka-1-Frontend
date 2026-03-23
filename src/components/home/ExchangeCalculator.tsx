@@ -29,9 +29,9 @@ export function ExchangeCalculator() {
 
   return (
     <div className="space-y-3">
-      <h3 className="font-semibold text-sm">Brza konverzija</h3>
+      <h3 className="font-semibold text-sm">Quick Conversion</h3>
       <div>
-        <Label htmlFor="calc-amount">Iznos</Label>
+        <Label htmlFor="calc-amount">Amount</Label>
         <Input
           id="calc-amount"
           type="number"
@@ -41,7 +41,7 @@ export function ExchangeCalculator() {
       </div>
       <div className="grid grid-cols-2 gap-2">
         <div>
-          <Label>Iz</Label>
+          <Label>From</Label>
           <Select value={fromCurrency} onValueChange={(v) => setFromCurrency(v ?? 'RSD')}>
             <SelectTrigger>
               <SelectValue />
@@ -56,7 +56,7 @@ export function ExchangeCalculator() {
           </Select>
         </div>
         <div>
-          <Label>U</Label>
+          <Label>To</Label>
           <Select value={toCurrency} onValueChange={(v) => setToCurrency(v ?? 'EUR')}>
             <SelectTrigger>
               <SelectValue />
@@ -76,7 +76,7 @@ export function ExchangeCalculator() {
         className="w-full"
         disabled={amount <= 0 || convert.isPending}
       >
-        {convert.isPending ? 'Izračunavanje...' : 'Izračunaj'}
+        {convert.isPending ? 'Calculating...' : 'Calculate'}
       </Button>
       {triggered && convert.data && (
         <p className="text-lg font-bold text-center">

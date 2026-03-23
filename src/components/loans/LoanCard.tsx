@@ -5,9 +5,9 @@ import { LOAN_TYPES } from '@/lib/constants/banking'
 import type { Loan } from '@/types/loan'
 
 const STATUS_LABELS: Record<string, string> = {
-  ACTIVE: 'Aktivan',
-  PAID_OFF: 'Isplaćen',
-  DELINQUENT: 'U kašnjenju',
+  ACTIVE: 'Active',
+  PAID_OFF: 'Paid Off',
+  DELINQUENT: 'Delinquent',
 }
 
 const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive'> = {
@@ -35,9 +35,9 @@ export function LoanCard({ loan, onClick }: LoanCardProps) {
           <p className="font-semibold">{loanTypeLabel(loan.loan_type)}</p>
           <p className="text-sm text-muted-foreground">{loan.loan_number}</p>
           <p className="text-sm text-muted-foreground">
-            Rata: {formatCurrency(loan.installment_amount, 'RSD')}/mesec
+            Installment: {formatCurrency(loan.installment_amount, 'RSD')}/month
           </p>
-          <p className="text-sm text-muted-foreground">Odobren: {formatDate(loan.created_at)}</p>
+          <p className="text-sm text-muted-foreground">Approved: {formatDate(loan.created_at)}</p>
         </div>
         <div className="text-right space-y-1">
           <p className="text-lg font-bold">{formatCurrency(loan.amount, 'RSD')}</p>

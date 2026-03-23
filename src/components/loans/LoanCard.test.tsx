@@ -14,7 +14,7 @@ describe('LoanCard', () => {
   it('renders loan type label', () => {
     const loan = createMockLoan({ loan_type: 'CASH' })
     renderWithProviders(<LoanCard loan={loan} onClick={mockOnClick} />)
-    expect(screen.getByText(/gotovinski/i)).toBeInTheDocument()
+    expect(screen.getByText(/cash/i)).toBeInTheDocument()
   })
 
   it('renders loan number', () => {

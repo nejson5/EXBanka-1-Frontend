@@ -83,10 +83,10 @@ function EmployeeNav({ isAdmin }: { isAdmin: boolean }) {
         Clients
       </Link>
       <Link to="/admin/loans/requests" className={navLinkClass}>
-        Zahtevi za kredite
+        Loan Requests
       </Link>
       <Link to="/admin/loans" className={navLinkClass}>
-        Svi krediti
+        All Loans
       </Link>
     </>
   )

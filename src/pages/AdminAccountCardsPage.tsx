@@ -18,13 +18,13 @@ export function AdminAccountCardsPage() {
     <div className="space-y-4">
       <div className="flex items-center gap-4">
         <Button variant="ghost" onClick={() => navigate('/admin/accounts')}>
-          ← Nazad
+          ← Back
         </Button>
-        <h1 className="text-2xl font-bold">Kartice — {account?.account_name ?? 'Račun'}</h1>
+        <h1 className="text-2xl font-bold">Cards — {account?.account_name ?? 'Account'}</h1>
       </div>
 
       {isLoading ? (
-        <p>Učitavanje...</p>
+        <p>Loading...</p>
       ) : cards && cards.length > 0 ? (
         <div className="space-y-3">
           {cards.map((card) => (
@@ -38,7 +38,7 @@ export function AdminAccountCardsPage() {
           ))}
         </div>
       ) : (
-        <p className="text-muted-foreground">Nema kartica za ovaj račun.</p>
+        <p className="text-muted-foreground">No cards for this account.</p>
       )}
     </div>
   )

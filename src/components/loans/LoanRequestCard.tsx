@@ -6,9 +6,9 @@ import { formatCurrency, formatDate } from '@/lib/utils/format'
 import { LOAN_TYPES } from '@/lib/constants/banking'
 
 const STATUS_LABELS: Record<string, string> = {
-  PENDING: 'Na čekanju',
-  APPROVED: 'Odobren',
-  REJECTED: 'Odbijen',
+  PENDING: 'Pending',
+  APPROVED: 'Approved',
+  REJECTED: 'Rejected',
 }
 
 const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive'> = {
@@ -18,8 +18,8 @@ const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive'> = 
 }
 
 const INTEREST_TYPE_LABELS: Record<string, string> = {
-  FIXED: 'Fiksna',
-  VARIABLE: 'Varijabilna',
+  FIXED: 'Fixed',
+  VARIABLE: 'Variable',
 }
 
 interface LoanRequestCardProps {
@@ -69,7 +69,7 @@ export function LoanRequestCard({
         {isPending && (
           <div className="flex gap-2">
             <Button size="sm" onClick={() => onApprove(request.id)} disabled={isDisabled}>
-              Odobri
+              Approve
             </Button>
             <Button
               size="sm"
@@ -77,7 +77,7 @@ export function LoanRequestCard({
               onClick={() => onReject(request.id)}
               disabled={isDisabled}
             >
-              Odbij
+              Reject
             </Button>
           </div>
         )}

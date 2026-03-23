@@ -15,27 +15,27 @@ describe('NewPaymentForm', () => {
     renderWithProviders(
       <NewPaymentForm accounts={mockAccounts} recipients={mockRecipients} onSubmit={onSubmit} />
     )
-    expect(screen.getByText('Nova uplata')).toBeInTheDocument()
+    expect(screen.getByText('New Payment')).toBeInTheDocument()
   })
 
   it('renders receiver name input', () => {
     renderWithProviders(
       <NewPaymentForm accounts={mockAccounts} recipients={mockRecipients} onSubmit={onSubmit} />
     )
-    expect(screen.getByLabelText(/ime primaoca/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/recipient name/i)).toBeInTheDocument()
   })
 
   it('renders amount input', () => {
     renderWithProviders(
       <NewPaymentForm accounts={mockAccounts} recipients={mockRecipients} onSubmit={onSubmit} />
     )
-    expect(screen.getByLabelText(/iznos/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/amount/i)).toBeInTheDocument()
   })
 
   it('renders submit/continue button', () => {
     renderWithProviders(
       <NewPaymentForm accounts={mockAccounts} recipients={mockRecipients} onSubmit={onSubmit} />
     )
-    expect(screen.getByRole('button', { name: /nastavi/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /continue/i })).toBeInTheDocument()
   })
 })

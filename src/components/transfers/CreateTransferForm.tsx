@@ -42,12 +42,12 @@ export function CreateTransferForm({ accounts, onSubmit }: CreateTransferFormPro
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Kreiraj transfer</CardTitle>
+        <CardTitle>Create Transfer</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <Label htmlFor="from_account_number">Izvorni račun</Label>
+            <Label htmlFor="from_account_number">Source Account</Label>
             <Controller
               name="from_account_number"
               control={control}
@@ -60,8 +60,8 @@ export function CreateTransferForm({ accounts, onSubmit }: CreateTransferFormPro
                   }}
                   value={field.value}
                 >
-                  <SelectTrigger aria-label="Izvorni račun">
-                    <SelectValue placeholder="Izaberite račun" />
+                  <SelectTrigger aria-label="Source Account">
+                    <SelectValue placeholder="Select account" />
                   </SelectTrigger>
                   <SelectContent>
                     {accounts.map((acc) => (
@@ -79,14 +79,14 @@ export function CreateTransferForm({ accounts, onSubmit }: CreateTransferFormPro
           </div>
 
           <div>
-            <Label htmlFor="to_account_number">Odredišni račun</Label>
+            <Label htmlFor="to_account_number">Destination Account</Label>
             <Controller
               name="to_account_number"
               control={control}
               render={({ field }) => (
                 <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger aria-label="Odredišni račun">
-                    <SelectValue placeholder="Izaberite račun" />
+                  <SelectTrigger aria-label="Destination Account">
+                    <SelectValue placeholder="Select account" />
                   </SelectTrigger>
                   <SelectContent>
                     {toAccounts.map((acc) => (
@@ -104,18 +104,18 @@ export function CreateTransferForm({ accounts, onSubmit }: CreateTransferFormPro
           </div>
 
           <div>
-            <Label htmlFor="amount">Iznos</Label>
+            <Label htmlFor="amount">Amount</Label>
             <Input
               id="amount"
               type="number"
               {...register('amount', { valueAsNumber: true })}
-              aria-label="Iznos"
+              aria-label="Amount"
             />
             {errors.amount && <p className="text-sm text-destructive">{errors.amount.message}</p>}
           </div>
 
           <Button type="submit" className="w-full">
-            Uradi transfer
+            Make Transfer
           </Button>
         </form>
       </CardContent>

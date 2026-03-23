@@ -18,7 +18,7 @@ describe('ClientTable', () => {
     const onEdit = jest.fn()
     const client = createMockClient({ id: 42 })
     renderWithProviders(<ClientTable clients={[client]} onEdit={onEdit} />)
-    await userEvent.click(screen.getByRole('button', { name: /izmeni/i }))
+    await userEvent.click(screen.getByRole('button', { name: /edit/i }))
     expect(onEdit).toHaveBeenCalledWith(42)
   })
 })

@@ -14,8 +14,8 @@ describe('RenameAccountDialog', () => {
         loading={false}
       />
     )
-    expect(screen.getByLabelText(/naziv računa/i)).toBeInTheDocument()
-    expect(screen.getByText(/preimenuj račun/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/account name/i)).toBeInTheDocument()
+    expect(screen.getByText(/rename account/i)).toBeInTheDocument()
   })
 
   it('shows error when new name is the same as current', async () => {
@@ -29,10 +29,10 @@ describe('RenameAccountDialog', () => {
         loading={false}
       />
     )
-    const input = screen.getByLabelText(/naziv računa/i)
+    const input = screen.getByLabelText(/account name/i)
     await user.clear(input)
     await user.type(input, 'Tekući RSD')
-    expect(screen.getByText(/isti kao trenutni/i)).toBeInTheDocument()
+    expect(screen.getByText(/same as current/i)).toBeInTheDocument()
   })
 
   it('shows error when name matches an existing account', async () => {
@@ -47,10 +47,10 @@ describe('RenameAccountDialog', () => {
         loading={false}
       />
     )
-    const input = screen.getByLabelText(/naziv računa/i)
+    const input = screen.getByLabelText(/account name/i)
     await user.clear(input)
     await user.type(input, 'Devizni EUR')
-    expect(screen.getByText(/već koristi/i)).toBeInTheDocument()
+    expect(screen.getByText(/already in use/i)).toBeInTheDocument()
   })
 
   it('calls onRename with new name', async () => {
@@ -65,10 +65,10 @@ describe('RenameAccountDialog', () => {
         loading={false}
       />
     )
-    const input = screen.getByLabelText(/naziv računa/i)
+    const input = screen.getByLabelText(/account name/i)
     await user.clear(input)
     await user.type(input, 'New Name')
-    await user.click(screen.getByText(/sačuvaj/i))
+    await user.click(screen.getByText(/save/i))
     expect(onRename).toHaveBeenCalledWith('New Name')
   })
 })

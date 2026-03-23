@@ -22,7 +22,7 @@ describe('AccountTable', () => {
   it('calls onViewCards when button clicked', async () => {
     const onViewCards = jest.fn()
     renderWithProviders(<AccountTable accounts={[createMockAccount()]} onViewCards={onViewCards} />)
-    await userEvent.click(screen.getByRole('button', { name: /kartice/i }))
+    await userEvent.click(screen.getByRole('button', { name: /cards/i }))
     expect(onViewCards).toHaveBeenCalledWith(1)
   })
 

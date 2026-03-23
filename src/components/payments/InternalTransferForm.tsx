@@ -45,19 +45,19 @@ export function InternalTransferForm({ accounts, onSubmit }: InternalTransferFor
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Prenos sredstava</CardTitle>
+        <CardTitle>Transfer Funds</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <Label>Sa računa</Label>
+            <Label>From Account</Label>
             <Controller
               name="from_account_number"
               control={control}
               render={({ field }) => (
                 <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Izaberite račun" />
+                    <SelectValue placeholder="Select account" />
                   </SelectTrigger>
                   <SelectContent>
                     {accounts.map((acc) => (
@@ -76,14 +76,14 @@ export function InternalTransferForm({ accounts, onSubmit }: InternalTransferFor
           </div>
 
           <div>
-            <Label>Na račun</Label>
+            <Label>To Account</Label>
             <Controller
               name="to_account_number"
               control={control}
               render={({ field }) => (
                 <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Izaberite račun" />
+                    <SelectValue placeholder="Select account" />
                   </SelectTrigger>
                   <SelectContent>
                     {toAccounts.map((acc) => (
@@ -102,18 +102,18 @@ export function InternalTransferForm({ accounts, onSubmit }: InternalTransferFor
           </div>
 
           <div>
-            <Label htmlFor="amount">Iznos</Label>
+            <Label htmlFor="amount">Amount</Label>
             <Input id="amount" type="number" {...register('amount', { valueAsNumber: true })} />
             {errors.amount && <p className="text-sm text-destructive">{errors.amount.message}</p>}
           </div>
 
           <div>
-            <Label htmlFor="payment_purpose">Opis (opciono)</Label>
+            <Label htmlFor="payment_purpose">Description (optional)</Label>
             <Input id="payment_purpose" {...register('payment_purpose')} />
           </div>
 
           <Button type="submit" className="w-full">
-            Nastavi
+            Continue
           </Button>
         </form>
       </CardContent>

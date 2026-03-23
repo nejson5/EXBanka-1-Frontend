@@ -34,21 +34,21 @@ export function RecipientForm({ onSubmit, submitting, defaultValues }: Recipient
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
-          <Label htmlFor="recipient_name">Ime primaoca</Label>
+          <Label htmlFor="recipient_name">Recipient Name</Label>
           <Input id="recipient_name" {...register('recipient_name')} />
           {errors.recipient_name && (
             <p className="text-sm text-destructive">{errors.recipient_name.message}</p>
           )}
         </div>
         <div>
-          <Label htmlFor="account_number">Broj računa</Label>
+          <Label htmlFor="account_number">Account Number</Label>
           <Input id="account_number" {...register('account_number')} />
           {errors.account_number && (
             <p className="text-sm text-destructive">{errors.account_number.message}</p>
           )}
         </div>
         <Button type="submit" disabled={submitting}>
-          {submitting ? 'Čuvanje...' : 'Dodaj'}
+          {submitting ? 'Saving...' : 'Add'}
         </Button>
       </form>
     </div>

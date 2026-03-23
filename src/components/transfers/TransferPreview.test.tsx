@@ -32,14 +32,14 @@ describe('TransferPreview', () => {
   it('calls onConfirm', async () => {
     const user = userEvent.setup()
     renderWithProviders(<TransferPreview {...defaultProps} />)
-    await user.click(screen.getByRole('button', { name: 'Potvrdi' }))
+    await user.click(screen.getByRole('button', { name: 'Confirm' }))
     expect(defaultProps.onConfirm).toHaveBeenCalled()
   })
 
   it('calls onBack', async () => {
     const user = userEvent.setup()
     renderWithProviders(<TransferPreview {...defaultProps} />)
-    await user.click(screen.getByText(/nazad/i))
+    await user.click(screen.getByText(/back/i))
     expect(defaultProps.onBack).toHaveBeenCalled()
   })
 })

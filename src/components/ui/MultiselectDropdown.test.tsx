@@ -40,7 +40,7 @@ describe('MultiselectDropdown', () => {
     )
     await user.click(screen.getByRole('button', { name: 'Status' }))
     expect(screen.getByTestId('popover-content')).toBeInTheDocument()
-    expect(screen.getByLabelText('Izaberi sve')).toBeInTheDocument()
+    expect(screen.getByLabelText('Select all')).toBeInTheDocument()
     expect(screen.getByLabelText('Option A')).toBeInTheDocument()
     expect(screen.getByLabelText('Option B')).toBeInTheDocument()
     expect(screen.getByLabelText('Option C')).toBeInTheDocument()
@@ -53,7 +53,7 @@ describe('MultiselectDropdown', () => {
       <MultiselectDropdown label="Status" options={OPTIONS} selected={[]} onChange={onChange} />
     )
     await user.click(screen.getByRole('button', { name: 'Status' }))
-    await user.click(screen.getByLabelText('Izaberi sve'))
+    await user.click(screen.getByLabelText('Select all'))
     expect(onChange).toHaveBeenCalledWith(['A', 'B', 'C'])
   })
 
@@ -64,7 +64,7 @@ describe('MultiselectDropdown', () => {
       <MultiselectDropdown label="Status" options={OPTIONS} selected={['A', 'B', 'C']} onChange={onChange} />
     )
     await user.click(screen.getByRole('button', { name: 'Status (3)' }))
-    await user.click(screen.getByLabelText('Izaberi sve'))
+    await user.click(screen.getByLabelText('Select all'))
     expect(onChange).toHaveBeenCalledWith([])
   })
 
@@ -96,7 +96,7 @@ describe('MultiselectDropdown', () => {
       <MultiselectDropdown label="Status" options={OPTIONS} selected={['A', 'B', 'C']} onChange={jest.fn()} />
     )
     await user.click(screen.getByRole('button', { name: 'Status (3)' }))
-    expect(screen.getByLabelText('Izaberi sve')).toBeChecked()
+    expect(screen.getByLabelText('Select all')).toBeChecked()
   })
 
   it('shows Select All as unchecked when not all options are selected', async () => {
@@ -105,6 +105,6 @@ describe('MultiselectDropdown', () => {
       <MultiselectDropdown label="Status" options={OPTIONS} selected={['A']} onChange={jest.fn()} />
     )
     await user.click(screen.getByRole('button', { name: 'Status (1)' }))
-    expect(screen.getByLabelText('Izaberi sve')).not.toBeChecked()
+    expect(screen.getByLabelText('Select all')).not.toBeChecked()
   })
 })

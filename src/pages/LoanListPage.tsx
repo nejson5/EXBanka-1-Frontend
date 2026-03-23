@@ -8,13 +8,13 @@ export function LoanListPage() {
   const { data, isLoading } = useLoans()
   const loans = data?.loans ?? []
 
-  if (isLoading) return <p>Učitavanje...</p>
+  if (isLoading) return <p>Loading...</p>
 
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Moji krediti</h1>
-        <Button onClick={() => navigate('/loans/apply')}>Podnesi zahtev</Button>
+        <h1 className="text-2xl font-bold">My Loans</h1>
+        <Button onClick={() => navigate('/loans/apply')}>Apply for Loan</Button>
       </div>
 
       {loans.length > 0 ? (
@@ -24,7 +24,7 @@ export function LoanListPage() {
           ))}
         </div>
       ) : (
-        <p className="text-muted-foreground">Nemate aktivnih kredita.</p>
+        <p className="text-muted-foreground">You have no active loans.</p>
       )}
     </div>
   )

@@ -37,7 +37,7 @@ describe('LoanRequestCard', () => {
         rejecting={false}
       />
     )
-    expect(screen.getByText(/gotovinski/i)).toBeInTheDocument()
+    expect(screen.getByText(/cash/i)).toBeInTheDocument()
   })
 
   it('renders applicant account number', () => {
@@ -65,8 +65,8 @@ describe('LoanRequestCard', () => {
         rejecting={false}
       />
     )
-    expect(screen.getByRole('button', { name: /odobri/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /odbij/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /approve/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /reject/i })).toBeInTheDocument()
   })
 
   it('calls onApprove with request id when Approve is clicked', async () => {
@@ -80,7 +80,7 @@ describe('LoanRequestCard', () => {
         rejecting={false}
       />
     )
-    await userEvent.click(screen.getByRole('button', { name: /odobri/i }))
+    await userEvent.click(screen.getByRole('button', { name: /approve/i }))
     expect(mockOnApprove).toHaveBeenCalledWith(42)
   })
 
@@ -95,7 +95,7 @@ describe('LoanRequestCard', () => {
         rejecting={false}
       />
     )
-    await userEvent.click(screen.getByRole('button', { name: /odbij/i }))
+    await userEvent.click(screen.getByRole('button', { name: /reject/i }))
     expect(mockOnReject).toHaveBeenCalledWith(42)
   })
 
@@ -110,8 +110,8 @@ describe('LoanRequestCard', () => {
         rejecting={false}
       />
     )
-    expect(screen.getByRole('button', { name: /odobri/i })).toBeDisabled()
-    expect(screen.getByRole('button', { name: /odbij/i })).toBeDisabled()
+    expect(screen.getByRole('button', { name: /approve/i })).toBeDisabled()
+    expect(screen.getByRole('button', { name: /reject/i })).toBeDisabled()
   })
 
   it('disables both buttons when rejecting is true', () => {
@@ -125,8 +125,8 @@ describe('LoanRequestCard', () => {
         rejecting={true}
       />
     )
-    expect(screen.getByRole('button', { name: /odobri/i })).toBeDisabled()
-    expect(screen.getByRole('button', { name: /odbij/i })).toBeDisabled()
+    expect(screen.getByRole('button', { name: /approve/i })).toBeDisabled()
+    expect(screen.getByRole('button', { name: /reject/i })).toBeDisabled()
   })
 
   it('displays interest type when present', () => {
@@ -140,7 +140,7 @@ describe('LoanRequestCard', () => {
         rejecting={false}
       />
     )
-    expect(screen.getByText(/fiksna/i)).toBeInTheDocument()
+    expect(screen.getByText(/fixed/i)).toBeInTheDocument()
   })
 
   it('displays currency when present', () => {

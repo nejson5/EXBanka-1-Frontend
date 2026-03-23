@@ -27,6 +27,6 @@ describe('CardRequestPage', () => {
 
   it('renders card request form', () => {
     renderWithProviders(<CardRequestPage />)
-    expect(screen.getByText(/zatraži novu karticu/i)).toBeInTheDocument()
+    expect(screen.getByText(/request new card/i)).toBeInTheDocument()
   })
 })

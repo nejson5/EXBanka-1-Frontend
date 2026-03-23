@@ -17,6 +17,6 @@ describe('ExchangeCalculatorPage', () => {
 
   it('renders calculator', () => {
     renderWithProviders(<ExchangeCalculatorPage />)
-    expect(screen.getByText(/proveri ekvivalentnost/i)).toBeInTheDocument()
+    expect(screen.getByText(/check equivalence/i)).toBeInTheDocument()
   })
 })

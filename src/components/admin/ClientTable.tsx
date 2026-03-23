@@ -19,11 +19,11 @@ export function ClientTable({ clients, onEdit }: ClientTableProps) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Ime</TableHead>
-          <TableHead>Prezime</TableHead>
+          <TableHead>First Name</TableHead>
+          <TableHead>Last Name</TableHead>
           <TableHead>Email</TableHead>
-          <TableHead>Telefon</TableHead>
-          <TableHead>Akcije</TableHead>
+          <TableHead>Phone</TableHead>
+          <TableHead>Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -35,7 +35,7 @@ export function ClientTable({ clients, onEdit }: ClientTableProps) {
             <TableCell>{client.phone ?? '—'}</TableCell>
             <TableCell>
               <Button size="sm" variant="outline" onClick={() => onEdit(client.id)}>
-                Izmeni
+                Edit
               </Button>
             </TableCell>
           </TableRow>
@@ -43,7 +43,7 @@ export function ClientTable({ clients, onEdit }: ClientTableProps) {
         {clients.length === 0 && (
           <TableRow>
             <TableCell colSpan={5} className="text-center text-muted-foreground">
-              Nema klijenata.
+              No clients.
             </TableCell>
           </TableRow>
         )}

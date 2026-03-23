@@ -60,7 +60,7 @@ export function ChangeLimitsDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Promena limita</DialogTitle>
+          <DialogTitle>Change Limits</DialogTitle>
         </DialogHeader>
         {step === 'verification' ? (
           <VerificationStep
@@ -75,11 +75,11 @@ export function ChangeLimitsDialog({
           <>
             <div className="space-y-4 py-4">
               <p className="text-sm text-muted-foreground">
-                Trenutno: {formatCurrency(currentDailyLimit, currency)} / dan,{' '}
-                {formatCurrency(currentMonthlyLimit, currency)} / mesec
+                Current: {formatCurrency(currentDailyLimit, currency)} / day,{' '}
+                {formatCurrency(currentMonthlyLimit, currency)} / month
               </p>
               <div>
-                <Label htmlFor="daily-limit">Dnevni limit</Label>
+                <Label htmlFor="daily-limit">Daily Limit</Label>
                 <Input
                   id="daily-limit"
                   type="number"
@@ -88,7 +88,7 @@ export function ChangeLimitsDialog({
                 />
               </div>
               <div>
-                <Label htmlFor="monthly-limit">Mesečni limit</Label>
+                <Label htmlFor="monthly-limit">Monthly Limit</Label>
                 <Input
                   id="monthly-limit"
                   type="number"
@@ -99,10 +99,10 @@ export function ChangeLimitsDialog({
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => onOpenChange(false)}>
-                Otkaži
+                Cancel
               </Button>
               <Button onClick={handleSave} disabled={!isValid || loading}>
-                {loading ? 'Čuvanje...' : 'Sačuvaj'}
+                {loading ? 'Saving...' : 'Save'}
               </Button>
             </DialogFooter>
           </>

@@ -19,7 +19,7 @@ describe('CardListPage', () => {
 
   it('renders card list with request button', () => {
     renderWithProviders(<CardListPage />)
-    expect(screen.getByRole('heading', { name: /kartice/i })).toBeInTheDocument()
-    expect(screen.getByText(/zatraži karticu/i)).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /cards/i })).toBeInTheDocument()
+    expect(screen.getByText(/request card/i)).toBeInTheDocument()
   })
 })

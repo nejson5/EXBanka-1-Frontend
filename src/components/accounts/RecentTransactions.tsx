@@ -11,9 +11,9 @@ import { formatCurrency, formatDate } from '@/lib/utils/format'
 import type { Payment } from '@/types/payment'
 
 const STATUS_LABELS: Record<string, string> = {
-  COMPLETED: 'Realizovano',
-  PENDING: 'U obradi',
-  FAILED: 'Odbijeno',
+  COMPLETED: 'Completed',
+  PENDING: 'Processing',
+  FAILED: 'Rejected',
 }
 
 const STATUS_VARIANT: Record<string, 'default' | 'secondary' | 'destructive'> = {
@@ -28,16 +28,16 @@ interface RecentTransactionsProps {
 
 export function RecentTransactions({ transactions }: RecentTransactionsProps) {
   if (transactions.length === 0) {
-    return <p className="text-sm text-muted-foreground py-4">Nema transakcija.</p>
+    return <p className="text-sm text-muted-foreground py-4">No transactions.</p>
   }
 
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Datum</TableHead>
-          <TableHead>Primalac</TableHead>
-          <TableHead className="text-right">Iznos</TableHead>
+          <TableHead>Date</TableHead>
+          <TableHead>Recipient</TableHead>
+          <TableHead className="text-right">Amount</TableHead>
           <TableHead>Status</TableHead>
         </TableRow>
       </TableHeader>

@@ -30,7 +30,7 @@ describe('CreateAccountForm', () => {
     renderWithProviders(<CreateAccountForm {...defaultProps} />, {
       preloadedState: { auth: createMockAuthState() },
     })
-    expect(screen.queryByLabelText(/tip kartice/i)).not.toBeInTheDocument()
+    expect(screen.queryByLabelText(/card brand/i)).not.toBeInTheDocument()
   })
 
   it('shows card brand dropdown when create card checkbox is checked', async () => {
@@ -39,7 +39,7 @@ describe('CreateAccountForm', () => {
       preloadedState: { auth: createMockAuthState() },
     })
     await user.click(screen.getByLabelText(/create card/i))
-    expect(screen.getByLabelText(/tip kartice/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/card brand/i)).toBeInTheDocument()
   })
 
   it('shows account kind dropdown by default (Current account type)', () => {

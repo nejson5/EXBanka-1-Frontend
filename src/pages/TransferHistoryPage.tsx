@@ -4,11 +4,11 @@ import { TransferHistoryTable } from '@/components/transfers/TransferHistoryTabl
 export function TransferHistoryPage() {
   const { data, isLoading } = useTransfers({})
 
-  if (isLoading) return <p>Učitavanje...</p>
+  if (isLoading) return <p>Loading...</p>
 
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold">Istorija transfera</h1>
+      <h1 className="text-2xl font-bold">Transfer History</h1>
       <TransferHistoryTable transfers={data?.transfers ?? []} />
     </div>
   )

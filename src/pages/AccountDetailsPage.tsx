@@ -28,8 +28,8 @@ export function AccountDetailsPage() {
   const [renameOpen, setRenameOpen] = useState(false)
   const [limitsOpen, setLimitsOpen] = useState(false)
 
-  if (isLoading) return <p>Učitavanje...</p>
-  if (!account) return <p>Račun nije pronađen.</p>
+  if (isLoading) return <p>Loading...</p>
+  if (!account) return <p>Account not found.</p>
 
   const handleRename = (name: string) => {
     updateAccountName.mutate({ new_name: name }, { onSuccess: () => setRenameOpen(false) })
@@ -43,7 +43,7 @@ export function AccountDetailsPage() {
     <div className="space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="ghost" onClick={() => navigate('/accounts')}>
-          ← Nazad
+          ← Back
         </Button>
         <h1 className="text-2xl font-bold">{account.account_name}</h1>
       </div>
@@ -52,33 +52,33 @@ export function AccountDetailsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Detalji</CardTitle>
+          <CardTitle>Details</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          {account.owner_name && <InfoRow label="Vlasnik" value={account.owner_name} />}
+          {account.owner_name && <InfoRow label="Owner" value={account.owner_name} />}
           <InfoRow
-            label="Tip računa"
-            value={account.account_kind === 'foreign' ? 'Devizni' : 'Tekući'}
+            label="Account Type"
+            value={account.account_kind === 'foreign' ? 'Foreign Currency' : 'Checking'}
           />
           <InfoRow
-            label="Tip vlasnika"
-            value={account.account_category === 'business' ? 'Poslovni' : 'Lični'}
+            label="Owner Type"
+            value={account.account_category === 'business' ? 'Business' : 'Personal'}
           />
-          <InfoRow label="Stanje" value={formatCurrency(account.balance, account.currency_code)} />
+          <InfoRow label="Balance" value={formatCurrency(account.balance, account.currency_code)} />
           <InfoRow
-            label="Raspoloživo"
+            label="Available"
             value={formatCurrency(account.available_balance, account.currency_code)}
           />
-          <InfoRow label="Rezervisana sredstva" value={formatCurrency(0, account.currency_code)} />
+          <InfoRow label="Reserved Funds" value={formatCurrency(0, account.currency_code)} />
           {account.daily_limit !== undefined && (
             <InfoRow
-              label="Dnevni limit"
+              label="Daily Limit"
               value={formatCurrency(account.daily_limit, account.currency_code)}
             />
           )}
           {account.monthly_limit !== undefined && (
             <InfoRow
-              label="Mesečni limit"
+              label="Monthly Limit"
               value={formatCurrency(account.monthly_limit, account.currency_code)}
             />
           )}
@@ -89,16 +89,16 @@ export function AccountDetailsPage() {
 
       <div className="flex gap-3">
         <Button variant="outline" onClick={() => navigate('/payments/new')}>
-          Novo plaćanje
+          New Payment
         </Button>
         <Button variant="outline" onClick={() => setRenameOpen(true)}>
-          Preimenuj račun
+          Rename Account
         </Button>
       </div>
 
       {account.daily_limit !== undefined && (
         <Button variant="outline" onClick={() => setLimitsOpen(true)}>
-          Promeni limite
+          Change Limits
         </Button>
       )}
 

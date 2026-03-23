@@ -22,15 +22,15 @@ describe('CardRequestForm', () => {
     renderWithProviders(
       <CardRequestForm accounts={mockAccounts as any} onSubmit={onSubmit} loading={false} />
     )
-    expect(screen.getByLabelText(/račun/i)).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /zatraži/i })).toBeInTheDocument()
+    expect(screen.getByLabelText(/account/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /request/i })).toBeInTheDocument()
   })
 
   it('renders card brand dropdown', () => {
     renderWithProviders(
       <CardRequestForm accounts={mockAccounts as any} onSubmit={onSubmit} loading={false} />
     )
-    expect(screen.getByLabelText(/tip kartice/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/card type/i)).toBeInTheDocument()
   })
 
   it('calls onSubmit with account number and card brand', async () => {
@@ -38,11 +38,11 @@ describe('CardRequestForm', () => {
     renderWithProviders(
       <CardRequestForm accounts={mockAccounts as any} onSubmit={onSubmit} loading={false} />
     )
-    await user.click(screen.getByLabelText(/račun/i))
+    await user.click(screen.getByLabelText(/account/i))
     await user.click(screen.getByText(/111000100000000011/i))
-    await user.click(screen.getByLabelText(/tip kartice/i))
+    await user.click(screen.getByLabelText(/card type/i))
     await user.click(screen.getByText(/visa/i))
-    await user.click(screen.getByRole('button', { name: /zatraži/i }))
+    await user.click(screen.getByRole('button', { name: /request/i }))
     expect(onSubmit).toHaveBeenCalledWith('111000100000000011', 'VISA')
   })
 })

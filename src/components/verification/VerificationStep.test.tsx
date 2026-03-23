@@ -19,26 +19,26 @@ describe('VerificationStep', () => {
 
   it('renders request code button when code not yet requested', () => {
     renderWithProviders(<VerificationStep {...defaultProps} />)
-    expect(screen.getByRole('button', { name: /pošalji kod/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /send code/i })).toBeInTheDocument()
   })
 
   it('renders code input when code has been requested', () => {
     renderWithProviders(<VerificationStep {...defaultProps} codeRequested />)
-    expect(screen.getByLabelText(/verifikacioni kod/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/verification code/i)).toBeInTheDocument()
   })
 
   it('calls onRequestCode when request button clicked', async () => {
     const user = userEvent.setup()
     renderWithProviders(<VerificationStep {...defaultProps} />)
-    await user.click(screen.getByRole('button', { name: /pošalji kod/i }))
+    await user.click(screen.getByRole('button', { name: /send code/i }))
     expect(defaultProps.onRequestCode).toHaveBeenCalled()
   })
 
   it('calls onVerified with entered code', async () => {
     const user = userEvent.setup()
     renderWithProviders(<VerificationStep {...defaultProps} codeRequested />)
-    await user.type(screen.getByLabelText(/verifikacioni kod/i), '847291')
-    await user.click(screen.getByRole('button', { name: /potvrdi/i }))
+    await user.type(screen.getByLabelText(/verification code/i), '847291')
+    await user.click(screen.getByRole('button', { name: /confirm/i }))
     expect(defaultProps.onVerified).toHaveBeenCalledWith('847291')
   })
 
@@ -49,6 +49,6 @@ describe('VerificationStep', () => {
 
   it('renders back button', () => {
     renderWithProviders(<VerificationStep {...defaultProps} />)
-    expect(screen.getByRole('button', { name: /nazad/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /back/i })).toBeInTheDocument()
   })
 })

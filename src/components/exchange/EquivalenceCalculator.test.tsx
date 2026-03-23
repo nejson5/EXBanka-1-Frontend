@@ -11,10 +11,10 @@ describe('EquivalenceCalculator', () => {
     renderWithProviders(
       <EquivalenceCalculator onConvert={onConvert} result={null} loading={false} />
     )
-    expect(screen.getByLabelText(/iznos/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/iz valute/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/u valutu/i)).toBeInTheDocument()
-    expect(screen.getByText(/izračunaj/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/amount/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/from currency/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/to currency/i)).toBeInTheDocument()
+    expect(screen.getByText(/calculate/i)).toBeInTheDocument()
   })
 
   it('displays conversion result', () => {

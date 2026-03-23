@@ -35,27 +35,27 @@ export function CreateClientPage() {
     <div className="p-6 max-w-lg mx-auto">
       <div className="flex items-center gap-4 mb-4">
         <Button variant="ghost" onClick={() => navigate(-1)}>
-          ← Nazad
+          ← Back
         </Button>
-        <h1 className="text-2xl font-bold">Novi klijent</h1>
+        <h1 className="text-2xl font-bold">New Client</h1>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Podaci o klijentu</CardTitle>
+          <CardTitle>Client Information</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="first_name">Ime</Label>
+                <Label htmlFor="first_name">First Name</Label>
                 <Input id="first_name" {...register('first_name')} />
                 {errors.first_name && (
                   <p className="text-sm text-destructive">{errors.first_name.message}</p>
                 )}
               </div>
               <div>
-                <Label htmlFor="last_name">Prezime</Label>
+                <Label htmlFor="last_name">Last Name</Label>
                 <Input id="last_name" {...register('last_name')} />
                 {errors.last_name && (
                   <p className="text-sm text-destructive">{errors.last_name.message}</p>
@@ -70,7 +70,7 @@ export function CreateClientPage() {
             </div>
 
             <div>
-              <Label htmlFor="date_of_birth">Datum rođenja</Label>
+              <Label htmlFor="date_of_birth">Date of Birth</Label>
               <Input
                 id="date_of_birth"
                 type="date"
@@ -89,29 +89,27 @@ export function CreateClientPage() {
             </div>
 
             <div>
-              <Label htmlFor="phone">Telefon (opciono)</Label>
+              <Label htmlFor="phone">Phone (optional)</Label>
               <Input id="phone" {...register('phone')} />
               {errors.phone && <p className="text-sm text-destructive">{errors.phone.message}</p>}
             </div>
 
             <div>
-              <Label htmlFor="address">Adresa (opciono)</Label>
+              <Label htmlFor="address">Address (optional)</Label>
               <Input id="address" {...register('address')} />
             </div>
 
             <div className="flex gap-3">
               <Button variant="outline" type="button" onClick={() => navigate('/admin/clients')}>
-                Otkaži
+                Cancel
               </Button>
               <Button type="submit" disabled={createClient.isPending}>
-                {createClient.isPending ? 'Kreiranje...' : 'Kreiraj klijenta'}
+                {createClient.isPending ? 'Creating...' : 'Create Client'}
               </Button>
             </div>
 
             {createClient.isError && (
-              <p className="text-sm text-destructive">
-                Greška pri kreiranju klijenta. Pokušajte ponovo.
-              </p>
+              <p className="text-sm text-destructive">Error creating client. Please try again.</p>
             )}
           </form>
         </CardContent>

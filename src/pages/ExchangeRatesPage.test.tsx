@@ -23,7 +23,7 @@ describe('ExchangeRatesPage', () => {
     } as any)
 
     renderWithProviders(<ExchangeRatesPage />)
-    expect(screen.getByText(/kursna lista/i)).toBeInTheDocument()
+    expect(screen.getByText(/exchange rates/i)).toBeInTheDocument()
     expect(screen.getByText('EUR')).toBeInTheDocument()
   })
 
@@ -34,6 +34,6 @@ describe('ExchangeRatesPage', () => {
     } as any)
 
     renderWithProviders(<ExchangeRatesPage />)
-    expect(screen.getByText(/učitavanje/i)).toBeInTheDocument()
+    expect(screen.getByText(/loading/i)).toBeInTheDocument()
   })
 })

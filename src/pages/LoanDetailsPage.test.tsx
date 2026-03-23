@@ -17,7 +17,7 @@ describe('LoanDetailsPage', () => {
 
   it('renders loan details', () => {
     renderWithProviders(<LoanDetailsPage />, { route: '/loans/1' })
-    expect(screen.getAllByText(/gotovinski/i).length).toBeGreaterThan(0)
-    expect(screen.getAllByText(/kamatna stopa/i).length).toBeGreaterThan(0)
+    expect(screen.getAllByText(/cash/i).length).toBeGreaterThan(0)
+    expect(screen.getAllByText(/interest rate/i).length).toBeGreaterThan(0)
   })
 })

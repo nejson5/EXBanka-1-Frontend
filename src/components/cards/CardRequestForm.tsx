@@ -31,14 +31,14 @@ export function CardRequestForm({ accounts, onSubmit, loading }: CardRequestForm
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Zatraži novu karticu</CardTitle>
+        <CardTitle>Request New Card</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
-          <Label>Račun</Label>
+          <Label>Account</Label>
           <Select value={selected} onValueChange={(v) => setSelected(v ?? '')}>
-            <SelectTrigger aria-label="Račun">
-              <SelectValue placeholder="Izaberite račun" />
+            <SelectTrigger aria-label="Account">
+              <SelectValue placeholder="Select account" />
             </SelectTrigger>
             <SelectContent>
               {accounts.map((acc) => (
@@ -51,10 +51,10 @@ export function CardRequestForm({ accounts, onSubmit, loading }: CardRequestForm
         </div>
 
         <div>
-          <Label>Tip kartice</Label>
+          <Label>Card Type</Label>
           <Select value={cardBrand} onValueChange={(v) => setCardBrand(v as CardBrand)}>
-            <SelectTrigger aria-label="Tip kartice">
-              <SelectValue placeholder="Izaberite tip kartice" />
+            <SelectTrigger aria-label="Card Type">
+              <SelectValue placeholder="Select card type" />
             </SelectTrigger>
             <SelectContent>
               {CARD_BRAND_OPTIONS.map((opt) => (
@@ -71,7 +71,7 @@ export function CardRequestForm({ accounts, onSubmit, loading }: CardRequestForm
           disabled={!selected || !cardBrand || loading}
           className="w-full"
         >
-          {loading ? 'Slanje zahteva...' : 'Zatraži'}
+          {loading ? 'Sending request...' : 'Request'}
         </Button>
       </CardContent>
     </Card>

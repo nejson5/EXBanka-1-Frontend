@@ -37,24 +37,24 @@ export function RenameAccountDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Preimenuj račun</DialogTitle>
+          <DialogTitle>Rename Account</DialogTitle>
         </DialogHeader>
         <div className="space-y-2">
-          <Label htmlFor="account-name">Naziv računa</Label>
+          <Label htmlFor="account-name">Account Name</Label>
           <Input id="account-name" value={name} onChange={(e) => setName(e.target.value)} />
           {isSameName && name && (
-            <p className="text-sm text-destructive">Naziv je isti kao trenutni.</p>
+            <p className="text-sm text-destructive">Name is the same as current.</p>
           )}
           {isDuplicate && !isSameName && (
-            <p className="text-sm text-destructive">Naziv se već koristi za drugi račun.</p>
+            <p className="text-sm text-destructive">Name is already in use by another account.</p>
           )}
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Otkaži
+            Cancel
           </Button>
           <Button onClick={() => onRename(name)} disabled={loading || isInvalid}>
-            {loading ? 'Čuvanje...' : 'Sačuvaj'}
+            {loading ? 'Saving...' : 'Save'}
           </Button>
         </DialogFooter>
       </DialogContent>

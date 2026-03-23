@@ -17,7 +17,7 @@ describe('AdminClientsPage', () => {
 
   it('renders clients management page', () => {
     renderWithProviders(<AdminClientsPage />)
-    expect(screen.getByText(/upravljanje klijentima/i)).toBeInTheDocument()
+    expect(screen.getByText(/client management/i)).toBeInTheDocument()
     expect(screen.getByText('Petar')).toBeInTheDocument()
     expect(screen.getByText('Petrović')).toBeInTheDocument()
   })
