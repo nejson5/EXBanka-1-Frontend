@@ -2,31 +2,40 @@ import { useState, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { EmployeeTable } from '@/components/employees/EmployeeTable'
-import { EmployeeFilters } from '@/components/employees/EmployeeFilters'
+import { FilterBar } from '@/components/ui/FilterBar'
 import { EmployeeProfileTab } from '@/components/employees/EmployeeProfileTab'
 import { PaginationControls } from '@/components/shared/PaginationControls'
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner'
 import { useEmployees } from '@/hooks/useEmployees'
-import type { EmployeeFilters as EmployeeFiltersType, FilterCategory } from '@/types/employee'
+import type { EmployeeFilters as EmployeeFiltersType } from '@/types/employee'
+import type { FilterFieldDef, FilterValues } from '@/types/filters'
 
 const PAGE_SIZE = 20
 
+const EMPLOYEE_FILTER_FIELDS: FilterFieldDef[] = [
+  { key: 'name', label: 'Name', type: 'text' },
+  { key: 'email', label: 'Email', type: 'text' },
+  { key: 'position', label: 'Position', type: 'text' },
+]
+
 export function EmployeeListPage() {
   const navigate = useNavigate()
-  const [filter, setFilter] = useState<{ category: FilterCategory; value: string } | null>(null)
+  const [filterValues, setFilterValues] = useState<FilterValues>({})
   const [page, setPage] = useState(1)
 
   const apiFilters: EmployeeFiltersType = {
     page,
     page_size: PAGE_SIZE,
-    ...(filter ? { [filter.category]: filter.value } : {}),
+    name: (filterValues.name as string) || undefined,
+    email: (filterValues.email as string) || undefined,
+    position: (filterValues.position as string) || undefined,
   }
 
   const { data, isLoading } = useEmployees(apiFilters)
   const totalPages = Math.max(1, Math.ceil((data?.total_count ?? 0) / PAGE_SIZE))
 
-  const handleFilterChange = (newFilter: { category: FilterCategory; value: string } | null) => {
-    setFilter(newFilter)
+  const handleFilterChange = (newFilters: FilterValues) => {
+    setFilterValues(newFilters)
     setPage(1)
   }
 
@@ -51,7 +60,11 @@ export function EmployeeListPage() {
         </TabsList>
 
         <TabsContent value="employees">
-          <EmployeeFilters onFilterChange={handleFilterChange} />
+          <FilterBar
+            fields={EMPLOYEE_FILTER_FIELDS}
+            values={filterValues}
+            onChange={handleFilterChange}
+          />
 
           {isLoading ? (
             <LoadingSpinner />

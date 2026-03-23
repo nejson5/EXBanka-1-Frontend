@@ -65,7 +65,7 @@ describe('EmployeeListPage', () => {
     })
     await screen.findByText('Jane Doe')
 
-    const filterInput = screen.getByPlaceholderText(/type to filter/i)
+    const filterInput = screen.getByPlaceholderText(/^name$/i)
     fireEvent.change(filterInput, { target: { value: 'Jane' } })
 
     await waitFor(() =>
@@ -90,11 +90,11 @@ describe('EmployeeListPage', () => {
     })
     await screen.findByText('Jane Doe')
 
-    const filterInput = screen.getByPlaceholderText(/type to filter/i)
+    const filterInput = screen.getByPlaceholderText(/^name$/i)
     fireEvent.change(filterInput, { target: { value: 'Jane' } })
     await waitFor(() => expect(screen.queryByText('John Smith')).not.toBeInTheDocument())
 
-    fireEvent.click(screen.getByRole('button', { name: /clear filter/i }))
+    fireEvent.change(filterInput, { target: { value: '' } })
 
     await waitFor(() =>
       expect(employeesApi.getEmployees).toHaveBeenLastCalledWith(
@@ -129,7 +129,7 @@ describe('EmployeeListPage', () => {
     expect(employeesApi.getEmployees).toHaveBeenCalledWith({ page: 1, page_size: 20 })
   })
 
-  it('calls API with email filter when category is changed to email', async () => {
+  it('calls API with email filter when typing in email field', async () => {
     jest.mocked(employeesApi.getEmployees).mockImplementation(async (filters = {}) => {
       if (filters.email === 'john@test.com') {
         return { employees: [allEmployees[1]], total_count: 1 }
@@ -142,8 +142,7 @@ describe('EmployeeListPage', () => {
     })
     await screen.findByText('Jane Doe')
 
-    fireEvent.click(screen.getByRole('option', { name: /email/i }))
-    const filterInput = screen.getByPlaceholderText(/type to filter/i)
+    const filterInput = screen.getByPlaceholderText(/^email$/i)
     fireEvent.change(filterInput, { target: { value: 'john@test.com' } })
 
     await waitFor(() =>
@@ -153,7 +152,7 @@ describe('EmployeeListPage', () => {
     )
   })
 
-  it('calls API with position filter when category is changed to position', async () => {
+  it('calls API with position filter when typing in position field', async () => {
     jest.mocked(employeesApi.getEmployees).mockImplementation(async (filters = {}) => {
       if (filters.position === 'Manager') {
         return { employees: [allEmployees[1]], total_count: 1 }
@@ -166,8 +165,7 @@ describe('EmployeeListPage', () => {
     })
     await screen.findByText('Jane Doe')
 
-    fireEvent.click(screen.getByRole('option', { name: /position/i }))
-    const filterInput = screen.getByPlaceholderText(/type to filter/i)
+    const filterInput = screen.getByPlaceholderText(/^position$/i)
     fireEvent.change(filterInput, { target: { value: 'Manager' } })
 
     await waitFor(() =>
@@ -192,7 +190,7 @@ describe('EmployeeListPage', () => {
     })
     await screen.findByText('Jane Doe')
 
-    const filterInput = screen.getByPlaceholderText(/type to filter/i)
+    const filterInput = screen.getByPlaceholderText(/^name$/i)
     fireEvent.change(filterInput, { target: { value: 'ZZZZZ' } })
 
     await screen.findByText('No employees found.')

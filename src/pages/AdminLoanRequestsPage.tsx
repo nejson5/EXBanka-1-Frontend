@@ -9,28 +9,31 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { FilterBar } from '@/components/ui/FilterBar'
 import { LOAN_TYPES } from '@/lib/constants/banking'
 import { formatCurrency } from '@/lib/utils/format'
 import type { LoanType } from '@/types/loan'
+import type { FilterFieldDef, FilterValues } from '@/types/filters'
+
+const LOAN_REQUEST_FILTER_FIELDS: FilterFieldDef[] = [
+  {
+    key: 'loan_type',
+    label: 'Tip kredita',
+    type: 'multiselect',
+    options: LOAN_TYPES.map((t) => ({ label: t.label, value: t.value })),
+  },
+  { key: 'account_number', label: 'Broj računa', type: 'text' },
+  { key: 'name', label: 'Ime klijenta', type: 'text' },
+]
 
 export function AdminLoanRequestsPage() {
-  const [loanTypeFilter, setLoanTypeFilter] = useState<LoanType | undefined>()
-  const [accountFilter, setAccountFilter] = useState('')
-  const [nameFilter, setNameFilter] = useState('')
+  const [filterValues, setFilterValues] = useState<FilterValues>({})
 
   const { data, isLoading } = useLoanRequests({
     status: 'pending',
-    loan_type: loanTypeFilter,
-    account_number: accountFilter || undefined,
+    loan_type: (filterValues.loan_type as string[])?.[0] as LoanType | undefined,
+    account_number: (filterValues.account_number as string) || undefined,
     page: 1,
     page_size: 100,
   })
@@ -41,6 +44,7 @@ export function AdminLoanRequestsPage() {
   const requests = data?.requests ?? []
   const clientsById = Object.fromEntries((clientsData?.clients ?? []).map((c) => [c.id, c]))
 
+  const nameFilter = (filterValues.name as string) ?? ''
   const filtered = nameFilter
     ? requests.filter((req) => {
         const client = clientsById[req.client_id ?? -1]
@@ -57,38 +61,11 @@ export function AdminLoanRequestsPage() {
     <div className="space-y-4">
       <h1 className="text-2xl font-bold">Zahtevi za kredite</h1>
 
-      <div className="flex gap-3 flex-wrap">
-        <Select
-          value={loanTypeFilter ?? 'all'}
-          onValueChange={(v) => setLoanTypeFilter(v && v !== 'all' ? (v as LoanType) : undefined)}
-        >
-          <SelectTrigger className="w-48">
-            <SelectValue placeholder="Svi tipovi" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Svi tipovi</SelectItem>
-            {LOAN_TYPES.map((t) => (
-              <SelectItem key={t.value} value={t.value}>
-                {t.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Input
-          placeholder="Broj računa..."
-          value={accountFilter}
-          onChange={(e) => setAccountFilter(e.target.value)}
-          className="max-w-xs"
-        />
-
-        <Input
-          placeholder="Ime klijenta..."
-          value={nameFilter}
-          onChange={(e) => setNameFilter(e.target.value)}
-          className="max-w-xs"
-        />
-      </div>
+      <FilterBar
+        fields={LOAN_REQUEST_FILTER_FIELDS}
+        values={filterValues}
+        onChange={setFilterValues}
+      />
 
       {isLoading ? (
         <p>Učitavanje...</p>
