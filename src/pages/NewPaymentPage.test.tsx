@@ -32,11 +32,6 @@ describe('NewPaymentPage', () => {
   })
 
   it('shows Save Recipient prompt on success when recipient is not saved', () => {
-    jest.mocked(usePaymentsHook.useCreatePaymentRecipient).mockReturnValue({
-      mutate: jest.fn(),
-      isPending: false,
-    } as any)
-
     renderWithProviders(<NewPaymentPage />, {
       preloadedState: {
         payment: {

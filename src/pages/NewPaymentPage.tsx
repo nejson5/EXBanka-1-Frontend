@@ -29,19 +29,24 @@ function AddRecipientPrompt({
 }) {
   const createRecipient = useCreatePaymentRecipient()
   const [saved, setSaved] = useState(false)
+  const [saveError, setSaveError] = useState(false)
 
   if (saved) return <p className="text-sm text-muted-foreground">Recipient saved.</p>
 
   return (
     <div className="border rounded-lg p-4 space-y-2">
       <p className="text-sm">Would you like to save &quot;{recipientName}&quot; as a recipient?</p>
+      {saveError && <p className="text-sm text-destructive">Failed to save. Please try again.</p>}
       <Button
         size="sm"
         disabled={createRecipient.isPending}
         onClick={() =>
           createRecipient.mutate(
             { recipient_name: recipientName, account_number: accountNumber },
-            { onSuccess: () => setSaved(true) }
+            {
+              onSuccess: () => setSaved(true),
+              onError: () => setSaveError(true),
+            }
           )
         }
       >
