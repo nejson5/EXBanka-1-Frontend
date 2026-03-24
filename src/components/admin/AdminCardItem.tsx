@@ -1,20 +1,8 @@
-import type { Card, CardStatus } from '@/types/card'
-import { maskCardNumber } from '@/lib/utils/format'
+import type { Card } from '@/types/card'
+import { CardVisual } from '@/components/cards/CardVisual'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Card as CardUI, CardContent } from '@/components/ui/card'
-
-const STATUS_LABELS: Record<CardStatus, string> = {
-  ACTIVE: 'Active',
-  BLOCKED: 'Blocked',
-  DEACTIVATED: 'Deactivated',
-}
-
-const STATUS_VARIANT: Record<CardStatus, 'default' | 'secondary' | 'destructive'> = {
-  ACTIVE: 'default',
-  BLOCKED: 'secondary',
-  DEACTIVATED: 'destructive',
-}
+import { CARD_STATUS_LABELS, CARD_STATUS_VARIANT } from '@/lib/constants/banking'
 
 interface AdminCardItemProps {
   card: Card
@@ -25,19 +13,13 @@ interface AdminCardItemProps {
 
 export function AdminCardItem({ card, onBlock, onUnblock, onDeactivate }: AdminCardItemProps) {
   return (
-    <CardUI>
-      <CardContent className="p-4 flex justify-between items-center">
-        <div className="space-y-1">
-          <p className="font-mono text-lg">{maskCardNumber(card.card_number)}</p>
-          <p className="text-sm text-muted-foreground">{card.owner_name}</p>
-          <p className="text-sm">
-            {card.card_name} • {card.brand}
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          <Badge variant={STATUS_VARIANT[card.status] ?? 'secondary'}>
-            {STATUS_LABELS[card.status] ?? card.status}
-          </Badge>
+    <div className="flex flex-col items-center gap-3">
+      <CardVisual card={card} />
+      <div className="flex items-center gap-3 w-full max-w-sm justify-between">
+        <Badge variant={CARD_STATUS_VARIANT[card.status] ?? 'secondary'}>
+          {CARD_STATUS_LABELS[card.status] ?? card.status}
+        </Badge>
+        <div className="flex gap-2">
           {card.status === 'ACTIVE' && (
             <Button size="sm" variant="destructive" onClick={() => onBlock(card.id)}>
               Block
@@ -54,7 +36,7 @@ export function AdminCardItem({ card, onBlock, onUnblock, onDeactivate }: AdminC
             </>
           )}
         </div>
-      </CardContent>
-    </CardUI>
+      </div>
+    </div>
   )
 }
