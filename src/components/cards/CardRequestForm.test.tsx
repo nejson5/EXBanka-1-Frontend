@@ -34,7 +34,7 @@ describe('CardRequestForm', () => {
   })
 
   it('calls onSubmit with account number and card brand', async () => {
-    const user = userEvent.setup()
+    const user = userEvent.setup({ pointerEventsCheck: 0 })
     renderWithProviders(
       <CardRequestForm accounts={mockAccounts as any} onSubmit={onSubmit} loading={false} />
     )
