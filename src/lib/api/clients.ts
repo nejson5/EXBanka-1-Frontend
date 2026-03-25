@@ -23,7 +23,7 @@ export async function getClient(id: number): Promise<Client> {
 }
 
 export async function getClientMe(): Promise<Client> {
-  const response = await apiClient.get<Client>('/api/clients/me')
+  const response = await apiClient.get<Client>('/api/me')
   return response.data
 }
 
