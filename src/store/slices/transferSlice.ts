@@ -44,8 +44,8 @@ export const submitTransfer = createAsyncThunk(
     try {
       return await createTransfer(payload)
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { message?: string } } }
-      return rejectWithValue(error.response?.data?.message ?? 'Transfer failed')
+      const error = err as { response?: { data?: { error?: { message?: string } } } }
+      return rejectWithValue(error.response?.data?.error?.message ?? 'Transfer failed')
     }
   }
 )

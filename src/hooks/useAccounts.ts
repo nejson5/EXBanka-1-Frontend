@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   getClientAccounts,
   getAccount,
+  getClientAccount,
   createAccount,
   updateAccountName,
   updateAccountLimits,
@@ -25,6 +26,14 @@ export function useAccount(id: number) {
   return useQuery({
     queryKey: ['account', id],
     queryFn: () => getAccount(id),
+    enabled: id > 0,
+  })
+}
+
+export function useClientAccount(id: number) {
+  return useQuery({
+    queryKey: ['account', 'me', id],
+    queryFn: () => getClientAccount(id),
     enabled: id > 0,
   })
 }

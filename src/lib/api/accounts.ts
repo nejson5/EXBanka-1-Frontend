@@ -18,6 +18,11 @@ export async function getAccount(id: number): Promise<Account> {
   return response.data
 }
 
+export async function getClientAccount(id: number): Promise<Account> {
+  const response = await apiClient.get<Account>(`/api/me/accounts/${id}`)
+  return response.data
+}
+
 export async function createAccount(payload: CreateAccountRequest): Promise<Account> {
   const response = await apiClient.post<Account>('/api/accounts', payload)
   return response.data

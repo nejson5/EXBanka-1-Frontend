@@ -46,8 +46,8 @@ export const submitPayment = createAsyncThunk(
       }
       return await createPayment(payload.data as CreatePaymentRequest)
     } catch (err: unknown) {
-      const error = err as { response?: { data?: { message?: string } } }
-      return rejectWithValue(error.response?.data?.message ?? 'Payment failed')
+      const error = err as { response?: { data?: { error?: { message?: string } } } }
+      return rejectWithValue(error.response?.data?.error?.message ?? 'Payment failed')
     }
   }
 )
