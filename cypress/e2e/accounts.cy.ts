@@ -111,4 +111,71 @@ describe('Celina 1: Računi — Kreiranje i upravljanje računima', () => {
       cy.url().should('include', '/admin/accounts')
     })
   })
+
+  describe('Client: Account Viewing & Management (Scenarios 6–8)', () => {
+    beforeEach(() => {
+      cy.intercept('GET', '/api/accounts/client/*', { fixture: 'accounts.json' }).as(
+        'getClientAccounts'
+      )
+      cy.intercept('GET', '/api/payments/account/*', {
+        body: { payments: [], total: 0 },
+      }).as('getPayments')
+      cy.intercept('GET', '/api/clients/me', {
+        body: { id: 42, first_name: 'Marko', last_name: 'Jovanović', email: 'marko@example.com' },
+      }).as('getClientMe')
+      cy.loginAsClient('/accounts')
+    })
+
+    // Scenario 6: Pregled računa klijenta
+    it('should display all active client accounts', () => {
+      cy.wait('@getClientAccounts')
+
+      cy.contains('h1', 'My Accounts').should('be.visible')
+      cy.contains('Moj tekući račun').should('be.visible')
+      cy.contains('Devizni EUR').should('be.visible')
+    })
+
+    // Scenario 7: Pregled detalja računa
+    it('should display account details when account card is clicked', () => {
+      cy.intercept('GET', '/api/accounts/1', { fixture: 'account-detail.json' }).as(
+        'getAccountDetail'
+      )
+
+      cy.wait('@getClientAccounts')
+      cy.contains('Moj tekući račun').click()
+      cy.wait('@getAccountDetail')
+
+      cy.contains('h1', 'Moj tekući račun').should('be.visible')
+      cy.contains('Account Type').should('be.visible')
+      cy.contains('Balance').should('be.visible')
+      cy.contains('Available').should('be.visible')
+      cy.contains('265-0000000000000-11').should('be.visible')
+    })
+
+    // Scenario 8: Promena naziva računa
+    it('should rename an account successfully', () => {
+      cy.intercept('GET', '/api/accounts/1', { fixture: 'account-detail.json' }).as(
+        'getAccountDetail'
+      )
+      cy.fixture('account-detail.json').then((account) => {
+        cy.intercept('PUT', '/api/accounts/1/name', {
+          statusCode: 200,
+          body: { ...account, account_name: 'Glavni račun' },
+        }).as('renameAccount')
+      })
+
+      cy.visit('/accounts/1')
+      cy.wait('@getAccountDetail')
+
+      cy.contains('button', 'Rename Account').click()
+      cy.get('#account-name').clear().type('Glavni račun')
+      cy.contains('button', 'Save').click()
+      cy.wait('@renameAccount')
+
+      cy.get('@renameAccount')
+        .its('request.body')
+        .should('have.property', 'new_name', 'Glavni račun')
+      cy.get('[role="dialog"]').should('not.exist')
+    })
+  })
 })
