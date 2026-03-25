@@ -83,15 +83,17 @@ const paymentSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(submitPayment.pending, (state) => {
+      .addCase(submitPayment.pending, (state, action) => {
         state.submitting = true
         state.error = null
+        state.flowType = action.meta.arg.type
       })
       .addCase(submitPayment.fulfilled, (state, action) => {
         state.submitting = false
         state.result = action.payload
         state.transactionId = action.payload.id
         state.step = 'verification'
+        state.codeRequested = true
       })
       .addCase(submitPayment.rejected, (state, action) => {
         state.submitting = false

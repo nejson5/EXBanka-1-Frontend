@@ -84,6 +84,7 @@ const transferSlice = createSlice({
         state.result = action.payload
         state.transactionId = action.payload.id
         state.step = 'verification'
+        state.codeRequested = true
       })
       .addCase(submitTransfer.rejected, (state, action) => {
         state.submitting = false
