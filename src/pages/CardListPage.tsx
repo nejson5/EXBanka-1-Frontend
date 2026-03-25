@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useCards, useBlockCard } from '@/hooks/useCards'
+import { useClientMe } from '@/hooks/useClients'
 import { CardGrid } from '@/components/cards/CardGrid'
 import { Button } from '@/components/ui/button'
 import { useNavigate } from 'react-router-dom'
@@ -14,8 +15,10 @@ import {
 export function CardListPage() {
   const navigate = useNavigate()
   const { data: cards, isLoading, error } = useCards()
+  const { data: client } = useClientMe()
   const blockCard = useBlockCard()
   const [blockingCardId, setBlockingCardId] = useState<number | null>(null)
+  const holderName = client ? `${client.first_name} ${client.last_name}` : undefined
 
   if (isLoading) return <p>Loading...</p>
   if (error) return <p className="text-destructive">Error loading cards. Please try again.</p>
@@ -26,7 +29,11 @@ export function CardListPage() {
         <h1 className="text-2xl font-bold">Cards</h1>
         <Button onClick={() => navigate('/cards/request')}>Request Card</Button>
       </div>
-      <CardGrid cards={cards ?? []} onBlock={(id) => setBlockingCardId(id)} />
+      <CardGrid
+        cards={cards ?? []}
+        onBlock={(id) => setBlockingCardId(id)}
+        holderName={holderName}
+      />
 
       <Dialog open={blockingCardId !== null} onOpenChange={() => setBlockingCardId(null)}>
         <DialogContent>
