@@ -1,17 +1,8 @@
 import { useState } from 'react'
 import { usePayments } from '@/hooks/usePayments'
-import { useClientAccounts } from '@/hooks/useAccounts'
 import { FilterBar } from '@/components/ui/FilterBar'
 import { PaymentHistoryTable } from '@/components/payments/PaymentHistoryTable'
 import { PaginationControls } from '@/components/shared/PaginationControls'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import { Label } from '@/components/ui/label'
 import type { PaymentFilters as PaymentFiltersType } from '@/types/payment'
 import type { FilterFieldDef, FilterValues } from '@/types/filters'
 
@@ -35,19 +26,11 @@ const PAYMENT_FILTER_FIELDS: FilterFieldDef[] = [
 ]
 
 export function PaymentHistoryPage() {
-  const { data: accountsData } = useClientAccounts()
-  const accounts = accountsData?.accounts ?? []
-  const [selectedAccountNumber, setSelectedAccountNumber] = useState<string>('')
   const [filterValues, setFilterValues] = useState<FilterValues>({})
   const [page, setPage] = useState(1)
 
   const handleFilterChange = (newFilters: FilterValues) => {
     setFilterValues(newFilters)
-    setPage(1)
-  }
-
-  const handleAccountChange = (value: string | null) => {
-    setSelectedAccountNumber(value ?? '')
     setPage(1)
   }
 
@@ -68,23 +51,6 @@ export function PaymentHistoryPage() {
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-bold">Payment History</h1>
-      {accounts.length > 1 && (
-        <div className="flex items-center gap-2">
-          <Label>Account:</Label>
-          <Select value={selectedAccountNumber} onValueChange={handleAccountChange}>
-            <SelectTrigger className="w-64">
-              <SelectValue placeholder="All Accounts" />
-            </SelectTrigger>
-            <SelectContent>
-              {accounts.map((acc) => (
-                <SelectItem key={acc.account_number} value={acc.account_number}>
-                  {acc.account_name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      )}
       <FilterBar
         fields={PAYMENT_FILTER_FIELDS}
         values={filterValues}

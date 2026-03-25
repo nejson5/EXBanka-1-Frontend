@@ -24,7 +24,7 @@ export function AccountListPage() {
 
   const effectiveAccount = accounts[0] ?? null
 
-  const { data: paymentsData } = usePayments()
+  const { data: paymentsData } = usePayments({ page_size: 5 })
 
   const sortedTransactions = [...(paymentsData?.payments ?? [])].sort((a: Payment, b: Payment) => {
     if (sortBy === 'date') return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()

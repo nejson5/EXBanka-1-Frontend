@@ -81,7 +81,10 @@ export function CardRequestPage() {
   if (step === 'success') {
     return (
       <div className="space-y-4 text-center">
-        <h2 className="text-xl font-semibold">Card successfully created!</h2>
+        <h2 className="text-xl font-semibold">Card request submitted!</h2>
+        <p className="text-muted-foreground">
+          Your card request has been received and is pending approval.
+        </p>
         <Button onClick={() => navigate('/cards')}>Back to Cards</Button>
       </div>
     )
