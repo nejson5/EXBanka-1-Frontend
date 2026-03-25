@@ -31,9 +31,14 @@ export function useAccountCards(accountNumber: string) {
 }
 
 export function useRequestCard() {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({ account_number, card_brand }: { account_number: string; card_brand?: string }) =>
       requestCard(account_number, card_brand),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cards'] })
+      queryClient.invalidateQueries({ queryKey: ['card-requests'] })
+    },
   })
 }
 

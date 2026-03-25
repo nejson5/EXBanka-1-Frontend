@@ -61,8 +61,12 @@ export function useDeletePaymentRecipient() {
 }
 
 export function useExecutePayment() {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({ id, verificationCode }: { id: number; verificationCode: string }) =>
       executePayment(id, verificationCode),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['payments'] })
+    },
   })
 }

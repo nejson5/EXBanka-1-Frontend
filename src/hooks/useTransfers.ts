@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getTransfers, executeTransfer } from '@/lib/api/transfers'
 import { getExchangeRate } from '@/lib/api/exchange'
 import type { TransferFilters } from '@/types/transfer'
@@ -19,8 +19,12 @@ export function useTransferPreview(fromCurrency: string, toCurrency: string, amo
 }
 
 export function useExecuteTransfer() {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({ id, verificationCode }: { id: number; verificationCode: string }) =>
       executeTransfer(id, verificationCode),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['transfers'] })
+    },
   })
 }
