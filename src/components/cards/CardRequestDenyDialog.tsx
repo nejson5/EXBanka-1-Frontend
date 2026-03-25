@@ -52,9 +52,7 @@ export function CardRequestDenyDialog({ open, onClose, onConfirm }: CardRequestD
       }}
     >
       <DialogContent>
-        {open && (
-          <CardRequestDenyDialogInner key={String(open)} onClose={onClose} onConfirm={onConfirm} />
-        )}
+        {open && <CardRequestDenyDialogInner onClose={onClose} onConfirm={onConfirm} />}
       </DialogContent>
     </Dialog>
   )

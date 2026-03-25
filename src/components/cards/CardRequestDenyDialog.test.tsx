@@ -45,4 +45,18 @@ describe('CardRequestDenyDialog', () => {
     await user.click(screen.getByRole('button', { name: /cancel/i }))
     expect(onClose).toHaveBeenCalled()
   })
+
+  it('clears the textarea when closed and reopened', async () => {
+    const user = userEvent.setup()
+    const { rerender } = renderWithProviders(
+      <CardRequestDenyDialog open onClose={onClose} onConfirm={onConfirm} />
+    )
+    await user.type(screen.getByPlaceholderText(/reason/i), 'Some reason')
+    expect(screen.getByPlaceholderText(/reason/i)).toHaveValue('Some reason')
+
+    rerender(<CardRequestDenyDialog open={false} onClose={onClose} onConfirm={onConfirm} />)
+
+    rerender(<CardRequestDenyDialog open onClose={onClose} onConfirm={onConfirm} />)
+    expect(screen.getByPlaceholderText(/reason/i)).toHaveValue('')
+  })
 })
