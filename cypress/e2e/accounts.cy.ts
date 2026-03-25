@@ -16,7 +16,7 @@ describe('Celina 1: Računi — Kreiranje i upravljanje računima', () => {
       // Search and select client
       cy.get('input[placeholder="Search client by name..."]').type('Marko')
       cy.wait('@searchClients')
-      cy.contains('li', 'Marko Jovanović').click()
+      cy.contains('li', 'Marko Jovanović').should('be.visible').click()
 
       // Account Type is "current" by default — verify
       cy.get('[aria-label="Account Type"]').should('contain.text', 'Current')
@@ -39,15 +39,15 @@ describe('Celina 1: Računi — Kreiranje i upravljanje računima', () => {
     it('should create a foreign currency account', () => {
       cy.get('input[placeholder="Search client by name..."]').type('Marko')
       cy.wait('@searchClients')
-      cy.contains('li', 'Marko Jovanović').click()
+      cy.contains('li', 'Marko Jovanović').should('be.visible').click()
 
       // Select foreign account type
       cy.get('[aria-label="Account Type"]').click()
-      cy.get('[role="option"]').contains('Foreign').click()
+      cy.contains('[role="option"]', 'Foreign').click()
 
       // Currency selector appears — select EUR
       cy.get('[aria-label="Currency"]').click()
-      cy.get('[role="option"]').contains('EUR').click()
+      cy.contains('[role="option"]', 'EUR').click()
 
       cy.contains('button', 'Create Account').click()
       cy.wait('@createAccount')
@@ -64,14 +64,14 @@ describe('Celina 1: Računi — Kreiranje i upravljanje računima', () => {
     it('should create account with automatic card creation', () => {
       cy.get('input[placeholder="Search client by name..."]').type('Marko')
       cy.wait('@searchClients')
-      cy.contains('li', 'Marko Jovanović').click()
+      cy.contains('li', 'Marko Jovanović').should('be.visible').click()
 
       // Check "Create Card" checkbox
       cy.get('#create_card').check()
 
       // Select card brand
       cy.get('[aria-label="Card Brand"]').click()
-      cy.get('[role="option"]').contains('Visa').click()
+      cy.contains('[role="option"]', 'Visa').click()
 
       cy.contains('button', 'Create Account').click()
       cy.wait('@createAccount')
@@ -88,11 +88,11 @@ describe('Celina 1: Računi — Kreiranje i upravljanje računima', () => {
     it('should create a business account for a company', () => {
       cy.get('input[placeholder="Search client by name..."]').type('Marko')
       cy.wait('@searchClients')
-      cy.contains('li', 'Marko Jovanović').click()
+      cy.contains('li', 'Marko Jovanović').should('be.visible').click()
 
       // Select business category
       cy.get('[aria-label="Account Category"]').click()
-      cy.get('[role="option"]').contains('Company').click()
+      cy.contains('[role="option"]', 'Company').click()
 
       // Fill company fields (dots in IDs must be escaped in CSS selectors)
       cy.get('#company\\.name').type('Tech DOO')
