@@ -14,17 +14,15 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Label } from '@/components/ui/label'
-import type { Account } from '@/types/account'
 import type { Payment } from '@/types/payment'
 
 export function AccountListPage() {
   const navigate = useNavigate()
   const { data: accountsData, isLoading } = useClientAccounts()
   const accounts = accountsData?.accounts ?? []
-  const [selectedAccount, setSelectedAccount] = useState<Account | null>(null)
   const [sortBy, setSortBy] = useState<'date' | 'type'>('date')
 
-  const effectiveAccount = selectedAccount ?? accounts[0] ?? null
+  const effectiveAccount = accounts[0] ?? null
 
   const { data: paymentsData } = usePayments(
     effectiveAccount ? effectiveAccount.account_number : undefined
@@ -45,7 +43,7 @@ export function AccountListPage() {
           <AccountCard
             key={account.id}
             account={account}
-            onClick={() => setSelectedAccount(account)}
+            onClick={() => navigate(`/accounts/${account.id}`)}
           />
         ))}
         {accounts.length === 0 && (

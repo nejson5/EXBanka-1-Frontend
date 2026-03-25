@@ -45,6 +45,43 @@ Access tokens expire after 15 minutes. Use the refresh token to obtain a new pai
 15. [Transfer Fees](#15-transfer-fees)
 16. [Interest Rate Tiers](#16-interest-rate-tiers)
 17. [Bank Margins](#17-bank-margins)
+18. [Card Requests](#18-card-requests)
+
+---
+
+## Bootstrap
+
+### POST /api/bootstrap
+
+One-time admin account setup. Creates the system admin employee and provisions their auth account, triggering an activation email. Idempotent — safe to call multiple times (subsequent calls re-send the activation token if the account is not yet active).
+
+Returns `404 Not Found` when `BOOTSTRAP_SECRET` is not set in the api-gateway environment (disabled in production).
+
+**Authentication:** None (public). Protected by shared secret instead.
+
+**Request Body:**
+
+```json
+{
+  "secret": "dev-bootstrap-secret",
+  "email": "admin@example.com"
+}
+```
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `secret` | string | yes | Must match the `BOOTSTRAP_SECRET` env var configured in api-gateway |
+| `email` | string | yes | Email address to use for the admin account |
+
+**Responses:**
+
+| Status | Description |
+|---|---|
+| `200 OK` | Admin employee created (or already existed) and activation token published to Kafka |
+| `400 Bad Request` | Missing or invalid request body |
+| `401 Unauthorized` | Wrong bootstrap secret |
+| `404 Not Found` | Bootstrap endpoint disabled (`BOOTSTRAP_SECRET` not set) |
+| `500 Internal Server Error` | Failed to create employee or provision auth account |
 
 ---
 
@@ -571,7 +608,7 @@ Client management endpoints require an employee JWT with `clients.read` permissi
 
 Create a new bank client.
 
-**Authentication:** Employee JWT + `clients.read` permission
+**Authentication:** Employee JWT + `clients.create` permission
 
 **Request Body:**
 
@@ -676,7 +713,7 @@ Get the currently authenticated client's profile.
 
 Partially update a client record.
 
-**Authentication:** Employee JWT + `clients.read` permission
+**Authentication:** Employee JWT + `clients.update` permission
 
 **Path Parameters:**
 
@@ -700,23 +737,6 @@ Partially update a client record.
 
 ---
 
-### POST /api/clients/set-password
-
-Set a client's password hash (used internally during client activation flow).
-
-**Authentication:** Employee JWT + `clients.read` permission
-
-**Request Body:**
-
-| Field | Type | Required | Description |
-|---|---|---|---|
-| `user_id` | uint64 | Yes | Client ID |
-| `password_hash` | string | Yes | Bcrypt password hash |
-
-**Response 200:** `{"success": true}`
-
----
-
 ## 5. Accounts
 
 Account endpoints require an employee JWT with `accounts.read` permission (EmployeeBasic+). Clients can look up accounts by number.
@@ -727,7 +747,7 @@ Account endpoints require an employee JWT with `accounts.read` permission (Emplo
 
 Create a new bank account.
 
-**Authentication:** Employee JWT + `accounts.read` permission
+**Authentication:** Employee JWT + `accounts.create` permission
 
 **Request Body:**
 
@@ -882,7 +902,7 @@ List all accounts belonging to a specific client. Clients can only access their 
 
 Update the display name of an account.
 
-**Authentication:** Employee JWT + `accounts.read` permission
+**Authentication:** Employee JWT + `accounts.update` permission
 
 **Path Parameters:**
 
@@ -905,7 +925,7 @@ Update the display name of an account.
 
 Update the daily/monthly spending limits of an account. Requires a verification code for authorization.
 
-**Authentication:** Employee JWT + `accounts.read` permission
+**Authentication:** Employee JWT + `accounts.update` permission
 
 **Path Parameters:**
 
@@ -947,7 +967,7 @@ Update the daily/monthly spending limits of an account. Requires a verification 
 
 Update the status of an account (activate, block, close, etc.).
 
-**Authentication:** Employee JWT + `accounts.read` permission
+**Authentication:** Employee JWT + `accounts.update` permission
 
 **Path Parameters:**
 
@@ -995,7 +1015,7 @@ List all supported currencies.
 
 Create a new company record.
 
-**Authentication:** Employee JWT + `accounts.read` permission
+**Authentication:** Employee JWT + `accounts.create` permission
 
 **Request Body:**
 
@@ -1025,7 +1045,7 @@ Create a new company record.
 
 ## 6. Cards
 
-Card endpoints require an employee JWT with `cards.manage` permission (EmployeeBasic+). Clients can read their own cards.
+Card endpoints require specific employee permissions (see per-endpoint notes). Creating cards requires `cards.create`; blocking, unblocking, and deactivating require `cards.update`; approving/rejecting card requests requires `cards.approve`. Clients can read their own cards.
 
 ---
 
@@ -1033,7 +1053,7 @@ Card endpoints require an employee JWT with `cards.manage` permission (EmployeeB
 
 Issue a new payment card linked to an account.
 
-**Authentication:** Employee JWT + `cards.manage` permission
+**Authentication:** Employee JWT + `cards.create` permission
 
 **Request Body:**
 
@@ -1143,9 +1163,9 @@ List all cards belonging to a specific client. Clients can only access their own
 
 Block a card (e.g., reported as lost or stolen).
 
-**Authentication:** Employee JWT + `cards.manage` permission **OR** Client JWT (own cards only)
+**Authentication:** Employee JWT + `cards.update` permission **OR** Client JWT (own cards only)
 
-Employees with the `cards.manage` permission can block any card. Clients can block their own cards only — the card's `owner_id` must match the authenticated client's `user_id`. If a client attempts to block a card that does not belong to them, a `403 Forbidden` error is returned.
+Employees with the `cards.update` permission can block any card. Clients can block their own cards only — the card's `owner_id` must match the authenticated client's `user_id`. If a client attempts to block a card that does not belong to them, a `403 Forbidden` error is returned.
 
 **Path Parameters:**
 
@@ -1165,7 +1185,7 @@ Employees with the `cards.manage` permission can block any card. Clients can blo
 
 Unblock a previously blocked card. Only employees can unblock cards.
 
-**Authentication:** Employee JWT + `cards.manage` permission
+**Authentication:** Employee JWT + `cards.update` permission
 
 **Path Parameters:**
 
@@ -1181,7 +1201,7 @@ Unblock a previously blocked card. Only employees can unblock cards.
 
 Permanently deactivate a card.
 
-**Authentication:** Employee JWT + `cards.manage` permission
+**Authentication:** Employee JWT + `cards.update` permission
 
 **Path Parameters:**
 
@@ -1570,6 +1590,62 @@ Execute a pending payment after verification. The payment must have been created
 
 ---
 
+### GET /api/payments/client/:client_id
+
+Returns all payments where any of the client's accounts appears as sender or recipient.
+Equivalent to `GET /api/transfers/client/:client_id` but for payments.
+
+**Authentication:** Required (employee or client; clients may only query their own `client_id`)
+
+**Path parameters:**
+
+| Parameter   | Type    | Description |
+|-------------|---------|-------------|
+| `client_id` | integer | Client ID   |
+
+**Query parameters:**
+
+| Parameter   | Type    | Default | Description             |
+|-------------|---------|---------|-------------------------|
+| `page`      | integer | 1       | Page number             |
+| `page_size` | integer | 20      | Items per page          |
+
+**Example request:**
+```
+GET /api/payments/client/42?page=1&page_size=20
+Authorization: Bearer <token>
+```
+
+**Response 200:**
+```json
+{
+  "payments": [
+    {
+      "id": 7,
+      "from_account_number": "115-0001234567-10",
+      "to_account_number": "115-0009876543-10",
+      "initial_amount": "500.0000",
+      "final_amount": "500.0000",
+      "commission": "0.0000",
+      "recipient_name": "John Doe",
+      "payment_code": "289",
+      "reference_number": "",
+      "payment_purpose": "Test",
+      "status": "completed",
+      "timestamp": "2026-03-24 10:30:00 +0000 UTC"
+    }
+  ],
+  "total": 1
+}
+```
+
+**Response 400:** `{ "error": "invalid client_id" }`
+**Response 401:** `{ "error": "not authenticated" }`
+**Response 403:** `{ "error": "forbidden" }` (client accessing another client's data)
+**Response 500:** `{ "error": "..." }`
+
+---
+
 ## 8. Transfers
 
 Transfers are inter-account currency exchanges (can be same currency or cross-currency).
@@ -1609,7 +1685,8 @@ Initiate a currency transfer between accounts.
   "final_amount": 8.53,
   "exchange_rate": 117.23,
   "commission": 0.50,
-  "timestamp": "2026-03-13T10:00:00Z"
+  "timestamp": "2026-03-13T10:00:00Z",
+  "status": "pending_verification"
 }
 ```
 
@@ -1698,7 +1775,8 @@ Execute a pending transfer after verification. The transfer must have been creat
   "final_amount": 8.53,
   "exchange_rate": 117.23,
   "commission": 0.50,
-  "timestamp": "2026-03-13T10:00:00Z"
+  "timestamp": "2026-03-13T10:00:00Z",
+  "status": "completed"
 }
 ```
 
@@ -2016,7 +2094,7 @@ Submit a new loan application.
 
 List all loan requests (employee view).
 
-**Authentication:** Employee JWT + `credits.manage` permission
+**Authentication:** Employee JWT + `credits.read` permission
 
 **Query Parameters:**
 
@@ -2042,7 +2120,7 @@ List all loan requests (employee view).
 
 Get a single loan request by ID.
 
-**Authentication:** Employee JWT + `credits.manage` permission
+**Authentication:** Employee JWT + `credits.read` permission
 
 **Path Parameters:**
 
@@ -2059,7 +2137,7 @@ Get a single loan request by ID.
 
 Approve a loan request. Creates a loan and sends an approval email to the client.
 
-**Authentication:** Employee JWT + `credits.manage` permission
+**Authentication:** Employee JWT + `credits.approve` permission
 
 **Path Parameters:**
 
@@ -2105,7 +2183,7 @@ Approve a loan request. Creates a loan and sends an approval email to the client
 
 Reject a loan request. Sends a rejection email to the client.
 
-**Authentication:** Employee JWT + `credits.manage` permission
+**Authentication:** Employee JWT + `credits.approve` permission
 
 **Path Parameters:**
 
@@ -2121,7 +2199,7 @@ Reject a loan request. Sends a rejection email to the client.
 
 List all active loans (employee view).
 
-**Authentication:** Employee JWT + `credits.manage` permission
+**Authentication:** Employee JWT + `credits.read` permission
 
 **Query Parameters:**
 
@@ -2567,7 +2645,7 @@ All error responses follow this format:
 
 Bank account management endpoints allow administrators to manage internal bank-owned accounts used for fee collection and loan repayments. The bank must always maintain at least one RSD account and at least one foreign currency account.
 
-**Authentication:** Employee token with `employees.create` permission (EmployeeAdmin role)
+**Authentication:** Employee token with `bank-accounts.manage` permission
 
 ---
 
@@ -2575,7 +2653,7 @@ Bank account management endpoints allow administrators to manage internal bank-o
 
 List all bank-owned accounts.
 
-**Authentication:** Employee token with `employees.create` permission
+**Authentication:** Employee token with `bank-accounts.manage` permission
 
 **Response 200:**
 ```json
@@ -2607,7 +2685,7 @@ List all bank-owned accounts.
 
 Create a new bank-owned account.
 
-**Authentication:** Employee token with `employees.create` permission
+**Authentication:** Employee token with `bank-accounts.manage` permission
 
 **Request Body:**
 
@@ -2652,7 +2730,7 @@ Create a new bank-owned account.
 
 Delete a bank-owned account by ID.
 
-**Authentication:** Employee token with `employees.create` permission
+**Authentication:** Employee token with `bank-accounts.manage` permission
 
 **Path Parameters:**
 
@@ -2685,7 +2763,7 @@ Configurable fee rules applied to payments and transfers. Multiple active fee ru
 
 Fee calculation is DB-backed: if the fee service is unavailable, the transaction is rejected. If no rules match (e.g., amount below threshold), zero fee is charged (not an error).
 
-**Authentication:** Employee token with `employees.create` permission (EmployeeAdmin role)
+**Authentication:** Employee token with `fees.manage` permission
 
 **Fee types:**
 - `percentage` — charged as a percentage of the transaction amount (e.g., `0.1` = 0.1%)
@@ -2697,7 +2775,7 @@ Fee calculation is DB-backed: if the fee service is unavailable, the transaction
 
 List all transfer fee rules.
 
-**Authentication:** Employee JWT with `employees.create` permission
+**Authentication:** Employee JWT with `fees.manage` permission
 
 **Response 200:**
 ```json
@@ -2727,7 +2805,7 @@ List all transfer fee rules.
 
 Create a new transfer fee rule.
 
-**Authentication:** Employee JWT with `employees.create` permission
+**Authentication:** Employee JWT with `fees.manage` permission
 
 **Request Body:**
 
@@ -2764,7 +2842,7 @@ Create a new transfer fee rule.
 
 Update an existing fee rule.
 
-**Authentication:** Employee JWT with `employees.create` permission
+**Authentication:** Employee JWT with `fees.manage` permission
 
 **Path Parameters:**
 
@@ -2796,7 +2874,7 @@ Update an existing fee rule.
 
 Deactivate a fee rule. The rule is not deleted from the database — it is soft-deactivated and will no longer apply to new transactions. It can be reactivated via `PUT /api/fees/{id}` with `"active": true`.
 
-**Authentication:** Employee JWT with `employees.create` permission
+**Authentication:** Employee JWT with `fees.manage` permission
 
 **Path Parameters:**
 
@@ -2819,9 +2897,9 @@ Deactivate a fee rule. The rule is not deleted from the database — it is soft-
 
 ## 16. Interest Rate Tiers
 
-Interest rate tier management for loan interest rate configuration. Each tier defines the fixed and variable base rates for a loan amount range. Only administrators can manage tiers.
+Interest rate tier management for loan interest rate configuration. Each tier defines the fixed and variable base rates for a loan amount range.
 
-**Authentication:** Employee token with `employees.create` permission (EmployeeAdmin role)
+**Authentication:** Employee token with `interest-rates.manage` permission
 
 ---
 
@@ -2829,7 +2907,7 @@ Interest rate tier management for loan interest rate configuration. Each tier de
 
 List all interest rate tiers.
 
-**Authentication:** Employee JWT with `employees.create` permission
+**Authentication:** Employee JWT with `interest-rates.manage` permission
 
 **Response 200:**
 ```json
@@ -2861,7 +2939,7 @@ List all interest rate tiers.
 
 Create a new interest rate tier.
 
-**Authentication:** Employee JWT with `employees.create` permission
+**Authentication:** Employee JWT with `interest-rates.manage` permission
 
 **Request Body:**
 
@@ -2909,7 +2987,7 @@ Create a new interest rate tier.
 
 Update an existing interest rate tier.
 
-**Authentication:** Employee JWT with `employees.create` permission
+**Authentication:** Employee JWT with `interest-rates.manage` permission
 
 **Path Parameters:**
 
@@ -2952,7 +3030,7 @@ Update an existing interest rate tier.
 
 Delete an interest rate tier.
 
-**Authentication:** Employee JWT with `employees.create` permission
+**Authentication:** Employee JWT with `interest-rates.manage` permission
 
 **Path Parameters:**
 
@@ -2981,7 +3059,7 @@ Delete an interest rate tier.
 
 Apply a variable rate update to all active variable-rate loans whose amount falls within this tier's range. This recalculates the interest rate for affected loans based on the tier's current `variable_base` plus the bank margin.
 
-**Authentication:** Employee JWT with `employees.create` permission
+**Authentication:** Employee JWT with `interest-rates.manage` permission
 
 **Path Parameters:**
 
@@ -3008,9 +3086,9 @@ Apply a variable rate update to all active variable-rate loans whose amount fall
 
 ## 17. Bank Margins
 
-Bank margin management for loan interest rate calculation. Each loan type has a configurable margin that is added to the variable base rate from the interest rate tier. Only administrators can manage margins.
+Bank margin management for loan interest rate calculation. Each loan type has a configurable margin that is added to the variable base rate from the interest rate tier.
 
-**Authentication:** Employee token with `employees.create` permission (EmployeeAdmin role)
+**Authentication:** Employee token with `interest-rates.manage` permission
 
 ---
 
@@ -3018,7 +3096,7 @@ Bank margin management for loan interest rate calculation. Each loan type has a 
 
 List all bank margins.
 
-**Authentication:** Employee JWT with `employees.create` permission
+**Authentication:** Employee JWT with `interest-rates.manage` permission
 
 **Response 200:**
 ```json
@@ -3056,7 +3134,7 @@ List all bank margins.
 
 Update the margin for a specific loan type.
 
-**Authentication:** Employee JWT with `employees.create` permission
+**Authentication:** Employee JWT with `interest-rates.manage` permission
 
 **Path Parameters:**
 
@@ -3095,6 +3173,220 @@ Update the margin for a specific loan type.
 | 400 | Invalid input |
 | 401 | Unauthorized |
 | 404 | Margin not found |
+| 500 | Internal server error |
+
+---
+
+## 18. Card Requests
+
+Card requests allow clients to request a card for one of their accounts. Employees with `cards.approve` permission can approve or reject these requests.
+
+---
+
+### POST /api/cards/requests
+
+Client submits a request to obtain a card for one of their accounts.
+
+**Authentication:** Client JWT (ClientBearerAuth)
+
+**Request Body:**
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `account_number` | string | Yes | Account number to attach the card to |
+| `card_brand` | string | Yes | Card brand: `visa`, `mastercard`, `dinacard`, `amex` |
+| `card_type` | string | No | Card type (default: `debit`) |
+| `card_name` | string | No | Custom name for the card |
+
+**Example Request:**
+```json
+{
+  "account_number": "265-0000000001-00",
+  "card_brand": "visa",
+  "card_type": "debit",
+  "card_name": "My Main Card"
+}
+```
+
+**Response 201:**
+```json
+{
+  "id": 1,
+  "client_id": 42,
+  "account_number": "265-0000000001-00",
+  "card_brand": "visa",
+  "card_type": "debit",
+  "card_name": "My Main Card",
+  "status": "pending",
+  "reason": "",
+  "approved_by": 0,
+  "created_at": "2026-03-23T10:00:00Z",
+  "updated_at": "2026-03-23T10:00:00Z"
+}
+```
+
+| Status | Description |
+|---|---|
+| 201 | Card request created |
+| 400 | Invalid input (bad brand, missing required fields) |
+| 401 | Unauthorized |
+| 500 | Internal server error |
+
+---
+
+### GET /api/cards/requests/me
+
+Returns all card requests submitted by the authenticated client.
+
+**Authentication:** Client JWT (ClientBearerAuth)
+
+**Query Parameters:**
+
+| Parameter | Type | Description |
+|---|---|---|
+| `page` | int | Page number (default: 1) |
+| `page_size` | int | Page size (default: 20) |
+
+**Response 200:**
+```json
+{
+  "requests": [...],
+  "total": 3
+}
+```
+
+| Status | Description |
+|---|---|
+| 200 | List of card requests |
+| 401 | Unauthorized |
+| 500 | Internal server error |
+
+---
+
+### GET /api/cards/requests
+
+Returns all card requests, optionally filtered by status.
+
+**Authentication:** Employee JWT with `cards.approve` permission
+
+**Query Parameters:**
+
+| Parameter | Type | Description |
+|---|---|---|
+| `status` | string | Filter: `pending`, `approved`, `rejected` |
+| `page` | int | Page number (default: 1) |
+| `page_size` | int | Page size (default: 20) |
+
+**Response 200:**
+```json
+{
+  "requests": [...],
+  "total": 10
+}
+```
+
+| Status | Description |
+|---|---|
+| 200 | List of card requests |
+| 400 | Invalid status filter |
+| 401 | Unauthorized |
+| 403 | Forbidden (missing permission) |
+| 500 | Internal server error |
+
+---
+
+### GET /api/cards/requests/:id
+
+Returns a single card request by ID.
+
+**Authentication:** Employee JWT with `cards.approve` permission
+
+**Path Parameters:**
+
+| Parameter | Type | Description |
+|---|---|---|
+| `id` | int | Card request ID |
+
+**Response 200:** Card request object
+
+| Status | Description |
+|---|---|
+| 200 | Card request found |
+| 400 | Invalid ID |
+| 401 | Unauthorized |
+| 403 | Forbidden |
+| 404 | Card request not found |
+| 500 | Internal server error |
+
+---
+
+### PUT /api/cards/requests/:id/approve
+
+Employee approves a pending card request. This creates the actual card.
+
+**Authentication:** Employee JWT with `cards.approve` permission
+
+**Path Parameters:**
+
+| Parameter | Type | Description |
+|---|---|---|
+| `id` | int | Card request ID |
+
+**Response 200:**
+```json
+{
+  "request": { "id": 1, "status": "approved", ... },
+  "card": { "id": 10, "card_number": "**** **** **** 4242", ... }
+}
+```
+
+| Status | Description |
+|---|---|
+| 200 | Request approved and card created |
+| 400 | Invalid ID |
+| 401 | Unauthorized |
+| 403 | Forbidden (missing permission) |
+| 404 | Card request not found |
+| 422 | Request already processed (not pending) |
+| 500 | Internal server error |
+
+---
+
+### PUT /api/cards/requests/:id/reject
+
+Employee rejects a pending card request with a reason.
+
+**Authentication:** Employee JWT with `cards.approve` permission
+
+**Path Parameters:**
+
+| Parameter | Type | Description |
+|---|---|---|
+| `id` | int | Card request ID |
+
+**Request Body:**
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `reason` | string | Yes | Reason for rejection |
+
+**Example Request:**
+```json
+{
+  "reason": "Insufficient account history"
+}
+```
+
+**Response 200:** Updated card request with status `rejected`
+
+| Status | Description |
+|---|---|
+| 200 | Request rejected |
+| 400 | Invalid input or ID |
+| 401 | Unauthorized |
+| 403 | Forbidden (missing permission) |
+| 404 | Card request not found |
+| 422 | Request already processed (not pending) |
 | 500 | Internal server error |
 
 ---

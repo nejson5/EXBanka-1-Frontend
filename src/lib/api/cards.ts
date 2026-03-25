@@ -1,6 +1,7 @@
 import { apiClient } from '@/lib/api/axios'
 import type { Card } from '@/types/card'
 import type { CreateAuthorizedPersonRequest } from '@/types/authorized-person'
+import type { CardRequest, CardRequestListResponse, CardRequestFilters } from '@/types/cardRequest'
 
 export async function getCards(clientId: number): Promise<Card[]> {
   const response = await apiClient.get<{ cards: Card[] }>(`/api/cards/client/${clientId}`)
@@ -14,14 +15,10 @@ export async function getAccountCards(accountNumber: string): Promise<Card[]> {
 
 export async function requestCard(
   account_number: string,
-  owner_id: number,
-  owner_type: 'CLIENT' | 'AUTHORIZED_PERSON',
   card_brand?: string
-): Promise<Card> {
-  const response = await apiClient.post<Card>('/api/cards', {
+): Promise<CardRequest> {
+  const response = await apiClient.post<CardRequest>('/api/cards/requests', {
     account_number,
-    owner_id,
-    owner_type,
     ...(card_brand ? { card_brand } : {}),
   })
   return response.data
@@ -53,4 +50,21 @@ export async function requestCardForAuthorizedPerson(
     authorized_person
   )
   return response.data
+}
+
+export async function getCardRequests(
+  filters?: CardRequestFilters
+): Promise<CardRequestListResponse> {
+  const response = await apiClient.get<CardRequestListResponse>('/api/cards/requests', {
+    params: filters,
+  })
+  return response.data
+}
+
+export async function approveCardRequest(id: number): Promise<void> {
+  await apiClient.put(`/api/cards/requests/${id}/approve`)
+}
+
+export async function rejectCardRequest(id: number, reason: string): Promise<void> {
+  await apiClient.put(`/api/cards/requests/${id}/reject`, { reason })
 }

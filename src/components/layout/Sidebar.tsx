@@ -85,6 +85,9 @@ function EmployeeNav({ isAdmin }: { isAdmin: boolean }) {
       <Link to="/admin/loans/requests" className={navLinkClass}>
         Loan Requests
       </Link>
+      <Link to="/admin/cards/requests" className={navLinkClass}>
+        Card Requests
+      </Link>
       <Link to="/admin/loans" className={navLinkClass}>
         All Loans
       </Link>

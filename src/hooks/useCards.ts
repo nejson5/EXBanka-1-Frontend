@@ -8,10 +8,14 @@ import {
   unblockCard,
   deactivateCard,
   requestCardForAuthorizedPerson,
+  getCardRequests,
+  approveCardRequest,
+  rejectCardRequest,
 } from '@/lib/api/cards'
 import { useAppSelector } from '@/hooks/useAppSelector'
 import { selectCurrentUser } from '@/store/selectors/authSelectors'
 import type { CreateAuthorizedPersonRequest } from '@/types/authorized-person'
+import type { CardRequestFilters } from '@/types/cardRequest'
 
 export function useCards() {
   const user = useAppSelector(selectCurrentUser)
@@ -33,17 +37,8 @@ export function useAccountCards(accountNumber: string) {
 
 export function useRequestCard() {
   return useMutation({
-    mutationFn: ({
-      account_number,
-      owner_id,
-      owner_type,
-      card_brand,
-    }: {
-      account_number: string
-      owner_id: number
-      owner_type: 'CLIENT' | 'AUTHORIZED_PERSON'
-      card_brand?: string
-    }) => requestCard(account_number, owner_id, owner_type, card_brand),
+    mutationFn: ({ account_number, card_brand }: { account_number: string; card_brand?: string }) =>
+      requestCard(account_number, card_brand),
   })
 }
 
@@ -92,5 +87,32 @@ export function useRequestCardForAuthorizedPerson() {
   return useMutation({
     mutationFn: (payload: CreateAuthorizedPersonRequest & { account_id: number }) =>
       requestCardForAuthorizedPerson(payload),
+  })
+}
+
+export function useCardRequests(filters?: CardRequestFilters) {
+  return useQuery({
+    queryKey: ['card-requests', filters],
+    queryFn: () => getCardRequests(filters),
+  })
+}
+
+export function useApproveCardRequest() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (id: number) => approveCardRequest(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['card-requests'] })
+    },
+  })
+}
+
+export function useRejectCardRequest() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, reason }: { id: number; reason: string }) => rejectCardRequest(id, reason),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['card-requests'] })
+    },
   })
 }

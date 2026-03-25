@@ -31,6 +31,7 @@ import { AdminAccountCardsPage } from '@/pages/AdminAccountCardsPage'
 import { AdminClientsPage } from '@/pages/AdminClientsPage'
 import { EditClientPage } from '@/pages/EditClientPage'
 import { AdminLoanRequestsPage } from '@/pages/AdminLoanRequestsPage'
+import { AdminCardRequestsPage } from '@/pages/AdminCardRequestsPage'
 import { AdminLoansPage } from '@/pages/AdminLoansPage'
 import { CreateClientPage } from '@/pages/CreateClientPage'
 
@@ -131,6 +132,14 @@ export default function App() {
           element={
             <ProtectedRoute requiredRole="Employee">
               <AdminLoanRequestsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/cards/requests"
+          element={
+            <ProtectedRoute requiredRole="Employee">
+              <AdminCardRequestsPage />
             </ProtectedRoute>
           }
         />
