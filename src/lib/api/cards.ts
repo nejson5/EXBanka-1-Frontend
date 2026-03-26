@@ -3,13 +3,15 @@ import type { Card } from '@/types/card'
 import type { CreateAuthorizedPersonRequest } from '@/types/authorized-person'
 import type { CardRequest, CardRequestListResponse, CardRequestFilters } from '@/types/cardRequest'
 
-export async function getCards(clientId: number): Promise<Card[]> {
-  const response = await apiClient.get<{ cards: Card[] }>(`/api/cards/client/${clientId}`)
+export async function getCards(): Promise<Card[]> {
+  const response = await apiClient.get<{ cards: Card[] }>('/api/me/cards')
   return response.data.cards
 }
 
 export async function getAccountCards(accountNumber: string): Promise<Card[]> {
-  const response = await apiClient.get<{ cards: Card[] }>(`/api/cards/account/${accountNumber}`)
+  const response = await apiClient.get<{ cards: Card[] }>('/api/cards', {
+    params: { account_number: accountNumber },
+  })
   return response.data.cards
 }
 
@@ -17,29 +19,34 @@ export async function requestCard(
   account_number: string,
   card_brand?: string
 ): Promise<CardRequest> {
-  const response = await apiClient.post<CardRequest>('/api/cards/requests', {
+  const response = await apiClient.post<CardRequest>('/api/me/cards/requests', {
     account_number,
     ...(card_brand ? { card_brand } : {}),
   })
   return response.data
 }
 
-// NOTE: No matching endpoint found in REST API spec for card verification
-export async function confirmCardRequest(account_number: string, code: string): Promise<Card> {
-  const response = await apiClient.post<Card>('/api/cards/confirm', { account_number, code })
-  return response.data
+export async function temporaryBlockCard(
+  cardId: number,
+  durationHours: number = 12,
+  reason?: string
+): Promise<void> {
+  await apiClient.post(`/api/me/cards/${cardId}/temporary-block`, {
+    duration_hours: durationHours,
+    ...(reason ? { reason } : {}),
+  })
 }
 
 export async function blockCard(cardId: number): Promise<void> {
-  await apiClient.put(`/api/cards/${cardId}/block`)
+  await apiClient.post(`/api/cards/${cardId}/block`)
 }
 
 export async function unblockCard(cardId: number): Promise<void> {
-  await apiClient.put(`/api/cards/${cardId}/unblock`)
+  await apiClient.post(`/api/cards/${cardId}/unblock`)
 }
 
 export async function deactivateCard(cardId: number): Promise<void> {
-  await apiClient.put(`/api/cards/${cardId}/deactivate`)
+  await apiClient.post(`/api/cards/${cardId}/deactivate`)
 }
 
 export async function requestCardForAuthorizedPerson(
@@ -62,9 +69,9 @@ export async function getCardRequests(
 }
 
 export async function approveCardRequest(id: number): Promise<void> {
-  await apiClient.put(`/api/cards/requests/${id}/approve`)
+  await apiClient.post(`/api/cards/requests/${id}/approve`)
 }
 
 export async function rejectCardRequest(id: number, reason: string): Promise<void> {
-  await apiClient.put(`/api/cards/requests/${id}/reject`, { reason })
+  await apiClient.post(`/api/cards/requests/${id}/reject`, { reason })
 }
