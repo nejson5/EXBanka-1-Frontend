@@ -3,27 +3,22 @@ import {
   getCards,
   getAccountCards,
   requestCard,
-  confirmCardRequest,
   blockCard,
   unblockCard,
   deactivateCard,
+  temporaryBlockCard,
   requestCardForAuthorizedPerson,
   getCardRequests,
   approveCardRequest,
   rejectCardRequest,
 } from '@/lib/api/cards'
-import { useAppSelector } from '@/hooks/useAppSelector'
-import { selectCurrentUser } from '@/store/selectors/authSelectors'
 import type { CreateAuthorizedPersonRequest } from '@/types/authorized-person'
 import type { CardRequestFilters } from '@/types/cardRequest'
 
 export function useCards() {
-  const user = useAppSelector(selectCurrentUser)
-  const clientId = user?.id ?? 0
   return useQuery({
-    queryKey: ['cards', 'client', clientId],
-    queryFn: () => getCards(clientId),
-    enabled: clientId > 0,
+    queryKey: ['cards', 'me'],
+    queryFn: () => getCards(),
   })
 }
 
@@ -36,17 +31,29 @@ export function useAccountCards(accountNumber: string) {
 }
 
 export function useRequestCard() {
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({ account_number, card_brand }: { account_number: string; card_brand?: string }) =>
       requestCard(account_number, card_brand),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cards'] })
+      queryClient.invalidateQueries({ queryKey: ['card-requests'] })
+    },
   })
 }
 
-export function useConfirmCardRequest() {
+export function useTemporaryBlockCard() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ account_number, code }: { account_number: string; code: string }) =>
-      confirmCardRequest(account_number, code),
+    mutationFn: ({
+      cardId,
+      durationHours = 12,
+      reason,
+    }: {
+      cardId: number
+      durationHours?: number
+      reason?: string
+    }) => temporaryBlockCard(cardId, durationHours, reason),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['cards'] })
     },

@@ -2,13 +2,12 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   getClientAccounts,
   getAccount,
+  getClientAccount,
   createAccount,
   updateAccountName,
   updateAccountLimits,
   getAllAccounts,
 } from '@/lib/api/accounts'
-import { useAppSelector } from '@/hooks/useAppSelector'
-import { selectCurrentUser } from '@/store/selectors/authSelectors'
 import type {
   AccountFilters,
   CreateAccountRequest,
@@ -17,12 +16,9 @@ import type {
 } from '@/types/account'
 
 export function useClientAccounts() {
-  const user = useAppSelector(selectCurrentUser)
-  const clientId = user?.id ?? 0
   return useQuery({
-    queryKey: ['accounts', 'client', clientId],
-    queryFn: () => getClientAccounts(clientId),
-    enabled: clientId > 0,
+    queryKey: ['accounts', 'me'],
+    queryFn: () => getClientAccounts(),
   })
 }
 
@@ -30,6 +26,14 @@ export function useAccount(id: number) {
   return useQuery({
     queryKey: ['account', id],
     queryFn: () => getAccount(id),
+    enabled: id > 0,
+  })
+}
+
+export function useClientAccount(id: number) {
+  return useQuery({
+    queryKey: ['account', 'me', id],
+    queryFn: () => getClientAccount(id),
     enabled: id > 0,
   })
 }
