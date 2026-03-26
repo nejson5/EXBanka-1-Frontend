@@ -31,5 +31,13 @@ export default defineConfig([
       '@typescript-eslint/no-require-imports': 'off',
     },
   },
+  // Cypress test files: allow namespace augmentation and any types
+  {
+    files: ['cypress/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-namespace': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
   prettier,
 ])
