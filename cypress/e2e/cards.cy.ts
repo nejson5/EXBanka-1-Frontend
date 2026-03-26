@@ -83,5 +83,103 @@ describe('Celina 6: Kartice — Upravljanje bankarskim karticama', () => {
       // Only ACTIVE card should have "Block" button
       cy.get('button').contains('Block').should('have.length', 1)
     })
+
+    // Scenario 30: Blokiranje kartice od strane klijenta
+    it('should temporarily block an active card for 12 hours (Scenario 30)', () => {
+      cy.intercept('POST', '/api/me/cards/10/temporary-block', {
+        statusCode: 200,
+        body: {},
+      }).as('blockCard')
+
+      cy.loginAsClient('/cards')
+      cy.wait('@getCards')
+
+      // Register the updated cards intercept AFTER initial load to avoid LIFO conflict
+      cy.intercept('GET', '/api/me/cards', {
+        body: {
+          cards: [
+            {
+              id: 10,
+              card_number: '4111111111111111',
+              card_type: 'DEBIT',
+              card_name: 'Visa Debit',
+              brand: 'VISA',
+              created_at: '2026-01-20T10:00:00Z',
+              expires_at: '2029-01-20T10:00:00Z',
+              account_number: '265000000000000011',
+              cvv: '123',
+              limit: 100000,
+              status: 'BLOCKED',
+              owner_name: 'MARKO JOVANOVIĆ',
+            },
+            {
+              id: 11,
+              card_number: '5500000000000004',
+              card_type: 'DEBIT',
+              card_name: 'MasterCard Debit',
+              brand: 'MASTERCARD',
+              created_at: '2026-02-15T10:00:00Z',
+              expires_at: '2029-02-15T10:00:00Z',
+              account_number: '265000000000000011',
+              cvv: '456',
+              limit: 100000,
+              status: 'BLOCKED',
+              owner_name: 'MARKO JOVANOVIĆ',
+            },
+            {
+              id: 12,
+              card_number: '9891000000000001',
+              card_type: 'DEBIT',
+              card_name: 'DinaCard Debit',
+              brand: 'DINACARD',
+              created_at: '2026-01-10T10:00:00Z',
+              expires_at: '2028-01-10T10:00:00Z',
+              account_number: '265000000000000022',
+              cvv: '789',
+              limit: 50000,
+              status: 'DEACTIVATED',
+              owner_name: 'MARKO JOVANOVIĆ',
+            },
+          ],
+        },
+      }).as('getCardsUpdated')
+
+      // Click "Block" on the active Visa card
+      cy.contains('button', 'Block').click()
+
+      // Confirmation dialog
+      cy.contains('Temporarily Block Card?').should('be.visible')
+      cy.contains('temporarily block this card for 12 hours').should('be.visible')
+
+      // Confirm block
+      cy.get('[role="dialog"]').within(() => {
+        cy.contains('button', 'Block for 12 Hours').click()
+      })
+      cy.wait('@blockCard')
+
+      // Verify request body
+      cy.get('@blockCard')
+        .its('request.body')
+        .should('have.property', 'duration_hours', 12)
+
+      // After block, card list refreshes
+      cy.wait('@getCardsUpdated')
+    })
+
+    // Scenario 32: Pokušaj aktivacije deaktivirane kartice
+    it('should not allow any actions on a deactivated card (Scenario 32)', () => {
+      cy.loginAsClient('/cards')
+      cy.wait('@getCards')
+
+      // The deactivated DinaCard (id=12) should have the DEACTIVATED overlay
+      cy.contains('DEACTIVATED').should('be.visible')
+
+      // Only the ACTIVE card (id=10) has a "Block" button
+      cy.get('button').contains('Block').should('have.length', 1)
+
+      // There should be no "Unblock" or "Activate" button anywhere on the client page
+      cy.contains('button', 'Unblock').should('not.exist')
+      cy.contains('button', 'Activate').should('not.exist')
+    })
   })
 })
