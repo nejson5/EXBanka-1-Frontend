@@ -31,7 +31,12 @@ export function PortfolioPage() {
           </span>
         </div>
       )}
-      <HoldingsTable holdings={holdings} onSell={setSelectedHolding} />
+      <HoldingsTable
+        holdings={holdings}
+        onSell={setSelectedHolding}
+        onMakePublic={() => {}}
+        onExercise={() => {}}
+      />
       {selectedHolding && (
         <SellOrderDialog
           open={!!selectedHolding}
