@@ -12,21 +12,33 @@ jest.mock('@/hooks/useOrders')
 jest.mock('@/hooks/useAccounts')
 
 describe('PortfolioPage', () => {
-  const holdings = [createMockHolding({ id: 1, ticker: 'AAPL', quantity: 10 })]
+  const stockHolding = createMockHolding({
+    id: 1,
+    ticker: 'AAPL',
+    quantity: 10,
+    security_type: 'stock',
+  })
   const accounts = [createMockAccount({ id: 1 })]
   const mutateFn = jest.fn()
+  const makePublicMutateFn = jest.fn()
+  const exerciseMutateFn = jest.fn()
 
   beforeEach(() => {
     jest.clearAllMocks()
+    jest.mocked(usePortfolioHook.usePortfolio).mockReturnValue({
+      data: { holdings: [stockHolding], total_count: 1 },
+      isLoading: false,
+    } as any)
+    jest.mocked(usePortfolioHook.usePortfolioSummary).mockReturnValue({
+      data: { total_value: '1750.00', total_profit_loss: '250.00' },
+      isLoading: false,
+    } as any)
     jest
-      .mocked(usePortfolioHook.usePortfolio)
-      .mockReturnValue({ data: { holdings, total_count: 1 }, isLoading: false } as any)
+      .mocked(usePortfolioHook.useMakePublic)
+      .mockReturnValue({ mutate: makePublicMutateFn, isPending: false } as any)
     jest
-      .mocked(usePortfolioHook.usePortfolioSummary)
-      .mockReturnValue({
-        data: { total_value: '1750.00', total_profit_loss: '250.00' },
-        isLoading: false,
-      } as any)
+      .mocked(usePortfolioHook.useExerciseOption)
+      .mockReturnValue({ mutate: exerciseMutateFn, isPending: false } as any)
     jest
       .mocked(useOrdersHook.useCreateOrder)
       .mockReturnValue({ mutate: mutateFn, isPending: false } as any)
@@ -57,5 +69,11 @@ describe('PortfolioPage', () => {
     renderWithProviders(<PortfolioPage />)
     fireEvent.click(screen.getByRole('button', { name: /sell/i }))
     expect(screen.getByText(/sell aapl/i)).toBeInTheDocument()
+  })
+
+  it('opens make-public dialog when Make Public is clicked', () => {
+    renderWithProviders(<PortfolioPage />)
+    fireEvent.click(screen.getByRole('button', { name: /make public/i }))
+    expect(screen.getByText(/make shares public.*aapl/i)).toBeInTheDocument()
   })
 })

@@ -1,17 +1,26 @@
 import { useState } from 'react'
-import { usePortfolio, usePortfolioSummary } from '@/hooks/usePortfolio'
+import {
+  usePortfolio,
+  usePortfolioSummary,
+  useMakePublic,
+  useExerciseOption,
+} from '@/hooks/usePortfolio'
 import { useCreateOrder } from '@/hooks/useOrders'
 import { useTradingAccounts } from '@/hooks/useAccounts'
 import { HoldingsTable } from '@/components/portfolio/HoldingsTable'
 import { SellOrderDialog } from '@/components/portfolio/SellOrderDialog'
+import { MakePublicDialog } from '@/components/portfolio/MakePublicDialog'
 import type { Holding } from '@/types/portfolio'
 
 export function PortfolioPage() {
   const { data, isLoading } = usePortfolio()
   const { data: summary } = usePortfolioSummary()
   const { data: accountsData } = useTradingAccounts()
-  const { mutate: createOrder, isPending } = useCreateOrder()
+  const { mutate: createOrder, isPending: isOrderPending } = useCreateOrder()
+  const { mutate: makePublic, isPending: isMakePublicPending } = useMakePublic()
+  const { mutate: exerciseOption } = useExerciseOption()
   const [selectedHolding, setSelectedHolding] = useState<Holding | null>(null)
+  const [makePublicHolding, setMakePublicHolding] = useState<Holding | null>(null)
 
   if (isLoading) return <p>Loading...</p>
 
@@ -34,8 +43,8 @@ export function PortfolioPage() {
       <HoldingsTable
         holdings={holdings}
         onSell={setSelectedHolding}
-        onMakePublic={() => {}}
-        onExercise={() => {}}
+        onMakePublic={setMakePublicHolding}
+        onExercise={(h) => exerciseOption(h.id)}
       />
       {selectedHolding && (
         <SellOrderDialog
@@ -48,7 +57,23 @@ export function PortfolioPage() {
           onSubmit={(payload) => {
             createOrder(payload, { onSuccess: () => setSelectedHolding(null) })
           }}
-          loading={isPending}
+          loading={isOrderPending}
+        />
+      )}
+      {makePublicHolding && (
+        <MakePublicDialog
+          open={!!makePublicHolding}
+          onOpenChange={(open) => {
+            if (!open) setMakePublicHolding(null)
+          }}
+          holding={makePublicHolding}
+          onSubmit={(quantity) => {
+            makePublic(
+              { id: makePublicHolding.id, quantity },
+              { onSuccess: () => setMakePublicHolding(null) }
+            )
+          }}
+          loading={isMakePublicPending}
         />
       )}
     </div>
