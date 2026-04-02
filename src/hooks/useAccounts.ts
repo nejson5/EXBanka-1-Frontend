@@ -6,9 +6,10 @@ import {
   updateAccountName,
   updateAccountLimits,
   getAllAccounts,
+  getBankAccounts,
 } from '@/lib/api/accounts'
 import { useAppSelector } from '@/hooks/useAppSelector'
-import { selectCurrentUser } from '@/store/selectors/authSelectors'
+import { selectCurrentUser, selectUserType } from '@/store/selectors/authSelectors'
 import type {
   AccountFilters,
   CreateAccountRequest,
@@ -71,4 +72,25 @@ export function useAllAccounts(filters?: AccountFilters) {
     queryKey: ['accounts', 'all', filters],
     queryFn: () => getAllAccounts(filters),
   })
+}
+
+export function useTradingAccounts() {
+  const userType = useAppSelector(selectUserType)
+  const user = useAppSelector(selectCurrentUser)
+  const clientId = user?.id ?? 0
+  const isClient = userType === 'client'
+
+  const clientAccountsQuery = useQuery({
+    queryKey: ['accounts', 'client', clientId],
+    queryFn: () => getClientAccounts(clientId),
+    enabled: isClient && clientId > 0,
+  })
+
+  const bankAccountsQuery = useQuery({
+    queryKey: ['bank-accounts'],
+    queryFn: getBankAccounts,
+    enabled: !isClient,
+  })
+
+  return isClient ? clientAccountsQuery : bankAccountsQuery
 }
