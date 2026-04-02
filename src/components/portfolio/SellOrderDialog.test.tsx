@@ -4,7 +4,7 @@ import { createMockHolding } from '@/__tests__/fixtures/portfolio-fixtures'
 import { createMockAccount } from '@/__tests__/fixtures/account-fixtures'
 
 describe('SellOrderDialog', () => {
-  const holding = createMockHolding({ bid: '175.40', contract_size: 1, quantity: 10 })
+  const holding = createMockHolding({ quantity: 10 })
   const accounts = [
     createMockAccount({ id: 1, account_name: 'Main Account', currency_code: 'USD' }),
   ]
@@ -33,7 +33,7 @@ describe('SellOrderDialog', () => {
     render(<SellOrderDialog {...defaultProps} />)
     const quantityInput = screen.getByLabelText(/quantity/i)
     fireEvent.change(quantityInput, { target: { value: '2' } })
-    // 2 * 1 (contract_size) * 175.40 (bid) = 350.80
+    // 2 * 1 * 175.00 (current_price) = 350.00
     expect(screen.getByText(/350/)).toBeInTheDocument()
   })
 

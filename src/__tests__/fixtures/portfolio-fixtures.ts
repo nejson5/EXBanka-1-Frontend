@@ -3,16 +3,16 @@ import type { Holding } from '@/types/portfolio'
 export function createMockHolding(overrides: Partial<Holding> = {}): Holding {
   return {
     id: 1,
-    listing_id: 42,
+    security_type: 'stock',
     ticker: 'AAPL',
     name: 'Apple Inc.',
-    security_type: 'stock',
     quantity: 10,
-    purchase_price: '150.00',
-    current_price: '175.45',
-    bid: '175.40',
-    contract_size: 1,
-    maintenance_margin: '10.00',
+    average_price: '150.00',
+    current_price: '175.00',
+    profit: '250.00',
+    public_quantity: 0,
+    account_id: 42,
+    last_modified: '2026-04-01T12:00:00Z',
     ...overrides,
   }
 }

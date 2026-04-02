@@ -27,7 +27,7 @@ export function HoldingsTable({ holdings, onSell }: Props) {
           <TableHead>Name</TableHead>
           <TableHead>Type</TableHead>
           <TableHead className="text-right">Quantity</TableHead>
-          <TableHead className="text-right">Purchase Price</TableHead>
+          <TableHead className="text-right">Avg. Price</TableHead>
           <TableHead className="text-right">Current Price</TableHead>
           <TableHead />
         </TableRow>
@@ -39,7 +39,7 @@ export function HoldingsTable({ holdings, onSell }: Props) {
             <TableCell>{h.name}</TableCell>
             <TableCell>{h.security_type}</TableCell>
             <TableCell className="text-right">{h.quantity}</TableCell>
-            <TableCell className="text-right">{h.purchase_price}</TableCell>
+            <TableCell className="text-right">{h.average_price}</TableCell>
             <TableCell className="text-right">{h.current_price}</TableCell>
             <TableCell className="text-right">
               <Button size="sm" variant="outline" onClick={() => onSell(h)}>

@@ -51,8 +51,8 @@ export function SellOrderDialog({
     orderType,
     'sell',
     holding.current_price,
-    holding.bid,
-    holding.contract_size,
+    holding.current_price,
+    1,
     quantity,
     limitValue || undefined,
     stopValue || undefined
