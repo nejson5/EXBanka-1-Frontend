@@ -50,3 +50,8 @@ export async function getAllAccounts(filters?: AccountFilters): Promise<AccountL
   const response = await apiClient.get<AccountListResponse>('/api/accounts', { params })
   return response.data
 }
+
+export async function getBankAccounts(): Promise<AccountListResponse> {
+  const response = await apiClient.get<{ accounts: Account[] }>('/api/bank-accounts')
+  return { accounts: response.data.accounts, total: response.data.accounts.length }
+}
