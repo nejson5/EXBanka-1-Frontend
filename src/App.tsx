@@ -36,6 +36,8 @@ import { CreateClientPage } from '@/pages/CreateClientPage'
 import { SecuritiesPage } from '@/pages/SecuritiesPage'
 import { PortfolioPage } from '@/pages/PortfolioPage'
 import { AdminOrdersPage } from '@/pages/AdminOrdersPage'
+import { TaxTrackingPage } from '@/pages/TaxTrackingPage'
+import { OtcPortalPage } from '@/pages/OtcPortalPage'
 
 export default function App() {
   return (
@@ -276,9 +278,10 @@ export default function App() {
           }
         />
 
-        {/* Securities & Portfolio (all authenticated users) */}
+        {/* Securities, Portfolio & OTC (all authenticated users) */}
         <Route path="/securities" element={<SecuritiesPage />} />
         <Route path="/portfolio" element={<PortfolioPage />} />
+        <Route path="/otc" element={<OtcPortalPage />} />
 
         {/* Admin Orders */}
         <Route
@@ -286,6 +289,16 @@ export default function App() {
           element={
             <ProtectedRoute requiredPermission="orders.approve">
               <AdminOrdersPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Tax Tracking (supervisor) */}
+        <Route
+          path="/admin/tax"
+          element={
+            <ProtectedRoute requiredPermission="tax.manage">
+              <TaxTrackingPage />
             </ProtectedRoute>
           }
         />

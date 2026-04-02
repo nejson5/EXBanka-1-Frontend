@@ -79,6 +79,9 @@ function ClientNav() {
         <Link to="/portfolio" className={navLinkClass}>
           My Portfolio
         </Link>
+        <Link to="/otc" className={navLinkClass}>
+          OTC Trading
+        </Link>
       </div>
     </>
   )
@@ -87,9 +90,11 @@ function ClientNav() {
 function EmployeeNav({
   isAdmin,
   hasOrdersApprove,
+  hasTaxManage,
 }: {
   isAdmin: boolean
   hasOrdersApprove: boolean
+  hasTaxManage: boolean
 }) {
   return (
     <>
@@ -125,6 +130,14 @@ function EmployeeNav({
             Order Review
           </Link>
         )}
+        <Link to="/otc" className={navLinkClass}>
+          OTC Trading
+        </Link>
+        {hasTaxManage && (
+          <Link to="/admin/tax" className={navLinkClass}>
+            Tax Management
+          </Link>
+        )}
       </div>
     </>
   )
@@ -139,6 +152,7 @@ export function Sidebar() {
   const isClient = userType === 'client'
   const isAdmin = useAppSelector(selectIsAdmin)
   const hasOrdersApprove = useAppSelector((state) => selectHasPermission(state, 'orders.approve'))
+  const hasTaxManage = useAppSelector((state) => selectHasPermission(state, 'tax.manage'))
 
   const handleLogout = () => {
     dispatch(logoutThunk())
@@ -151,7 +165,11 @@ export function Sidebar() {
         {isClient ? (
           <ClientNav />
         ) : (
-          <EmployeeNav isAdmin={isAdmin} hasOrdersApprove={hasOrdersApprove} />
+          <EmployeeNav
+            isAdmin={isAdmin}
+            hasOrdersApprove={hasOrdersApprove}
+            hasTaxManage={hasTaxManage}
+          />
         )}
       </nav>
       <div className="border-t border-sidebar-border pt-4 mt-4">
