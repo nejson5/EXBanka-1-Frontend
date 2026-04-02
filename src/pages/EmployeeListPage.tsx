@@ -68,7 +68,7 @@ export function EmployeeListPage() {
 
           {isLoading ? (
             <LoadingSpinner />
-          ) : data?.employees.length ? (
+          ) : data?.employees?.length ? (
             <>
               <EmployeeTable employees={data.employees} onRowClick={handleRowClick} />
               <p className="text-sm text-muted-foreground mt-2">{data.total_count} employees</p>
