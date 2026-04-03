@@ -11,9 +11,9 @@ export async function createTransfer(payload: CreateTransferRequest): Promise<Tr
   return response.data
 }
 
-export async function executeTransfer(id: number, verificationCode: string): Promise<Transfer> {
+export async function executeTransfer(id: number, challengeId: number): Promise<Transfer> {
   const response = await apiClient.post<Transfer>(`/api/me/transfers/${id}/execute`, {
-    verification_code: verificationCode,
+    challenge_id: challengeId,
   })
   return response.data
 }

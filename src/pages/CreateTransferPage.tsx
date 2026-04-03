@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '@/hooks/useAppDispatch'
 import { useAppSelector } from '@/hooks/useAppSelector'
@@ -10,8 +10,10 @@ import {
   setTransferFormData,
   resetTransferFlow,
   submitTransfer,
+  setChallengeId,
   setVerificationError,
 } from '@/store/slices/transferSlice'
+import { createChallenge, submitVerificationCode, getChallengeStatus } from '@/lib/api/verification'
 import { CreateTransferForm } from '@/components/transfers/CreateTransferForm'
 import { TransferPreview } from '@/components/transfers/TransferPreview'
 import { VerificationStep } from '@/components/verification/VerificationStep'
@@ -21,8 +23,16 @@ export function CreateTransferPage() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const user = useAppSelector(selectCurrentUser)
-  const { step, formData, submitting, result, transactionId, codeRequested, verificationError } =
-    useAppSelector((s) => s.transfer)
+  const {
+    step,
+    formData,
+    submitting,
+    result,
+    transactionId,
+    challengeId,
+    codeRequested,
+    verificationError,
+  } = useAppSelector((s) => s.transfer)
   const { data: accountsData, isLoading } = useClientAccounts()
   const accounts = accountsData?.accounts ?? []
 
@@ -37,12 +47,29 @@ export function CreateTransferPage() {
   )
 
   const executeTransfer = useExecuteTransfer()
+  const [verifying, setVerifying] = useState(false)
 
   useEffect(() => {
     return () => {
       dispatch(resetTransferFlow())
     }
   }, [dispatch])
+
+  useEffect(() => {
+    if (step === 'verification' && transactionId !== null && challengeId === null) {
+      createChallenge({
+        source_service: 'transfer',
+        source_id: transactionId,
+        method: 'email',
+      })
+        .then((res) => {
+          dispatch(setChallengeId(res.challenge_id))
+        })
+        .catch(() => {
+          dispatch(setVerificationError('Failed to create verification challenge.'))
+        })
+    }
+  }, [step, transactionId, challengeId, dispatch])
 
   if (isLoading) return <p>Loading...</p>
 
@@ -84,19 +111,48 @@ export function CreateTransferPage() {
   if (step === 'verification' && transactionId !== null) {
     return (
       <VerificationStep
-        codeRequested={codeRequested}
-        loading={executeTransfer.isPending}
+        codeRequested={codeRequested && challengeId !== null}
+        loading={verifying || executeTransfer.isPending}
         error={verificationError}
         onRequestCode={() => {}}
-        onVerified={(code) => {
-          executeTransfer.mutate(
-            { id: transactionId, verificationCode: code },
-            {
-              onSuccess: () => dispatch(setTransferStep('success')),
-              onError: () =>
-                dispatch(setVerificationError('Transfer execution failed. Please try again.')),
+        onVerified={async (code) => {
+          if (challengeId === null) return
+          setVerifying(true)
+          dispatch(setVerificationError(null))
+          try {
+            const submitResult = await submitVerificationCode(challengeId, code)
+            if (!submitResult.success) {
+              dispatch(
+                setVerificationError(
+                  `Invalid code. ${submitResult.remaining_attempts} attempts remaining.`
+                )
+              )
+              setVerifying(false)
+              return
             }
-          )
+            const status = await getChallengeStatus(challengeId)
+            if (status.status !== 'verified') {
+              dispatch(setVerificationError('Verification not confirmed. Please try again.'))
+              setVerifying(false)
+              return
+            }
+            executeTransfer.mutate(
+              { id: transactionId, challengeId },
+              {
+                onSuccess: () => {
+                  setVerifying(false)
+                  dispatch(setTransferStep('success'))
+                },
+                onError: () => {
+                  setVerifying(false)
+                  dispatch(setVerificationError('Transfer execution failed. Please try again.'))
+                },
+              }
+            )
+          } catch {
+            setVerifying(false)
+            dispatch(setVerificationError('Verification failed. Please try again.'))
+          }
         }}
         onBack={() => dispatch(setTransferStep('confirmation'))}
       />

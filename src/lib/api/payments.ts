@@ -13,9 +13,9 @@ export async function createPayment(payload: CreatePaymentRequest): Promise<Paym
   return response.data
 }
 
-export async function executePayment(id: number, verificationCode: string): Promise<Payment> {
+export async function executePayment(id: number, challengeId: number): Promise<Payment> {
   const response = await apiClient.post<Payment>(`/api/me/payments/${id}/execute`, {
-    verification_code: verificationCode,
+    challenge_id: challengeId,
   })
   return response.data
 }
