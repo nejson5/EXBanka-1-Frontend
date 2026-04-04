@@ -71,9 +71,15 @@ describe('updateTier', () => {
     }
     mockPut.mockResolvedValue({ data: updated })
 
-    const result = await updateTier(1, { fixed_rate: 6.0 })
+    const payload: CreateTierPayload = {
+      amount_from: 0,
+      amount_to: 50000,
+      fixed_rate: 6.0,
+      variable_base: 3.0,
+    }
+    const result = await updateTier(1, payload)
 
-    expect(mockPut).toHaveBeenCalledWith('/api/interest-rate-tiers/1', { fixed_rate: 6.0 })
+    expect(mockPut).toHaveBeenCalledWith('/api/interest-rate-tiers/1', payload)
     expect(result).toEqual(updated)
   })
 })
