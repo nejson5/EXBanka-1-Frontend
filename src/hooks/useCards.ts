@@ -146,7 +146,7 @@ export function useCreateCard() {
     }: {
       account: Account
       client: Client
-      cardBrand: string
+      cardBrand: CardBrand
     }) => {
       const ap = await createAuthorizedPerson({
         first_name: client.first_name,
@@ -160,7 +160,7 @@ export function useCreateCard() {
         account_number: account.account_number,
         owner_id: ap.id,
         owner_type: 'AUTHORIZED_PERSON',
-        card_brand: cardBrand as CardBrand,
+        card_brand: cardBrand,
       })
     },
     onSuccess: (_data, variables) => {

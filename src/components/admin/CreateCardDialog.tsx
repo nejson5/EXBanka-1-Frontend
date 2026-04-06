@@ -45,7 +45,7 @@ export function CreateCardDialog({ open, onClose }: CreateCardDialogProps) {
   }
 
   const handleSubmit = () => {
-    if (!selectedAccount || !selectedClient) return
+    if (!selectedAccount || !selectedClient || !cardBrand) return
     setError(null)
     createCard.mutate(
       { account: selectedAccount, client: selectedClient, cardBrand },
