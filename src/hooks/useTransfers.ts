@@ -21,8 +21,8 @@ export function useTransferPreview(fromCurrency: string, toCurrency: string, amo
 export function useExecuteTransfer() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, verificationCode }: { id: number; verificationCode: string }) =>
-      executeTransfer(id, verificationCode),
+    mutationFn: ({ id, challengeId }: { id: number; challengeId: number }) =>
+      executeTransfer(id, challengeId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['transfers'] })
     },

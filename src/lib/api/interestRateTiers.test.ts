@@ -41,7 +41,13 @@ describe('createTier', () => {
       fixed_rate: 5.5,
       variable_base: 3.0,
     }
-    const created: InterestRateTier = { id: 1, ...payload }
+    const created: InterestRateTier = {
+      id: 1,
+      ...payload,
+      active: true,
+      created_at: '2026-01-01T00:00:00Z',
+      updated_at: '2026-01-01T00:00:00Z',
+    }
     mockPost.mockResolvedValue({ data: created })
 
     const result = await createTier(payload)
@@ -59,12 +65,21 @@ describe('updateTier', () => {
       amount_to: 50000,
       fixed_rate: 6.0,
       variable_base: 3.0,
+      active: true,
+      created_at: '2026-01-01T00:00:00Z',
+      updated_at: '2026-01-01T00:00:00Z',
     }
     mockPut.mockResolvedValue({ data: updated })
 
-    const result = await updateTier(1, { fixed_rate: 6.0 })
+    const payload: CreateTierPayload = {
+      amount_from: 0,
+      amount_to: 50000,
+      fixed_rate: 6.0,
+      variable_base: 3.0,
+    }
+    const result = await updateTier(1, payload)
 
-    expect(mockPut).toHaveBeenCalledWith('/api/interest-rate-tiers/1', { fixed_rate: 6.0 })
+    expect(mockPut).toHaveBeenCalledWith('/api/interest-rate-tiers/1', payload)
     expect(result).toEqual(updated)
   })
 })
